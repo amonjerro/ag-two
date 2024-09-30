@@ -1,0 +1,13 @@
+{
+  "nodes": [
+    {
+      "key": "k-1",
+      "type": "info",
+      "title": "I am a test info node",
+      "description": "Here's some info for your quest",
+      "duration": 3,
+      "next": ""
+    }
+  ]
+}
+
