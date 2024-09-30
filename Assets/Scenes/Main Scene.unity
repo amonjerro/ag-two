@@ -2980,6 +2980,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ef761d0c0926144ebed725739a022c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sidePanel: {fileID: 1418335824}
   image: {fileID: 164220312}
   title: {fileID: 1865757117}
   description: {fileID: 214890443}
@@ -3814,6 +3815,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f1b808f3ece2024cb4cff5eb1e79889, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  panel: {fileID: 1061648877}
   questOptionPrefab: {fileID: 5678203767365783934, guid: 46f4ecf2bafa01342afad6660969637c,
     type: 3}
   contentDrawer: {fileID: 1526980794}

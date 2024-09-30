@@ -7,6 +7,9 @@ using TMPro;
 public class QuestNodePanel : UIPanel
 {
     [SerializeField]
+    UIPanel sidePanel;
+
+    [SerializeField]
     Image image;
 
     [SerializeField]
@@ -73,10 +76,9 @@ public class QuestNodePanel : UIPanel
         animator.SetBool("bShow", true);
     }
 
-
-
     public override void Dismiss()
     {
+        sidePanel.Dismiss();
         animator.SetBool("bShow", false);
     }
 }

@@ -5,6 +5,7 @@ using TMPro;
 
 public class AvailableQuest : MonoBehaviour
 {
+    public QuestNodePanel panel;
     public QuestData questData;
 
     [SerializeField]
@@ -17,6 +18,7 @@ public class AvailableQuest : MonoBehaviour
 
     public void ShowQuestStartUI()
     {
-        
+        panel.SetData(questData.rootNode);
+        panel.Show();
     }
 }

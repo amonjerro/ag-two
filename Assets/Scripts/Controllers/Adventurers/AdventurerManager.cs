@@ -56,7 +56,6 @@ public class AdventurerManager : MonoBehaviour
     public void ShowAdventurerProfile(NPCInformation information)
     {
         profile.GetData(adventurerRoster[information.index]);
-        profile.Show();
     }
 
     public List<QuestData> GetOpenQuests()

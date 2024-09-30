@@ -5,6 +5,9 @@ using UnityEngine;
 public class OpenQuestsMenu : UIPanel
 {
     [SerializeField]
+    QuestNodePanel panel;
+
+    [SerializeField]
     GameObject questOptionPrefab;
 
     [SerializeField]
@@ -34,13 +37,14 @@ public class OpenQuestsMenu : UIPanel
         DestroyOpenQuestObjects();
 
         // Get data again
-        List<QuestData> data = ServiceLocator.Instance.GetService<AdventurerManager>().GetOpenQuests();
+        List<QuestData> questData = ServiceLocator.Instance.GetService<AdventurerManager>().GetOpenQuests();
 
         // Instantiate
-        foreach (QuestData dataItem in data) {
+        foreach (QuestData dataItem in questData) {
             GameObject createdObject = Instantiate(questOptionPrefab, contentDrawer.transform);
             AvailableQuest aq = createdObject.GetComponent<AvailableQuest>();
             aq.questData = dataItem;
+            aq.panel = panel;
             aq.UpdateSelf();
         }
     }
