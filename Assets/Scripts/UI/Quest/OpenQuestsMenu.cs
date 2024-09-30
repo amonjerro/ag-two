@@ -24,7 +24,7 @@ public class OpenQuestsMenu : UIPanel
     {
         foreach(Transform child in contentDrawer.transform)
         {
-            Destroy(child);
+            Destroy(child.gameObject);
         }
     }
 

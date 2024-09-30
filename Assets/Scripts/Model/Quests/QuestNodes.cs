@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 
 public enum NodeTypes
 {
+    Start,
     Info,
     Challenge,
     Decision
@@ -25,6 +27,7 @@ public abstract class AQuestNode
 
     protected abstract void Start();
     protected abstract void End();
+    public abstract void SetButtonStrings(string[] buttonStrings);
 
     public void OnStart(QuestState state)
     {
@@ -41,6 +44,13 @@ public abstract class AQuestNode
 
 public class InformationNode : AQuestNode
 {
+    public string AcknowledgeString { get; protected set; }
+
+    public override void SetButtonStrings(string[] buttonStrings)
+    {
+        AcknowledgeString = buttonStrings[0];
+    }
+
     protected override void Start()
     {
 
@@ -54,11 +64,19 @@ public class InformationNode : AQuestNode
 
 public class DecisionNode : AQuestNode
 {
+    public string Option1String { get; protected set; }
+    public string Option2String { get; protected set; }
     public AQuestNode Option1 { get; set; }
     public AQuestNode Option2 { get; set; }
 
     public AQuestNode Decision;
 
+
+    public override void SetButtonStrings(string[] buttonStrings)
+    {
+        Option1String = buttonStrings[0];
+        Option2String = buttonStrings[1];
+    }
 
     protected override void Start()
     {

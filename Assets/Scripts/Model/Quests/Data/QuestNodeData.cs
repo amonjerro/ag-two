@@ -7,6 +7,7 @@ public class QuestNodeData
     public string type;
     public string title;
     public string description;
+    public string[] buttonStrings;
     public int duration;
     public string next;
 }

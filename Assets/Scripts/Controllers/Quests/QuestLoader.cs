@@ -8,6 +8,7 @@ public partial class QuestController
         public static AQuestNode MakeQuestNode(NodeTypes type)
         {
             switch (type) {
+                case NodeTypes.Start:
                 case NodeTypes.Decision:
                     return new DecisionNode();
                 default:
@@ -37,9 +38,12 @@ public partial class QuestController
             // Get the root node of this quest
             string rootKey = nodes[0].key;
 
-            DecisionNode startNode = (DecisionNode)QuestNodeFactory.MakeQuestNode(NodeTypes.Decision);
+            DecisionNode startNode = (DecisionNode)QuestNodeFactory.MakeQuestNode(NodeTypes.Start);
+            string[] startStrings = {Constants.QuestChooseAdventurers, Constants.QuestClose};
+            startNode.SetButtonStrings(startStrings);
             startNode.Description = dataQuest.description;
             startNode.Title = dataQuest.questTitle;
+            startNode.NodeType = NodeTypes.Start;
 
             // Set up the nodes objects and index their keys
             for (int i = 0; i < nodes.Length; i++)
@@ -52,6 +56,7 @@ public partial class QuestController
                 node.Description = nodes[i].description;
                 node.Title = nodes[i].title;
                 node.CurrentTickCount = 0;
+                node.SetButtonStrings(nodes[i].buttonStrings);
                 node.NodeType = type;
                 nodeObjectMap.Add(nodes[i].key, node);
                 dataObjectMap.Add(nodes[i].key, nodes[i]);

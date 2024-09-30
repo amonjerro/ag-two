@@ -18,6 +18,8 @@ public class QuestNodePanel : UIPanel
     [SerializeField]
     TextMeshProUGUI description;
 
+    AQuestNode node;
+
     private bool showingSingleConfirm = false;
 
     [SerializeField]
@@ -36,11 +38,58 @@ public class QuestNodePanel : UIPanel
         animator = GetComponent<Animator>();
     }
 
+    public void Acknowledge()
+    {
+        // Test to see if we're done
+        if (node.Next == null)
+        {
+
+        } else
+        {
+            // Set next consequence
+        }
+
+
+        // Set next consequence
+        Dismiss();
+    }
+
+    public void ChooseDecisionOne()
+    {
+        if (node.NodeType == NodeTypes.Start) { 
+            // Change UI to be Adventurer Assign
+        } else
+        {
+            // Set next consequence
+
+            // Make this message go away
+            Dismiss();
+        }
+    }
+
+    public void ChooseDecisionTwo()
+    {
+        try
+        {
+            DecisionNode decNode = (DecisionNode)node;
+            if (decNode.Option2 == null)
+            {
+                Dismiss();
+            } else
+            {
+
+            }
+        } catch(System.InvalidCastException e) {
+            Debug.Log("A non-decision node has spawned decision buttons");
+            Debug.LogError(e.Message);
+        }
+    }
 
     private void DetermineButtonLayout(NodeTypes type)
     {
         switch (type)
         {
+            case NodeTypes.Start:
             case NodeTypes.Decision:
             case NodeTypes.Challenge:
                 showingSingleConfirm = false;
@@ -55,6 +104,7 @@ public class QuestNodePanel : UIPanel
     {
         title.text = nodeData.Title;
         description.text = nodeData.Description;
+        node = nodeData;
         DetermineButtonLayout(nodeData.NodeType);
     }
 
@@ -66,10 +116,18 @@ public class QuestNodePanel : UIPanel
             Decision1.gameObject.SetActive(false);
             Decision2.gameObject.SetActive(false);
             singleConfirm.gameObject.SetActive(true);
+            TextMeshProUGUI childText = singleConfirm.GetComponentInChildren<TextMeshProUGUI>();
+            InformationNode info = (InformationNode)node;
+            childText.text = info.AcknowledgeString;
         } else
         {
+            DecisionNode decNode = (DecisionNode)node;
             Decision1.gameObject.SetActive(true);
+            TextMeshProUGUI childText = Decision1.GetComponentInChildren<TextMeshProUGUI>();
+            childText.text = decNode.Option1String;
             Decision2.gameObject.SetActive(true);
+            childText = Decision2.GetComponentInChildren<TextMeshProUGUI>();
+            childText.text = decNode.Option2String;
             singleConfirm.gameObject.SetActive(false);
         }
 
