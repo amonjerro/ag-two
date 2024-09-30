@@ -15,7 +15,7 @@ public partial class QuestController
         {
             return;
         }
-
+        // minor change
 
     }
 
