@@ -44,7 +44,7 @@ public class TimeManager : MonoBehaviour
         _currentSeason = Season.Spring;
         textClock.text = "07:00";
         textCalendar.text = "Day 1, Spring. Year 1";
-        IsPaused = true;
+        IsPaused = false;
     }
 
     void Update() {

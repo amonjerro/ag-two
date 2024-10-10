@@ -6,6 +6,7 @@ public partial class QuestController
     List<QuestData> openQuestData;
     List<QuestData> closedQuestData;
     List<AQuestNode> currentlyActiveQuests;
+    Dictionary<string, QuestData> questMap;
     public bool QuestListEmpty { get { return currentlyActiveQuests.Count == 0; } }
 
     public void Tick()
@@ -44,6 +45,8 @@ public partial class QuestController
                 soqd.startTick,
                 i
             );
+
+            questMap.Add(soqd.questKey, qd);
             nonCompletedData.Add(qd);
         }
 
@@ -58,14 +61,45 @@ public partial class QuestController
     }
 
 
-    public void AddQuest()
+    public void ProceedToNext(AQuestNode node)
     {
+        StopActiveQuest(node);
+        node.OnEnd();
+        AQuestNode next = node.Next;
+        if (next == null)
+        {
+            return;
+        }
 
+        AddActiveQuest(next);
+    }
+
+    public void DecideNode(AQuestNode node, bool val)
+    {
+        DecisionNode decNode = (DecisionNode)node;
+        decNode.Decide(val);
+        
+        ProceedToNext(node);
+    }
+
+    public void AddActiveQuest(AQuestNode quest)
+    {
+        currentlyActiveQuests.Add(quest);
+    }
+
+    public void StopActiveQuest(AQuestNode quest)
+    {
+        currentlyActiveQuests.Remove(quest);
     }
 
     public List<QuestData> GetOpenQuests()
     {
         return openQuestData;
+    }
+
+    public QuestData GetQuestByKey(string key)
+    {
+        return questMap[key];
     }
 
     ~QuestController()

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class QuestNodePanel : UIPanel
+public class QuestNodePanel : QuestUIPanel
 {
     [SerializeField]
     UIPanel sidePanel;
@@ -23,66 +23,26 @@ public class QuestNodePanel : UIPanel
     private bool showingSingleConfirm = false;
 
     [SerializeField]
-    Button singleConfirm;
+    QuestButton singleConfirm;
 
     [SerializeField]
-    Button Decision1;
+    QuestButton toRosterButton;
 
     [SerializeField]
-    Button Decision2;
+    QuestButton Decision1;
 
-    private Animator animator;
+    [SerializeField]
+    QuestButton Decision2;
+
 
     private void Start()
     {
-        animator = GetComponent<Animator>();
-    }
+        QuestController qc = ServiceLocator.Instance.GetService<AdventurerManager>().GetQuestController();
+        singleConfirm.SetCommand(new AcknowledgeCommand(qc,this));
+        Decision1.SetCommand(new DecisionAcceptCommand(qc, this));
+        Decision2.SetCommand(new DecisionRejectCommand(qc, this));
+        toRosterButton.SetCommand(new NextPageCommand(this));
 
-    public void Acknowledge()
-    {
-        // Test to see if we're done
-        if (node.Next == null)
-        {
-
-        } else
-        {
-            // Set next consequence
-        }
-
-
-        // Set next consequence
-        Dismiss();
-    }
-
-    public void ChooseDecisionOne()
-    {
-        if (node.NodeType == NodeTypes.Start) { 
-            // Change UI to be Adventurer Assign
-        } else
-        {
-            // Set next consequence
-
-            // Make this message go away
-            Dismiss();
-        }
-    }
-
-    public void ChooseDecisionTwo()
-    {
-        try
-        {
-            DecisionNode decNode = (DecisionNode)node;
-            if (decNode.Option2 == null)
-            {
-                Dismiss();
-            } else
-            {
-
-            }
-        } catch(System.InvalidCastException e) {
-            Debug.Log("A non-decision node has spawned decision buttons");
-            Debug.LogError(e.Message);
-        }
     }
 
     private void DetermineButtonLayout(NodeTypes type)
@@ -100,12 +60,12 @@ public class QuestNodePanel : UIPanel
         }
     }
 
-    public void SetData(AQuestNode nodeData)
+    public override void SetQuestNode(AQuestNode nodeData)
     {
-        title.text = nodeData.Title;
-        description.text = nodeData.Description;
         node = nodeData;
-        DetermineButtonLayout(nodeData.NodeType);
+        title.text = node.Title;
+        description.text = node.Description;
+        DetermineButtonLayout(node.NodeType);
     }
 
     // Start is called before the first frame update
@@ -117,26 +77,44 @@ public class QuestNodePanel : UIPanel
             Decision2.gameObject.SetActive(false);
             singleConfirm.gameObject.SetActive(true);
             TextMeshProUGUI childText = singleConfirm.GetComponentInChildren<TextMeshProUGUI>();
-            InformationNode info = (InformationNode)node;
+            InformationNode info = (InformationNode) node;
             childText.text = info.AcknowledgeString;
         } else
         {
+            TextMeshProUGUI childText;
             DecisionNode decNode = (DecisionNode)node;
-            Decision1.gameObject.SetActive(true);
-            TextMeshProUGUI childText = Decision1.GetComponentInChildren<TextMeshProUGUI>();
-            childText.text = decNode.Option1String;
+            if (node.NodeType == NodeTypes.Start) {
+                toRosterButton.gameObject.SetActive(true);
+                Decision1.gameObject.SetActive(false);
+            } else
+            {
+                toRosterButton.gameObject.SetActive(false);
+                Decision1.gameObject.SetActive(true);
+                childText = Decision1.GetComponentInChildren<TextMeshProUGUI>();
+                childText.text = decNode.Option1String;
+            }
+            
             Decision2.gameObject.SetActive(true);
             childText = Decision2.GetComponentInChildren<TextMeshProUGUI>();
             childText.text = decNode.Option2String;
             singleConfirm.gameObject.SetActive(false);
         }
 
-        animator.SetBool("bShow", true);
+        
+    }
+
+    public void CyclePage()
+    {
+        GetComponentInParent<QuestEventUI>().NextPage();
+    }
+
+    public AQuestNode GetOpenNode()
+    {
+        return node;
     }
 
     public override void Dismiss()
     {
-        sidePanel.Dismiss();
-        animator.SetBool("bShow", false);
+        GetComponentInParent<QuestEventUI>().Dismiss();
     }
 }

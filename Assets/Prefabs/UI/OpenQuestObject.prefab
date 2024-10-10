@@ -146,7 +146,7 @@ GameObject:
   - component: {fileID: 176047101907256441}
   - component: {fileID: 14697740950755525}
   - component: {fileID: 8442306016048530119}
-  - component: {fileID: 188809384553128260}
+  - component: {fileID: -7311582698194049139}
   m_Layer: 0
   m_Name: OpenQuestObject
   m_TagString: Untagged
@@ -257,9 +257,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 188809384553128260}
-        m_TargetAssemblyTypeName: AvailableQuest, Assembly-CSharp
-        m_MethodName: ShowQuestStartUI
+      - m_Target: {fileID: -7311582698194049139}
+        m_TargetAssemblyTypeName: QuestButton, Assembly-CSharp
+        m_MethodName: RunCommand
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -269,7 +269,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &188809384553128260
+--- !u!114 &-7311582698194049139
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -278,7 +278,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 5678203767365783934}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e46cceb9f73ec9b4d839471217422583, type: 3}
+  m_Script: {fileID: 11500000, guid: c7ed4d59b99bacb4d99ffc841a16d9ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questTitle: {fileID: 818847667048904175}

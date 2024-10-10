@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OpenQuestsMenu : UIPanel
+public class OpenQuestsMenu : QuestUIPanel
 {
     [SerializeField]
-    QuestNodePanel panel;
+    QuestUIPanel panel;
 
     [SerializeField]
     GameObject questOptionPrefab;
@@ -42,10 +42,9 @@ public class OpenQuestsMenu : UIPanel
         // Instantiate
         foreach (QuestData dataItem in questData) {
             GameObject createdObject = Instantiate(questOptionPrefab, contentDrawer.transform);
-            AvailableQuest aq = createdObject.GetComponent<AvailableQuest>();
-            aq.questData = dataItem;
-            aq.panel = panel;
-            aq.UpdateSelf();
+            QuestButton qb = createdObject.GetComponent<QuestButton>();
+            qb.SetCommand(new SeeOpenQuestCommand(dataItem, this));
+            qb.SetText(dataItem.questTitle);
         }
     }
 
@@ -59,4 +58,11 @@ public class OpenQuestsMenu : UIPanel
     {
         animator.SetBool("bShow", false);
     }
+
+    public override void SetQuestNode(AQuestNode node)
+    {
+        panel.SetQuestNode(node);
+        panel.Show();
+    }
+
 }

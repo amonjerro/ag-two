@@ -15,7 +15,7 @@ public class AdventurerManager : MonoBehaviour
     public AdventurerProfile profile;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         adventurerRoster = new List<Adventurer>();
         _adventurerRecruiter = new AdventurerRecruiter();
@@ -61,5 +61,10 @@ public class AdventurerManager : MonoBehaviour
     public List<QuestData> GetOpenQuests()
     {
         return _questController.GetOpenQuests();
+    }
+
+    public QuestController GetQuestController()
+    {
+        return _questController;
     }
 }
