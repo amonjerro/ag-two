@@ -8,6 +8,11 @@ public class StatBlock : MonoBehaviour
 
     public void UpdateStatSliderValue(Adventurer adventurer)
     {
-        statSlider.value = adventurer.Char_Stats.Get(statType) / adventurer.Char_Stats.GetMaxValue();
+        statSlider.value = adventurer.Char_Stats.Get(statType) / Stats.GetMaxValue();
+    }
+
+    public void SetSliderValue(float value)
+    {
+        statSlider.value = value;
     }
 }

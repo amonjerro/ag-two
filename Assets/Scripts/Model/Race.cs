@@ -9,11 +9,11 @@ public class RaceFactory{
     public static Stats GetRaceStats(RaceType race){
         switch (race){
             case (RaceType.Human):
-                return new Stats(0,0,0,1,0);
+                return new Stats(0,0,0,10,0);
             case (RaceType.Elf):
-                return new Stats(0,1,0,0,0);
+                return new Stats(0,10,0,0,0);
             case (RaceType.Dwarf):
-                return new Stats(0,0,1,0,0);
+                return new Stats(0,0,10,0,0);
             default:
                 return new Stats(0,0,0,0,0);
         }

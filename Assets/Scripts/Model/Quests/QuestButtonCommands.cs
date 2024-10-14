@@ -107,25 +107,63 @@ public class SeeOpenQuestCommand : AQuestCommand
 
 public class ShowRosterCommand : AQuestCommand
 {
-    QuestUIPanel roster;
+    RosterWidget roster;
+    UIPanel dismissPanel;
     RectTransform buttonLocation;
     Vector3 offset;
+    int index;
 
-    public ShowRosterCommand(RectTransform transform, QuestUIPanel roster, Vector3 offset)
+    public ShowRosterCommand(RectTransform transform, UIPanel dismiss, RosterWidget roster, Vector3 offset, int index)
     {
         buttonLocation = transform;
         this.roster = roster;
         this.offset = offset;
+        dismissPanel = dismiss;
+        this.index = index;
     }
 
     public override void Execute()
     {
+
         RectTransform rosterTransform = roster.GetComponent<RectTransform>();
         Vector3 targetLocation = Vector3.zero;
         Quaternion targetRotation = Quaternion.identity;
-        buttonLocation.GetPositionAndRotation(out targetLocation, out targetRotation);
-        rosterTransform.SetPositionAndRotation(targetLocation + offset, targetRotation);
-
+        buttonLocation.GetLocalPositionAndRotation(out targetLocation, out targetRotation);
+        rosterTransform.SetLocalPositionAndRotation(new Vector3(targetLocation.x + offset.x, targetLocation.y,0), targetRotation);
+        roster.SetBoundButton(index, buttonLocation.gameObject.GetComponent<QuestButton>());
         roster.Show();
+        
+        dismissPanel.Show();
+    }
+}
+
+public class DismissPanelCommand : AQuestCommand
+{
+    UIPanel dismissable;
+    public DismissPanelCommand(UIPanel panel)
+    {
+        dismissable = panel;
+    }
+
+    public override void Execute()
+    {
+        dismissable.Dismiss();
+    }
+}
+
+public class EmbarkCommand : DismissPanelCommand
+{
+    AdventurerManager man;
+    QuestData data;
+    public EmbarkCommand(AdventurerManager manager, QuestData data, UIPanel dismissable) : base(dismissable)
+    {
+        man = manager;
+        this.data = data;
+    }
+
+
+    public override void Execute() {
+        man.BindToQuest(data);
+        base.Execute();
     }
 }

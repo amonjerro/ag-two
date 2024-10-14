@@ -44,6 +44,7 @@ public partial class QuestController
             startNode.Description = dataQuest.description;
             startNode.Title = dataQuest.questTitle;
             startNode.NodeType = NodeTypes.Start;
+            startNode.QuestKey = dataQuest.questKey;
 
             // Set up the nodes objects and index their keys
             for (int i = 0; i < nodes.Length; i++)
@@ -58,6 +59,7 @@ public partial class QuestController
                 node.CurrentTickCount = 0;
                 node.SetButtonStrings(nodes[i].buttonStrings);
                 node.NodeType = type;
+                node.QuestKey = dataQuest.questKey;
                 nodeObjectMap.Add(nodes[i].key, node);
                 dataObjectMap.Add(nodes[i].key, nodes[i]);
             }

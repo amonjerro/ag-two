@@ -8,9 +8,11 @@ public class QuestData
     public string description;
     public int startTick;
     public bool hidden = false;
+    private bool _completed;
+    private List<Adventurer> adventurers;
 
     public int SOIndex { get; set; }
-    public bool HasBeenCompleted { get; private set; }
+    public bool HasBeenCompleted { get { return _completed; } set { _completed = value; } }
 
     public AQuestNode rootNode;
 
@@ -23,5 +25,11 @@ public class QuestData
         this.description = description;
         this.startTick = startTick;
         SOIndex = sOIndex;
+        HasBeenCompleted = false;
+    }
+
+    public void BindAdventurers(List<Adventurer> adventurers)
+    {
+        this.adventurers = adventurers;
     }
 }

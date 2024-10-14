@@ -46,7 +46,7 @@ namespace GameCursor
 
         private void OnSelect(InputValue value)
         {
-            Debug.Log("On Select");
+            //Debug.Log("On Select");
             switch (currentState) { 
                 case CursorStates.Build:
                     break;

@@ -1,4 +1,6 @@
-public struct Stat {
+using System;
+
+public class Stat {
     public int Value {get; set;}
     public string Name {get; private set;}
 
@@ -21,7 +23,7 @@ public enum StatName{
 }
 
 
-public struct Stats{
+public class Stats{
     public Stat Combat {get; private set;}
     public Stat Dungeoneering {get; private set;}
     public Stat Nature {get; private set;}
@@ -31,35 +33,42 @@ public struct Stats{
     public Stat Arcane {get; private set;}
 
     public Stats(int combat, int dungeoneering, int nature, int social, int arcane){
-        this.Combat = new Stat(combat, "Combat");
-        this.Dungeoneering = new Stat(dungeoneering, "Dungeoneering");
-        this.Nature = new Stat(nature, "Nature");
-        this.Social = new Stat(social, "Social");
-        this.Arcane = new Stat(arcane, "Arcane");
+        Combat = new Stat(combat, "Combat");
+        Dungeoneering = new Stat(dungeoneering, "Dungeoneering");
+        Nature = new Stat(nature, "Nature");
+        Social = new Stat(social, "Social");
+        Arcane = new Stat(arcane, "Arcane");
     }
 
     public void Add(Stats other){
-        this.Combat.Add(other.Combat.Value);
-        this.Dungeoneering.Add(other.Dungeoneering.Value);
-        this.Nature.Add(other.Nature.Value);
-        this.Social.Add(other.Social.Value);
-        this.Arcane.Add(other.Arcane.Value);
+        Combat.Add(other.Combat.Value);
+        Dungeoneering.Add(other.Dungeoneering.Value);
+        Nature.Add(other.Nature.Value);
+        Social.Add(other.Social.Value);
+        Arcane.Add(other.Arcane.Value);
     }
 
     public int Get(StatName stat)
     {
         switch(stat)
         {
-            case StatName.Combat: return this.Combat.Value;
-            case StatName.Dungeoneering: return this.Dungeoneering.Value;
-            case StatName.Nature: return this.Nature.Value;
-            case StatName.Social: return this.Social.Value;
-            default: return this.Arcane.Value;
+            case StatName.Combat: return Combat.Value;
+            case StatName.Dungeoneering: return Dungeoneering.Value;
+            case StatName.Nature: return Nature.Value;
+            case StatName.Social: return Social.Value;
+            default: return Arcane.Value;
         }
     }
 
-    public float GetMaxValue()
+    public static float GetMaxValue()
     {
         return 100.0f;
+    }
+
+    public override string ToString()
+    {
+        string s = String.Format("S{0} N{1} A{2} C{3} D{4}", 
+            Social.Value, Nature.Value, Arcane.Value, Combat.Value, Dungeoneering.Value);
+        return s;
     }
 }

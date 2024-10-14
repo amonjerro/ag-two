@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 
 public enum NodeTypes
 {
@@ -20,6 +19,8 @@ public abstract class AQuestNode
     protected QuestState _currentState;
     public string Title { get; set; }
     public string Description { get; set; }
+
+    public string QuestKey { get; set; }
     public int Duration { get; set; }
     public int CurrentTickCount { get; set; }
 

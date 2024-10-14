@@ -15,7 +15,7 @@ public class Adventurer
 
     public Adventurer(){
 
-        Char_Stats = new Stats();
+        Char_Stats = new Stats(0,0,0,0,0);
         Level = 1;
         _onMission = false;
         xp = 0;

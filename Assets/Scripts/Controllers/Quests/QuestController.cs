@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
 
 public partial class QuestController
 {
@@ -22,6 +21,7 @@ public partial class QuestController
     public QuestController(List<SO_QuestData> questDataObjects) { 
         currentlyActiveQuests = new List<AQuestNode>();
         openQuestData = new List<QuestData>();
+        questMap = new Dictionary<string, QuestData>();
         closedQuestData = new List<QuestData>();
 
         LoadQuests(questDataObjects);
@@ -100,6 +100,16 @@ public partial class QuestController
     public QuestData GetQuestByKey(string key)
     {
         return questMap[key];
+    }
+
+    public void BindStagingToQuest(QuestData quest, Dictionary<int, Adventurer> staging)
+    {
+        List<Adventurer> questParty = new List<Adventurer>();
+        foreach(KeyValuePair<int, Adventurer> kvp in staging)
+        {
+            questParty.Add(kvp.Value);
+        }
+        quest.BindAdventurers(questParty);
     }
 
     ~QuestController()

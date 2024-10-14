@@ -32,9 +32,9 @@ public class QuestEventUI : QuestUIPanel
         roleAssignPanel.gameObject.SetActive(true);
     }
 
-    public override void SetQuestData(QuestData data)
+    public override void SetQuestNode(AQuestNode data)
     {
-        nodeEventPanel.SetQuestData(data);
-        roleAssignPanel.SetQuestData(data);
+        nodeEventPanel.SetQuestNode(data);
+        roleAssignPanel.SetQuestNode(data);
     }
 }
