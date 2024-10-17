@@ -32,4 +32,9 @@ public class QuestData
     {
         this.adventurers = adventurers;
     }
+
+    public List<Adventurer> GetAdventurers()
+    {
+        return this.adventurers;
+    }
 }

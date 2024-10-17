@@ -6,7 +6,7 @@ public class RosterWidget : UIPanel
     [SerializeField]
     GameObject pickAdventurerPrefab;
 
-    QuestButton boundButton;
+    PickAdventurerButton boundButton;
     int boundIndex;
     RoleAssignPanel buttonParentPanel;
 
@@ -55,7 +55,7 @@ public class RosterWidget : UIPanel
 
     }
 
-    public void SetBoundButton(int index, QuestButton button)
+    public void SetBoundButton(int index, PickAdventurerButton button)
     {
         boundIndex = index;
         boundButton = button;

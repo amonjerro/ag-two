@@ -21,6 +21,7 @@ public class RoleAssignPanel : QuestUIPanel
     StatBlock[] statBlocks;
     AdventurerManager managerReference;
     QuestData questData;
+    AQuestNode questNode;
 
     private void Start()
     {
@@ -28,9 +29,9 @@ public class RoleAssignPanel : QuestUIPanel
         statBlocks = GetComponentsInChildren<StatBlock>();
 
         // Instantiate the button commands
-        QuestButton[] buttons = GetComponentsInChildren<QuestButton>();
+        PickAdventurerButton[] buttons = GetComponentsInChildren<PickAdventurerButton>();
         for(int i = 0; i < buttons.Length; i++) {
-            QuestButton button = buttons[i];
+            PickAdventurerButton button = buttons[i];
             button.SetCommand(
                 new ShowRosterCommand(
                     button.GetComponent<RectTransform>(),
@@ -41,7 +42,7 @@ public class RoleAssignPanel : QuestUIPanel
             );
         }
         cancel.SetCommand(new DismissPanelCommand(this));
-        embarkButton.SetCommand(new EmbarkCommand(managerReference, questData, this));
+        
 
     }
 
@@ -66,7 +67,8 @@ public class RoleAssignPanel : QuestUIPanel
     public override void SetQuestNode(AQuestNode node)
     {
         SetManagerReference();
-        questData = managerReference.GetQuestController().GetQuestByKey(node.QuestKey);
+        questNode = node;
+        embarkButton.SetCommand(new EmbarkCommand(managerReference, questNode, this));
     }
 
     public void UpdateStats(Dictionary<int, Adventurer> stagingRoster)

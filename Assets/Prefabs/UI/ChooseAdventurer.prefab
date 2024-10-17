@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 703988263651385535}
   - component: {fileID: 5389660628820446140}
   - component: {fileID: 2866348286613941600}
-  - component: {fileID: 3228533179530699346}
+  - component: {fileID: 3801083940016806791}
   m_Layer: 0
   m_Name: ChooseAdventurer
   m_TagString: Untagged
@@ -123,9 +123,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 3228533179530699346}
-        m_TargetAssemblyTypeName: QuestButton, Assembly-CSharp
-        m_MethodName: RunCommand
+      - m_Target: {fileID: 3801083940016806791}
+        m_TargetAssemblyTypeName: PickAdventurerButton, Assembly-CSharp
+        m_MethodName: Execute
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 0.3882353}
   m_EffectDistance: {x: 3, y: -3}
   m_UseGraphicAlpha: 1
---- !u!114 &3228533179530699346
+--- !u!114 &3801083940016806791
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3682161122529291574}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c7ed4d59b99bacb4d99ffc841a16d9ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 1388173b613579243b29cb1b8b773818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7577547086719936175

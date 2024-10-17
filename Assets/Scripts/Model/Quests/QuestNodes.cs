@@ -26,12 +26,15 @@ public abstract class AQuestNode
 
     public AQuestNode Next { get; set; }
 
+    public bool PendingReview { get; set; }
+
     protected abstract void Start();
     protected abstract void End();
     public abstract void SetButtonStrings(string[] buttonStrings);
 
     public void OnStart(QuestState state)
     {
+        PendingReview = false;
         _currentState = state;
         Start();
     }

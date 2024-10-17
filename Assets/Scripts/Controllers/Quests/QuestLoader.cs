@@ -77,7 +77,7 @@ public partial class QuestController
                 }
             }
 
-            startNode.Option1 = nodeObjectMap[rootKey];
+            startNode.Next = nodeObjectMap[rootKey];
 
             // Set the root node of the quest tree
             dataQuest.rootNode = startNode;

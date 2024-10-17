@@ -14,6 +14,9 @@ public class AdventurerManager : MonoBehaviour
 
     private QuestController _questController;
     [SerializeField]
+    UIPanel questMessageQueuePanel;
+
+    [SerializeField]
     List<SO_QuestData> _questData;
     
     public AdventurerProfile profile;
@@ -24,7 +27,7 @@ public class AdventurerManager : MonoBehaviour
         _availableAdventurers = new HashSet<Adventurer>();
         adventurerRoster = new List<Adventurer>();
         _adventurerRecruiter = new AdventurerRecruiter();
-        _questController = new QuestController(_questData);
+        _questController = new QuestController(_questData, (NotificationPill)questMessageQueuePanel);
         _stagingRoster = new Dictionary<int, Adventurer>();
 
         DebugSetup();

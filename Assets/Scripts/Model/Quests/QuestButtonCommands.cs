@@ -88,52 +88,20 @@ public class AcknowledgeCommand : AQuestCommand
     }
 }
 
-public class SeeOpenQuestCommand : AQuestCommand
+public class SeeQuestNode : AQuestCommand
 {
-    QuestData data;
-    QuestUIPanel uiPanel;
+    AQuestNode data;
+    QuestUIPanel questPanel;
 
-    public SeeOpenQuestCommand(QuestData data, QuestUIPanel uiPanel)
+    public SeeQuestNode(AQuestNode data, QuestUIPanel questPanel)
     {
         this.data = data;
-        this.uiPanel = uiPanel;
+        this.questPanel = questPanel;
     }
 
     public override void Execute()
     {
-        uiPanel.SetQuestNode(data.rootNode);
-    }
-}
-
-public class ShowRosterCommand : AQuestCommand
-{
-    RosterWidget roster;
-    UIPanel dismissPanel;
-    RectTransform buttonLocation;
-    Vector3 offset;
-    int index;
-
-    public ShowRosterCommand(RectTransform transform, UIPanel dismiss, RosterWidget roster, Vector3 offset, int index)
-    {
-        buttonLocation = transform;
-        this.roster = roster;
-        this.offset = offset;
-        dismissPanel = dismiss;
-        this.index = index;
-    }
-
-    public override void Execute()
-    {
-
-        RectTransform rosterTransform = roster.GetComponent<RectTransform>();
-        Vector3 targetLocation = Vector3.zero;
-        Quaternion targetRotation = Quaternion.identity;
-        buttonLocation.GetLocalPositionAndRotation(out targetLocation, out targetRotation);
-        rosterTransform.SetLocalPositionAndRotation(new Vector3(targetLocation.x + offset.x, targetLocation.y,0), targetRotation);
-        roster.SetBoundButton(index, buttonLocation.gameObject.GetComponent<QuestButton>());
-        roster.Show();
-        
-        dismissPanel.Show();
+        questPanel.SetQuestNode(data);
     }
 }
 
@@ -155,15 +123,18 @@ public class EmbarkCommand : DismissPanelCommand
 {
     AdventurerManager man;
     QuestData data;
-    public EmbarkCommand(AdventurerManager manager, QuestData data, UIPanel dismissable) : base(dismissable)
+    AQuestNode node;
+    public EmbarkCommand(AdventurerManager manager, AQuestNode node, UIPanel dismissable) : base(dismissable)
     {
         man = manager;
-        this.data = data;
+        data = manager.GetQuestController().GetQuestByKey(node.QuestKey);
+        this.node = node;
     }
 
 
     public override void Execute() {
         man.BindToQuest(data);
+        man.GetQuestController().AddActiveQuest(node.Next);
         base.Execute();
     }
 }
