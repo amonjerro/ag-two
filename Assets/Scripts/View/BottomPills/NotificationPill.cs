@@ -5,6 +5,9 @@ public class NotificationPill : UIPanel
 {
     [SerializeField]
     Animator animator;
+    [SerializeField]
+    Animator childAnimator;
+
     QuestController questController;
     
     [SerializeField]
@@ -21,10 +24,8 @@ public class NotificationPill : UIPanel
         command.Execute();
         panel.Show();
 
-        if (questController.NotificationsEmpty)
-        {
-            Dismiss();
-        }
+        childAnimator.SetBool("bOpen", true);
+
     }
 
     public void UpdateNotification()
@@ -39,6 +40,14 @@ public class NotificationPill : UIPanel
 
     public override void Dismiss()
     {
-        animator.SetBool("bShow", false);
+        TryDismiss();
+    }
+
+    public void TryDismiss()
+    {
+        if (questController.NotificationsEmpty)
+        {
+            animator.SetBool("bShow", false);
+        }
     }
 }
