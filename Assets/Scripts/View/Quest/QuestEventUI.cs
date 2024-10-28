@@ -23,6 +23,7 @@ public class QuestEventUI : QuestUIPanel
     public override void Dismiss()
     {
         sidePanel.Dismiss();
+        ServiceLocator.Instance.GetService<GameCursor.CursorManager>().SetCursorState(GameCursor.CursorStates.FreeHand);
         animator.SetBool("bShow", false);
     }
 

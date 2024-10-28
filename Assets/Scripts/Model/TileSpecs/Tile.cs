@@ -23,16 +23,19 @@ public class TileData
 public class TileMap
 {
     Dictionary<TileTypes, TileData> flywheel;
-    Dictionary<Vector2, TileTypes> map;
+    Dictionary<Vector2, TileTypes> groundMap;
+    Dictionary<Vector2, TileTypes> buildingMap;
 
     public TileMap(int size_x, int size_y)
     {
-        map = new Dictionary<Vector2, TileTypes> ();
+        groundMap = new Dictionary<Vector2, TileTypes> ();
+        buildingMap = new Dictionary<Vector2, TileTypes> ();
+
         flywheel = new Dictionary<TileTypes, TileData> ();
         for (int y = -size_y; y < size_y; y++) {
             for (int x = -size_x; x < size_x; x++) {
                 Vector2 coordinates = new Vector2(x, y);
-                map.Add(coordinates, TileTypes.Grass);
+                groundMap.Add(coordinates, TileTypes.Grass);
             }
         }
 
@@ -44,7 +47,7 @@ public class TileMap
 
     public TileTypes LookupType(Vector2 coordinates)
     {
-        return map[coordinates];
+        return groundMap[coordinates];
     }
 
     public TileData LookupData(TileTypes type) { return flywheel[type]; }
@@ -60,5 +63,10 @@ public class TileMap
                 return new TileData(true);
 
         }
+    }
+
+    public void AddBuilding(Vector2 location, TileTypes type)
+    {
+        buildingMap.Add(location, type);
     }
 }

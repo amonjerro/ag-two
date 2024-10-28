@@ -22,4 +22,9 @@ public class TileGroup : ScriptableObject
 
         return sprites[sampleIndex];
     }
+
+    public Sprite GetSprite(int index)
+    {
+        return sprites[index];
+    }
 }

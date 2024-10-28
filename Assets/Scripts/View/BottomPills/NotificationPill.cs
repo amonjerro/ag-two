@@ -1,4 +1,6 @@
 
+using GameCursor;
+using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class NotificationPill : UIPanel
@@ -25,6 +27,8 @@ public class NotificationPill : UIPanel
         panel.Show();
 
         childAnimator.SetBool("bOpen", true);
+
+        ServiceLocator.Instance.GetService<CursorManager>().SetCursorState(CursorStates.QuestEvent);
 
     }
 
