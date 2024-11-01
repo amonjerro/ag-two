@@ -213,7 +213,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownedPanel: {fileID: 1418335824}
-  state: 1
+  state: 2
 --- !u!114 &19650967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6367,7 +6367,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -983887.3, y: 663310.5}
+  m_AnchoredPosition: {x: -1009952.2, y: 681230.3}
   m_SizeDelta: {x: 171.24, y: 281.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1427888371
@@ -6448,7 +6448,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 048a87d4dcebde04c8f089b98e345e62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownedPanel: {fileID: 1418335824}
+  ownedPanel: {fileID: 0}
   state: 1
 --- !u!114 &1429267269
 MonoBehaviour:
@@ -7569,6 +7569,7 @@ MonoBehaviour:
   mapSize_x: 10
   mapSize_y: 10
   grassTiles: {fileID: 11400000, guid: 5e350a185bfca794886f99dd6da4a1f5, type: 2}
+  wallTiles: {fileID: 0}
 --- !u!1 &1734615903
 GameObject:
   m_ObjectHideFlags: 0

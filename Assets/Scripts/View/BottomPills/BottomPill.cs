@@ -13,7 +13,10 @@ public class BottomPill : UIPanel
     public void OpenPanel()
     {
         ServiceLocator.Instance.GetService<CursorManager>().SetCursorState(state);
-        ownedPanel.Show();
+        if (ownedPanel != null) {
+            ownedPanel.Show();
+        } 
+        
     }
 
     public override void Show()

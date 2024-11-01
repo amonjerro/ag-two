@@ -23,11 +23,12 @@ namespace GameCursor
         private void Awake()
         {
             buildController = new BuildController();
-            buildStateMachine = new BuildStateMachine(buildController);
+            
         }
 
         private void Start()
         {
+            buildStateMachine = new BuildStateMachine(buildController);
             TileManager tileManager = ServiceLocator.Instance.GetService<TileManager>();
             buildController.SetTileManagerReference(tileManager);
         }

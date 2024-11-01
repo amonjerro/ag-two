@@ -1,6 +1,5 @@
 
 using GameCursor;
-using UnityEditor.Build.Content;
 using UnityEngine;
 
 public class NotificationPill : UIPanel
