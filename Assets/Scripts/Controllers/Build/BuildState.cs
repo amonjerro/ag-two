@@ -19,6 +19,7 @@ public abstract class BuildState
 
     public BuildState(BuildController controller, BuildStateMachine fsm)
     {
+        this.controller = controller;
         this.fsm = fsm;
     }
 
@@ -97,7 +98,7 @@ public class BuildMake : BuildState
 
     public override void OnUpdate()
     {
-        cursorReference.UpdateCursorSelect();
+        
     }
 
     public override void OnEnter()

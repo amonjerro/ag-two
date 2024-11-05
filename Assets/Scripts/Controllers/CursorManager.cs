@@ -17,6 +17,10 @@ namespace GameCursor
         public bool isIgnoringCreatures;
         [SerializeField]
         private CursorStates currentState;
+
+        [SerializeField]
+        private SelectionBox selectionBox;
+
         BuildStateMachine buildStateMachine;
         BuildController buildController;
 
@@ -28,9 +32,9 @@ namespace GameCursor
 
         private void Start()
         {
-            buildStateMachine = new BuildStateMachine(buildController);
             TileManager tileManager = ServiceLocator.Instance.GetService<TileManager>();
             buildController.SetTileManagerReference(tileManager);
+            buildStateMachine = new BuildStateMachine(buildController);
         }
 
         private void HandleClickOnAdventurer(Adventurer adventurer)
@@ -41,20 +45,6 @@ namespace GameCursor
         public void SetCursorState(CursorStates state)
         {
             currentState = state;
-        }
-
-        public void ShowSelectBox()
-        {
-
-        }
-
-        public void HideSelectBox() { 
-        
-        }
-
-        public void UpdateCursorSelect()
-        {
-
         }
 
         public void Update()

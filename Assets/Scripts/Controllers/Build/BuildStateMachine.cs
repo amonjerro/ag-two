@@ -22,6 +22,7 @@ public class BuildStateMachine
 
     public void HandleClick(Vector3 position)
     {
+        Debug.Log(position);
         currentState.HandleClick(position);
     }
 
