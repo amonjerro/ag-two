@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class BuildController
 {
@@ -19,13 +20,14 @@ public class BuildController
     }
 
 
-    public void SetRectOrigin(int x, int y)
+    public void SetRectOrigin(Vector3 rawMouseLocation)
     {
-        rectOriginX = x; 
-        rectOriginY = y;
+        Vector3 mouseLocationInWorld = Camera.main.ScreenToWorldPoint(rawMouseLocation);
+        rectOriginX = (int)mouseLocationInWorld.x; 
+        rectOriginY = (int)mouseLocationInWorld.y;
     }
 
-    private void SetRectSize(int width, int height) {
+    private void SetRectSize() {
         int temp;
         if (rectEndX < rectOriginX)
         {
@@ -45,9 +47,11 @@ public class BuildController
         rectHeight = rectEndY - rectOriginY;
     }
 
-    public void SetRectEnd(int x, int y) { 
-        rectEndX = x;
-        rectEndY = y;
+    public void SetRectEnd(Vector3 rawMouseLocation) {
+        Vector3 mouseLocationInWorld = Camera.main.ScreenToWorldPoint(rawMouseLocation);
+        rectEndX = (int) mouseLocationInWorld.x;
+        rectEndY = (int) mouseLocationInWorld.y;
+        SetRectSize();
     }
 
     public void BuildRoom()

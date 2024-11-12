@@ -34,7 +34,7 @@ namespace GameCursor
         {
             TileManager tileManager = ServiceLocator.Instance.GetService<TileManager>();
             buildController.SetTileManagerReference(tileManager);
-            buildStateMachine = new BuildStateMachine(buildController);
+            buildStateMachine = new BuildStateMachine(buildController, this);
         }
 
         private void HandleClickOnAdventurer(Adventurer adventurer)
@@ -78,8 +78,7 @@ namespace GameCursor
             //Debug.Log("On Select");
             switch (currentState) { 
                 case CursorStates.Build:
-                    Vector3 mouseLocation = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-                    buildStateMachine.HandleClick(mouseLocation);
+                    buildStateMachine.HandleClick(Mouse.current.position.ReadValue());
                     break;
                 default:
                     TestNPCClick();
@@ -87,16 +86,32 @@ namespace GameCursor
             }
         }
 
-        private void OnMove(InputValue value)
+        private void OnCancel(InputValue value)
         {
-            switch (currentState) {
+            switch (currentState)
+            {
                 case CursorStates.Build:
-                    // Update the UI if necessary
-                    Vector3 mouseLocation = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+                    buildStateMachine.HandleCancel();
                     break;
                 default:
-                    return;
+                    break;
             }
+        }
+
+        // Selection Box Interaction
+        public void ShowSelectionBox()
+        {
+            selectionBox.Show();
+        }
+
+        public void SetBoxOrigin(float x, float y)
+        {
+            selectionBox.SetOrigin(x, y);
+        }
+
+        public void HideSelectionBox()
+        {
+            selectionBox.Hide();
         }
     }
 }

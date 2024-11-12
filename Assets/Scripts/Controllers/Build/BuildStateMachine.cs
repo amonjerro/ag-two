@@ -1,16 +1,18 @@
 using UnityEngine;
+using GameCursor;
 
 public class BuildStateMachine
 {
     BuildStart _buildStart;
     BuildMake _buildMake;
+    CursorManager _cursorManager;
     BuildState currentState;
 
 
-    public BuildStateMachine(BuildController controller)
+    public BuildStateMachine(BuildController controller, CursorManager cursorManager)
     {
-        _buildStart = new BuildStart(controller, this);
-        _buildMake = new BuildMake(controller, this);
+        _buildStart = new BuildStart(controller, this, cursorManager);
+        _buildMake = new BuildMake(controller, this, cursorManager);
 
         MoveToState(BuildStates.Start);
     }
@@ -22,8 +24,12 @@ public class BuildStateMachine
 
     public void HandleClick(Vector3 position)
     {
-        Debug.Log(position);
         currentState.HandleClick(position);
+    }
+
+    public void HandleCancel()
+    {
+        currentState.Cancel();
     }
 
     public void MoveToState(BuildStates state)

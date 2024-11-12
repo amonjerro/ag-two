@@ -8,7 +8,8 @@ public class SelectionBox : MonoBehaviour
     Image image;
     bool showing;
 
-    Vector2 origin;
+    float originX;
+    float originY;
     Vector2 currentMousePosition;
 
     public void Awake()
@@ -16,6 +17,7 @@ public class SelectionBox : MonoBehaviour
         rt = GetComponent<RectTransform>();
         image = GetComponent<Image>();
         showing = false;
+        rt.sizeDelta = Vector2.zero;
     }
 
     public void Update()
@@ -26,15 +28,27 @@ public class SelectionBox : MonoBehaviour
         }
 
         currentMousePosition = Mouse.current.position.ReadValue();
-        float deltaX = currentMousePosition.x - origin.x;
-        float deltaY = currentMousePosition.y - origin.y;
+        float deltaX = currentMousePosition.x - originX;
+        float deltaY = currentMousePosition.y - originY;
         rt.sizeDelta = new Vector2(Mathf.Abs(deltaX), Mathf.Abs(deltaY));
-        rt.anchoredPosition = new Vector2(origin.x, origin.y) + new Vector2(deltaX * 0.5f, deltaY * 0.5f);
+        rt.anchoredPosition = new Vector2(originX, originY) + new Vector2(deltaX * 0.5f, deltaY * 0.5f);
     }
 
-    public void ToggleVisibility()
+    public void Show()
     {
-        showing = !showing;
+        showing = true;
+    }
+
+    public void Hide()
+    {
+        showing = false;
+        rt.sizeDelta = Vector2.zero;
+    }
+
+    public void SetOrigin(float x, float y)
+    {
+        originX = x;
+        originY = y;
     }
     
 }

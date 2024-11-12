@@ -1,5 +1,6 @@
 using GameCursor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum BuildStates
 {
@@ -17,10 +18,11 @@ public abstract class BuildState
 
     public abstract void Cancel();
 
-    public BuildState(BuildController controller, BuildStateMachine fsm)
+    public BuildState(BuildController controller, BuildStateMachine fsm, CursorManager cursorManager)
     {
         this.controller = controller;
         this.fsm = fsm;
+        cursorReference = cursorManager;
     }
 
     public abstract void OnExit();
@@ -48,26 +50,24 @@ public abstract class BuildState
 public class BuildStart : BuildState
 {
 
-    public BuildStart(BuildController controller, BuildStateMachine fsm) : base(controller, fsm) { }
+    public BuildStart(BuildController controller, BuildStateMachine fsm, CursorManager csm) : base(controller, fsm, csm) { }
 
     public override void HandleClick(Vector3 mouseLocation)
     {
-        int x = (int) mouseLocation.x;
-        int y = (int) mouseLocation.y;
-        controller.SetRectOrigin(x, y);
+        controller.SetRectOrigin(mouseLocation);
+        cursorReference.SetBoxOrigin(mouseLocation.x, mouseLocation.y);
+        Exit();
     }
 
     public override void Cancel()
     {
+        cursorReference.HideSelectionBox();
         cursorReference.SetCursorState(CursorStates.FreeHand);
+        fsm.MoveToState(BuildStates.Start);
     }
 
     public override void OnEnter()
     {
-        if (cursorReference == null)
-        {
-            cursorReference = ServiceLocator.Instance.GetService<CursorManager>();
-        }
     }
 
     public override void OnUpdate()
@@ -75,20 +75,22 @@ public class BuildStart : BuildState
         
     }
 
-    public override void OnExit() {
-
+    public override void OnExit() 
+    {
+        cursorReference.ShowSelectionBox();
         fsm.MoveToState(BuildStates.Make);
     }
 }
 
 public class BuildMake : BuildState
 {
-    public BuildMake(BuildController controller, BuildStateMachine fsm) : base(controller, fsm) { }
+    public BuildMake(BuildController controller, BuildStateMachine fsm, CursorManager csm) : base(controller, fsm, csm) { }
     public override void HandleClick(Vector3 mouseLocation)
     {
         int x = (int)mouseLocation.x;
         int y = (int)mouseLocation.y;
         controller.BuildRoom();
+        Exit();
     }
 
     public override void Cancel()
@@ -98,21 +100,17 @@ public class BuildMake : BuildState
 
     public override void OnUpdate()
     {
-        
+        controller.SetRectEnd(Mouse.current.position.ReadValue());
     }
 
     public override void OnEnter()
     {
-        if (cursorReference == null)
-        {
-            cursorReference = ServiceLocator.Instance.GetService<CursorManager>();
-        }
+
     }
 
     public override void OnExit()
     {
-        
-
+        cursorReference.HideSelectionBox();
         cursorReference.SetCursorState(CursorStates.FreeHand);
         fsm.MoveToState(BuildStates.Start);
     }
