@@ -55,9 +55,27 @@ public class BuildController
 
     public void BuildRoom()
     {
-        for (int y = rectOriginY; y < rectHeight; y++) {
-            for (int x = rectOriginX; x < rectWidth; x++) { 
-                
+        int absWidth = Mathf.Abs(rectWidth);
+        int signWidth = (int)Mathf.Sign(rectWidth);
+        int absHeight = Mathf.Abs(rectHeight);
+        int signHeight = (int)Mathf.Sign(rectHeight);
+
+        for (int x = 0; x <= absWidth; x++)
+        {
+            for (int y = 0; y <= absHeight; y++)
+            {
+                int xOffset = x * signWidth;
+                int yOffset = y * signHeight;
+
+                // We need to paint ground here
+                if (y > 0 && y < absHeight && x > 0 && x < absWidth)
+                {
+                    continue;
+                }
+
+                tileManRef.BuildWall(rectOriginX + xOffset, rectOriginY + yOffset,
+                    GetWallFromRectPosition(rectOriginX, rectEndX, rectOriginX + xOffset, rectOriginY, rectEndY, rectOriginY + yOffset)
+                );
             }
         }
     }

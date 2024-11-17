@@ -23,12 +23,14 @@ public class TileManager : MonoBehaviour
 
     private Dictionary<(int x, int y), SpriteRenderer> groundSpriteRenderers;
     private Dictionary<(int x, int y), SpriteRenderer> ghostSpriteRenderers;
+    private Dictionary<(int x, int y), SpriteRenderer> wallSpriteRenderers;
     
     // Start is called before the first frame update
     void Start()
     {
         groundSpriteRenderers = new Dictionary<(int x, int y), SpriteRenderer>();
         ghostSpriteRenderers  = new Dictionary<(int x, int y), SpriteRenderer>();
+        wallSpriteRenderers = new Dictionary<(int x, int y), SpriteRenderer> ();
         CreateDefaultMap();
     }
 
@@ -124,6 +126,7 @@ public class TileManager : MonoBehaviour
         gameObject.transform.position = new Vector3(x, y, 0);
         SpriteRenderer sr = gameObject.AddComponent<SpriteRenderer>();
         sr.sprite = PickWallSprite(type);
+        wallSpriteRenderers.Add((x,y), sr);
     }
 
     public void PaintWall(int x, int y, WallTypes type)
