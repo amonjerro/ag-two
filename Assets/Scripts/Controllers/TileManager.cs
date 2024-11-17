@@ -19,10 +19,13 @@ public class TileManager : MonoBehaviour
     private TileGroup wallTiles;
 
     private TileMap tilemap;
+
+    private Dictionary<(int x, int y), SpriteRenderer> spriteRenderers;
     
     // Start is called before the first frame update
     void Start()
     {
+        spriteRenderers = new Dictionary<(int x, int y), SpriteRenderer>();
         CreateDefaultMap();
     }
 
@@ -45,9 +48,21 @@ public class TileManager : MonoBehaviour
                 go.transform.position = new Vector3(x, y, 0);
 
                 SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-                sr.sprite = grassTiles.GetRandomSprite(Random.Range(0, grassTiles.GetSize()));
+                sr.sprite = grassTiles.GetRandomSprite(UnityEngine.Random.Range(0, grassTiles.GetSize()));
+                spriteRenderers.Add((x, y), sr);
             }
         }
+    }
+
+    public void Paint(int x, int y, Color color)
+    {
+        SpriteRenderer sr;
+        spriteRenderers.TryGetValue((x, y), out sr);
+        if (sr == null) {
+            return;
+        }
+
+        sr.color = color;
     }
 
     public void BuildWall(int x, int y, WallTypes type)

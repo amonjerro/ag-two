@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class BuildController
 {
@@ -18,7 +17,6 @@ public class BuildController
     {
         this.tileManRef = tileManRef;
     }
-
 
     public void SetRectOrigin(Vector3 rawMouseLocation)
     {
@@ -52,6 +50,7 @@ public class BuildController
         rectEndX = (int) mouseLocationInWorld.x;
         rectEndY = (int) mouseLocationInWorld.y;
         SetRectSize();
+        UpdateTileColors(Color.green);
     }
 
     public void BuildRoom()
@@ -59,6 +58,25 @@ public class BuildController
         for (int y = rectOriginY; y < rectHeight; y++) {
             for (int x = rectOriginX; x < rectWidth; x++) { 
                 
+            }
+        }
+    }
+
+    public void UpdateTileColors(Color color)
+    {
+        int absWidth = Mathf.Abs(rectWidth);
+        int signWidth = (int) Mathf.Sign(rectWidth);
+        int absHeight = Mathf.Abs(rectHeight);
+        int signHeight = (int)Mathf.Sign(rectHeight);
+        if (color == Color.white) {
+            Debug.Log(absWidth);
+            Debug.Log(rectOriginX);
+        }
+        for (int x = 0; x <= absWidth; x++)
+        {
+            for (int y = 0;  y <= absHeight; y++)
+            {
+                tileManRef.Paint(rectOriginX + x * signWidth, rectOriginY + y * signHeight, color);
             }
         }
     }

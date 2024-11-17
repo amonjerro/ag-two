@@ -37,10 +37,6 @@ namespace GameCursor
             buildStateMachine = new BuildStateMachine(buildController, this);
         }
 
-        private void HandleClickOnAdventurer(Adventurer adventurer)
-        {
-            return;
-        }
 
         public void SetCursorState(CursorStates state)
         {

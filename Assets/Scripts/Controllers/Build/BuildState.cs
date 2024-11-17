@@ -110,6 +110,8 @@ public class BuildMake : BuildState
 
     public override void OnExit()
     {
+        controller.UpdateTileColors(Color.white);
+        Debug.Log("Updating to white");
         cursorReference.HideSelectionBox();
         cursorReference.SetCursorState(CursorStates.FreeHand);
         fsm.MoveToState(BuildStates.Start);
