@@ -6457,7 +6457,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1062985.1, y: 720853.7}
+  m_AnchoredPosition: {x: -1096555.8, y: 748824.1}
   m_SizeDelta: {x: 171.24, y: 281.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1427888371
@@ -7659,7 +7659,7 @@ MonoBehaviour:
   mapSize_x: 10
   mapSize_y: 10
   grassTiles: {fileID: 11400000, guid: 5e350a185bfca794886f99dd6da4a1f5, type: 2}
-  wallTiles: {fileID: 0}
+  wallTiles: {fileID: 11400000, guid: 69e4f95b9152227458f810e616d3bba1, type: 2}
 --- !u!1 &1734615903
 GameObject:
   m_ObjectHideFlags: 0

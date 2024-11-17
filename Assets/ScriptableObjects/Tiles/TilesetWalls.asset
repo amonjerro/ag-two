@@ -12,5 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ec4e0f8b5bdef7429d506d34aea62a8, type: 3}
   m_Name: TilesetWalls
   m_EditorClassIdentifier: 
-  sprites: []
-  size: 0
+  sprites:
+  - {fileID: -992429682, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  - {fileID: 32767076, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  - {fileID: 46641377, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  - {fileID: 848315079, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  - {fileID: -1789677397, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  - {fileID: 692953970, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  - {fileID: -628031406, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  - {fileID: -331644968, guid: 50001ee1447c2714890dd2c29ee944f2, type: 3}
+  size: 8
