@@ -65,6 +65,7 @@ public class TileManager : MonoBehaviour
 
                 SpriteRenderer ghostSR = ghostObject.AddComponent<SpriteRenderer>();
                 ghostSpriteRenderers.Add((x, y), ghostSR);
+                ghostSR.sortingOrder = 2;
             }
         }
     }
@@ -126,6 +127,7 @@ public class TileManager : MonoBehaviour
         gameObject.transform.position = new Vector3(x, y, 0);
         SpriteRenderer sr = gameObject.AddComponent<SpriteRenderer>();
         sr.sprite = PickWallSprite(type);
+        sr.sortingOrder = 1;
         wallSpriteRenderers.Add((x,y), sr);
     }
 

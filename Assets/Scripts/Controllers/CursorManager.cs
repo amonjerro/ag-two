@@ -9,7 +9,9 @@ namespace GameCursor
     {
         FreeHand,
         Build,
-        QuestEvent
+        QuestEvent,
+
+        MenuOpen
     }
 
     public class CursorManager : MonoBehaviour
