@@ -23,20 +23,18 @@ namespace GameCursor
         [SerializeField]
         private SelectionBox selectionBox;
 
-        BuildStateMachine buildStateMachine;
-        BuildController buildController;
+        
 
         private void Awake()
         {
-            buildController = new BuildController();
+            
             
         }
 
         private void Start()
         {
-            TileManager tileManager = ServiceLocator.Instance.GetService<TileManager>();
-            buildController.SetTileManagerReference(tileManager);
-            buildStateMachine = new BuildStateMachine(buildController, this);
+            
+            
         }
 
 
@@ -47,7 +45,6 @@ namespace GameCursor
 
         public void Update()
         {
-            buildStateMachine.Update();
         }
 
         private void TestNPCClick()
@@ -76,10 +73,10 @@ namespace GameCursor
             //Debug.Log("On Select");
             switch (currentState) { 
                 case CursorStates.Build:
-                    buildStateMachine.HandleClick(Mouse.current.position.ReadValue());
+                    
                     break;
                 default:
-                    TestNPCClick();
+                    //TestNPCClick();
                     break;
             }
         }
@@ -89,7 +86,7 @@ namespace GameCursor
             switch (currentState)
             {
                 case CursorStates.Build:
-                    buildStateMachine.HandleCancel();
+                    
                     break;
                 default:
                     break;

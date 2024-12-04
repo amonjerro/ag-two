@@ -1,49 +1,52 @@
 using UnityEngine;
 using GameCursor;
 
-public class BuildStateMachine
+namespace TileBuilder
 {
-    BuildStart _buildStart;
-    BuildMake _buildMake;
-    CursorManager _cursorManager;
-    BuildState currentState;
-
-
-    public BuildStateMachine(BuildController controller, CursorManager cursorManager)
+    public class BuildStateMachine
     {
-        _buildStart = new BuildStart(controller, this, cursorManager);
-        _buildMake = new BuildMake(controller, this, cursorManager);
+        BuildStart _buildStart;
+        BuildMake _buildMake;
+        CursorManager _cursorManager;
+        BuildState currentState;
 
-        MoveToState(BuildStates.Start);
-    }
 
-    public void Update()
-    {
-        currentState.Update();
-    }
-
-    public void HandleClick(Vector3 position)
-    {
-        currentState.HandleClick(position);
-    }
-
-    public void HandleCancel()
-    {
-        currentState.Cancel();
-    }
-
-    public void MoveToState(BuildStates state)
-    {
-        switch (state)
+        public BuildStateMachine(BuildController controller, CursorManager cursorManager)
         {
-            case BuildStates.Make:
-                currentState = _buildMake;
-                break;
-            default:
-                currentState = _buildStart;
-                break;
+            _buildStart = new BuildStart(controller, this, cursorManager);
+            _buildMake = new BuildMake(controller, this, cursorManager);
+
+            MoveToState(BuildStates.Start);
         }
 
-        currentState.Enter();
+        public void Update()
+        {
+            currentState.Update();
+        }
+
+        public void HandleClick(Vector3 position)
+        {
+            currentState.HandleClick(position);
+        }
+
+        public void HandleCancel()
+        {
+            currentState.Cancel();
+        }
+
+        public void MoveToState(BuildStates state)
+        {
+            switch (state)
+            {
+                case BuildStates.Make:
+                    currentState = _buildMake;
+                    break;
+                default:
+                    currentState = _buildStart;
+                    break;
+            }
+
+            currentState.Enter();
+        }
     }
 }
