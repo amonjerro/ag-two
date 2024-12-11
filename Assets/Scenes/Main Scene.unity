@@ -3278,8 +3278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3adf7bd5919ab2e448ba9ee9d710aa89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  adventurerPrefab: {fileID: 290489932729112612, guid: a3a65ececbb552c47a9824575b4f05db,
-    type: 3}
+  adventurerPrefab: {fileID: 0}
   questMessageQueuePanel: {fileID: 640694646}
   _questData:
   - {fileID: 11400000, guid: 92d16d6570390444d9bfd2d5002a09c0, type: 2}
@@ -5185,7 +5184,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1645320.6, y: 1104490}
+  m_AnchoredPosition: {x: -1652652.1, y: 1111386.4}
   m_SizeDelta: {x: 171.24, y: 281.25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1427888371
