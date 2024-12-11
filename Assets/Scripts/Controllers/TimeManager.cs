@@ -16,7 +16,7 @@ public class TimeManager : MonoBehaviour
     public bool IsPaused { get; set; }
 
     private float _elapsedTime;
-
+    private int _totalTickCount;
     private int _tickCount;
     private int _days;
     private uint _cycle;
@@ -36,6 +36,11 @@ public class TimeManager : MonoBehaviour
         this.tickLength = tickLength;
     }
 
+    private void Awake()
+    {
+        IsPaused = true;    
+    }
+
     void Start() {
         _elapsedTime = 0.0f;
         _tickCount = 14;
@@ -44,7 +49,6 @@ public class TimeManager : MonoBehaviour
         _currentSeason = Season.Spring;
         textClock.text = "07:00";
         textCalendar.text = "Day 1, Spring. Year 1";
-        IsPaused = false;
     }
 
     void Update() {
@@ -135,5 +139,10 @@ public class TimeManager : MonoBehaviour
         }
     }
 
+    public void LoadTime(int totalTickCount)
+    {
+        _totalTickCount = totalTickCount;
+        IsPaused = false;
+    }
 
 }

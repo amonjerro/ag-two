@@ -16,7 +16,6 @@ public class ServiceLocator : MonoBehaviour
             Instance = this;
         }
         serviceDict = new Dictionary<Type, MonoBehaviour>();
-
     }
 
     public T GetService<T>() where T : MonoBehaviour
