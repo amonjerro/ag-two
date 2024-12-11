@@ -43,15 +43,9 @@ public class AdventurerManager : MonoBehaviour
 
     private void DebugSetup()
     {
-        int xLimit = 5;
-        int yLimit = 3;
         adventurerRoster = AdventurerFactory.MakeAdventurerList(3);
         for (int i = 0; i < adventurerRoster.Count; i++)
         {
-            Vector2 randomStartingPosition = new Vector2(Random.Range(-xLimit, xLimit), Random.Range(-yLimit, yLimit));
-            GameObject adventurer = Instantiate(adventurerPrefab, randomStartingPosition, Quaternion.identity);
-            AdventurerNPC npcInformation = adventurer.GetComponent<AdventurerNPC>();
-            npcInformation.index = i;
             _availableAdventurers.Add(adventurerRoster[i]);
         }
     }

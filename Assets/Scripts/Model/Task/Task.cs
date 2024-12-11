@@ -1,18 +1,38 @@
 namespace Tasks {
+    public enum TaskType
+    {
+        Research,
+        Build,
+        Quest,
+        Forge
+    }
+
     public abstract class Task
     {
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public int Duration {  get; set; }
+        public int TimeElapsed {  get; set; }
+
+        public virtual void HandleTick()
+        {
+            TimeElapsed++;
+            if (TimeElapsed >= Duration)
+            {
+                Complete();
+            }
+        }
+        
         protected abstract void OnComplete();
 
-        public void Complete() {
+        public virtual void Complete() {
             OnComplete();
         }
     }
 
     public class ResearchTask : Task
     {
+
         protected override void OnComplete()
         {
             throw new System.NotImplementedException();
@@ -21,6 +41,7 @@ namespace Tasks {
 
     public class BuildTask : Task
     {
+
         protected override void OnComplete()
         {
             throw new System.NotImplementedException();
