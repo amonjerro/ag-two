@@ -1,5 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using Rooms;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -10,12 +10,12 @@ namespace GameCursor
         FreeHand,
         Build,
         QuestEvent,
-
         MenuOpen
     }
 
     public class CursorManager : MonoBehaviour
     {
+        private CameraMovement _camera;
         public bool isIgnoringCreatures;
         [SerializeField]
         private CursorStates currentState;
@@ -23,18 +23,17 @@ namespace GameCursor
         [SerializeField]
         private SelectionBox selectionBox;
 
-        
+        RoomManager roomManagerRef;
 
         private void Awake()
         {
-            
-            
+            Camera cam = Camera.main;
+            _camera = cam.GetComponent<CameraMovement>();
         }
 
         private void Start()
         {
-            
-            
+            roomManagerRef = ServiceLocator.Instance.GetService<RoomManager>();
         }
 
 
@@ -47,38 +46,33 @@ namespace GameCursor
         {
         }
 
-        private void TestNPCClick()
+        private void TestRoomHover()
         {
             Mouse mouse = Mouse.current;
             Vector3 mousePosition = new Vector3(mouse.position.x.value, mouse.position.y.value, 0);
             Vector3 realWorldPosition = Camera.main.ScreenToWorldPoint(mousePosition) + new Vector3(0,0,10);
+            int positionX = Mathf.FloorToInt(realWorldPosition.x);
+            int positionY = Mathf.FloorToInt(realWorldPosition.y);
 
-            RaycastHit2D hit = Physics2D.Raycast(realWorldPosition, Vector2.zero);
-            if (!hit)
-            {
-                return;
-            }
-            
-            ANPC npc = hit.collider.gameObject.GetComponent<ANPC>();
-            if (npc == null)
-            {
-                return;
-            }
-
-            ServiceLocator.Instance.GetService<AdventurerManager>().ShowAdventurerProfile(npc.GetInformation());
+            Debug.Log(roomManagerRef.IsRoomHovered(positionX, positionY));
         }
 
         private void OnSelect(InputValue value)
         {
-            //Debug.Log("On Select");
+            Debug.Log("On Select");
             switch (currentState) { 
                 case CursorStates.Build:
                     
                     break;
                 default:
-                    //TestNPCClick();
+                    TestRoomHover();
                     break;
             }
+        }
+
+        private void OnMove(InputValue value)
+        {
+            _camera.Move(value.Get<Vector2>());
         }
 
         private void OnCancel(InputValue value)

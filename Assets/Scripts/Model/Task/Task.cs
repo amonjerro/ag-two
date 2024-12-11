@@ -9,6 +9,8 @@ namespace Tasks {
 
     public abstract class Task
     {
+        protected TaskType _task;
+        public TaskType TaskType { get { return _task; } }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public int Duration {  get; set; }
