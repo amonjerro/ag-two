@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum NodeTypes
 {
@@ -103,27 +104,83 @@ public class DecisionNode : AQuestNode
     }
 }
 
-//public class ChallengeNode : DecisionNode
-//{
-//    Stats combinedPartyStats;
-//    Stats challengeStats;
+public enum ChallengeDifficulties
+{
+    Basic,
+    Novice,
+    Adept,
+    Veteran,
+    Expert,
+    Heroic
+}
 
-//    public ChallengeNode(Stats challenge)
-//    {
-//        challengeStats = challenge;
-//    }
+public class ChallengeNode : DecisionNode
+{
+    Stats combinedPartyStats;
+    Stats challengeStats;
+    ChallengeDifficulties difficultyType;
 
-//    protected override void Start()
-//    {
-//        combinedPartyStats = new Stats();
-//        for (int i = 0; i < _currentState.adventurers.Count; i++)
-//        {
-//            combinedPartyStats.Add(_currentState.adventurers[i].Char_Stats);
-//        }
-//    }
+    public ChallengeNode(Stats challenge, ChallengeDifficulties type)
+    {
+        challengeStats = challenge;
+        difficultyType = type;
+    }
 
-//    protected override void End()
-//    {
-//        throw new System.NotImplementedException();
-//    }
-//}
+    protected override void Start()
+    {
+        combinedPartyStats = new Stats(0,0,0,0,0);
+        for (int i = 0; i < _currentState.adventurers.Count; i++)
+        {
+            combinedPartyStats.Add(_currentState.adventurers[i].Char_Stats);
+        }
+    }
+
+    private bool MeetAllChallenges(int bonus)
+    {
+        bool combatMet = combinedPartyStats.Combat.Value + Random.Range(1, bonus) >= challengeStats.Combat.Value;
+        return combatMet;
+    }
+
+    private int ChallengeToBonusMap()
+    {
+        switch (difficultyType)
+        {
+            case ChallengeDifficulties.Heroic:
+                return 1;
+            case ChallengeDifficulties.Expert:
+                return 10;
+            case ChallengeDifficulties.Veteran:
+                return 20;
+            case ChallengeDifficulties.Adept:
+                return 40;
+            case ChallengeDifficulties.Novice:
+                return 80;
+            default:
+                return 100;
+        }
+    }
+
+    public override void Decide(bool value)
+    {
+        if (!value)
+        {
+            // Back down
+            Decision = Option2;
+            return;
+        }
+        int difficultyBonus = ChallengeToBonusMap();
+        if (MeetAllChallenges(difficultyBonus))
+        {
+            Decision = Option1;
+            return;
+        }
+
+        Decision = Option2;
+        
+    }
+
+    protected override void End()
+    {
+        throw new System.NotImplementedException();
+    }
+}

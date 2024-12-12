@@ -1,5 +1,7 @@
 using SaveGame;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainSceneTransitionManager : MonoBehaviour
 {
@@ -17,5 +19,36 @@ public class MainSceneTransitionManager : MonoBehaviour
 
         // Start the clock
         ServiceLocator.Instance.GetService<TimeManager>().LoadTime(GameInstance.tickCount);
+    }
+
+    IEnumerator LoadScene(int scene)
+    {
+        // Begin to load the scene
+        AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+
+
+        // Don't allow the scene to activate until we're read
+        operation.allowSceneActivation = false;
+
+        float t = 0;
+        while (operation.progress < 0.9f || t < 1.0f)
+        {
+            t += Time.deltaTime;
+            t = Mathf.Clamp01(t);
+            fadePanel.SetOpacity(t);
+            yield return null;
+        }
+        operation.allowSceneActivation = true;
+    }
+
+    private void SaveDataForTransition()
+    {
+
+    }
+
+    public void FadeToScene(int sceneIndex)
+    {
+        SaveDataForTransition();
+        StartCoroutine(LoadScene(sceneIndex));
     }
 }
