@@ -21,8 +21,9 @@ public class MainSceneTransitionManager : MonoBehaviour
         ServiceLocator.Instance.GetService<TimeManager>().LoadTime(GameInstance.tickCount);
     }
 
-    IEnumerator LoadScene(int scene)
+    protected IEnumerator LoadScene(int scene)
     {
+        fadePanel.transform.SetAsLastSibling();
         // Begin to load the scene
         AsyncOperation operation = SceneManager.LoadSceneAsync(1);
 
@@ -41,7 +42,7 @@ public class MainSceneTransitionManager : MonoBehaviour
         operation.allowSceneActivation = true;
     }
 
-    private void SaveDataForTransition()
+    protected virtual void SaveDataForTransition()
     {
 
     }
