@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/EditorExtensions/QuestBuilder/QuestBuilder.uss?fileID=7433441132597879392&amp;guid=31d2ee116d0cc224aad4941fa5e6a74e&amp;type=3#QuestBuilder" />
+    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement name="LeftPanel" style="flex-grow: 1; flex-direction: column-reverse;" />
+        <ui:VisualElement name="RightPanel" style="flex-grow: 1;" />
+    </ui:VisualElement>
+</ui:UXML>
