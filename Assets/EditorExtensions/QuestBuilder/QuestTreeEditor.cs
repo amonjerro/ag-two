@@ -11,6 +11,9 @@ public class QuestTreeEditor : EditorWindow
     string activeTreeFilePath;
     QuestNodeArray questNodeArray;
 
+    NodeTreeView treeView;
+
+
     [MenuItem("Window/Quest Tree Editor")]
     static void ShowEditor()
     {
@@ -24,14 +27,14 @@ public class QuestTreeEditor : EditorWindow
     {
         VisualElement root = rootVisualElement;
 
-        activeTreeFilePath = "";
+        // Create elements that are editable in the Unity UI Builder. (Window->UI Toolkit->UI Builder)
+        VisualTreeAsset visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/EditorExtensions/QuestBuilder/QuestBuilder.uxml");
+        visualTree.CloneTree(root);
 
-        Button button = new Button();
-        button.clicked += () => LoadTree();
-        button.name = "load";
-        button.text = "Load Tree";
-        root.Add(button);
+        StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/EditorExtensions/QuestBuilder/QuestBuilder.uss");
+        root.styleSheets.Add(styleSheet);
 
+        treeView = root.Q<NodeTreeView>();
     }
 
     private void LoadTree()
