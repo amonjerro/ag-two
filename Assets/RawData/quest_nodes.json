@@ -6,8 +6,11 @@
       "title": "I am a test info node",
       "description": "Here's some info for your quest",
       "duration": 3,
-      "buttonStrings": ["Return home"],
-      "next": ""
+      "buttonStrings": [ "Return home" ],
+      "next": "",
+      "guid": "8626cf6a3ccb5e243b5d91c0bd930fad",
+      "positionX": 0,
+      "positionY": 0
     }
   ]
 }

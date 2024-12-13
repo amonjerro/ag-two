@@ -12,6 +12,23 @@ public partial class QuestController
     // View
     NotificationPill pill;
 
+    public static NodeTypes MapStringToType(string type)
+    {
+        switch (type)
+        {
+            case "start":
+                return NodeTypes.Start;
+            case "end": 
+                return NodeTypes.End;
+            case "skill":
+                return NodeTypes.Challenge;
+            case "dec":
+                return NodeTypes.Decision; 
+            default:
+                return NodeTypes.Info;
+        }
+    }
+
     public bool NotificationsEmpty { get { return notifications.Count == 0; } }
 
     public void Tick()

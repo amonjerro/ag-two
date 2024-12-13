@@ -23,6 +23,7 @@ public class MainSceneTransitionManager : MonoBehaviour
 
     protected IEnumerator LoadScene(int scene)
     {
+
         fadePanel.transform.SetAsLastSibling();
         // Begin to load the scene
         AsyncOperation operation = SceneManager.LoadSceneAsync(1);

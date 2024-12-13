@@ -20,14 +20,6 @@ public partial class QuestController
     private static class QuestLoader
     {
 
-        private static NodeTypes MapStringToNodeType(string key)
-        {
-            switch (key) {
-                default:
-                    return NodeTypes.Info;
-            }
-        }
-
         public static void LoadQuest(SO_QuestData soQuest, QuestData dataQuest)
         {
             Dictionary<string, AQuestNode> nodeObjectMap = new Dictionary<string, AQuestNode>();
@@ -49,7 +41,7 @@ public partial class QuestController
             // Set up the nodes objects and index their keys
             for (int i = 0; i < nodes.Length; i++)
             {
-                NodeTypes type = MapStringToNodeType(nodes[i].type);
+                NodeTypes type = QuestController.MapStringToType(nodes[i].type);
 
                 AQuestNode node = QuestNodeFactory.MakeQuestNode(type);
 

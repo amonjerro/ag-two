@@ -4,6 +4,7 @@ using UnityEngine;
 public enum NodeTypes
 {
     Start,
+    End,
     Info,
     Challenge,
     Decision
