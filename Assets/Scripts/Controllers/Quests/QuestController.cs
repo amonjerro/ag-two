@@ -29,6 +29,35 @@ public partial class QuestController
         }
     }
 
+    public static string MapTypeToString(NodeTypes type)
+    {
+        switch (type)
+        {
+            case NodeTypes.Start:
+                return "start";
+            case NodeTypes.End:
+                return "end";
+            case NodeTypes.Challenge:
+                return "skill";
+            case NodeTypes.Decision:
+                return "dec";
+            default:
+                return "info";
+        }
+    }
+
+    public static int TypeToButtonStrings(NodeTypes type)
+    {
+        switch (type)
+        {
+            case NodeTypes.Challenge:
+            case NodeTypes.Decision:
+                return 2;
+            default:
+                return 1;
+        }
+    }
+
     public bool NotificationsEmpty { get { return notifications.Count == 0; } }
 
     public void Tick()

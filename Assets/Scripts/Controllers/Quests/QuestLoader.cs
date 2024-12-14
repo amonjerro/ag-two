@@ -25,7 +25,7 @@ public partial class QuestController
             Dictionary<string, AQuestNode> nodeObjectMap = new Dictionary<string, AQuestNode>();
             Dictionary<string, QuestNodeData> dataObjectMap = new Dictionary<string, QuestNodeData>();
             QuestNodeArray questNodeData = JsonUtility.FromJson<QuestNodeArray>(soQuest.nodes.text);
-            QuestNodeData[] nodes = questNodeData.nodes;
+            List<QuestNodeData> nodes = questNodeData.nodes;
 
             // Get the root node of this quest
             string rootKey = nodes[0].key;
@@ -39,9 +39,9 @@ public partial class QuestController
             startNode.QuestKey = dataQuest.questKey;
 
             // Set up the nodes objects and index their keys
-            for (int i = 0; i < nodes.Length; i++)
+            for (int i = 0; i < nodes.Count; i++)
             {
-                NodeTypes type = QuestController.MapStringToType(nodes[i].type);
+                NodeTypes type = MapStringToType(nodes[i].type);
 
                 AQuestNode node = QuestNodeFactory.MakeQuestNode(type);
 

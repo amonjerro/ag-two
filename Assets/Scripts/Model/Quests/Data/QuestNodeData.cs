@@ -1,4 +1,7 @@
-using Unity.VisualScripting;
+using System.Collections.Generic;
+#if (UNITY_EDITOR)
+using UnityEditor.Experimental.GraphView;
+#endif
 
 [System.Serializable]
 public class QuestNodeData
@@ -19,5 +22,25 @@ public class QuestNodeData
 [System.Serializable]
 public class QuestNodeArray
 {
-    public QuestNodeData[] nodes;
+    public List<QuestNodeData> nodes;
+
+    public void DeleteNode(QuestNodeData node)
+    {
+        // Disconnect the item
+        foreach (QuestNodeData nodeData in nodes) {
+            if (nodeData.next == node.key) {
+                nodeData.next = "";
+                break;
+            }
+        }
+
+        // Remove the item
+        nodes.Remove(node);
+    }
+
+    public void ConnectNodes(QuestNodeData parent, QuestNodeData child, Edge edge)
+    {
+        parent.next = child.key;
+    }
 }
+

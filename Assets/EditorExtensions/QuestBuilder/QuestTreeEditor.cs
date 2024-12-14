@@ -12,6 +12,7 @@ namespace QuestBuilder {
         QuestNodeArray questNodeArray;
 
         NodeTreeView treeView;
+        NodeInspector inspector;
 
 
         [MenuItem("Window/Quest Tree Editor")]
@@ -25,8 +26,6 @@ namespace QuestBuilder {
 
         public void CreateGUI()
         {
-            string guidString = GUID.Generate().ToString();
-            Debug.Log(guidString);
             VisualElement root = rootVisualElement;
 
             // Create elements that are editable in the Unity UI Builder. (Window->UI Toolkit->UI Builder)
@@ -37,6 +36,21 @@ namespace QuestBuilder {
             root.styleSheets.Add(styleSheet);
 
             treeView = root.Q<NodeTreeView>();
+            inspector = root.Q<NodeInspector>();
+
+            Button loadButton = new Button();
+            loadButton.text = "Load Tree";
+            loadButton.clicked += LoadTree;
+            inspector.Add(loadButton);
+
+            Button saveButton = new Button();
+            saveButton.text = "Save Tree";
+            saveButton.clicked += SaveTree;
+            inspector.Add(saveButton);
+
+            inspector.Init();
+            treeView.OnNodeSelected = OnNodeSelectionChanged;
+
         }
 
         private void LoadTree()
@@ -57,7 +71,7 @@ namespace QuestBuilder {
                 activeTreeFilePath = EditorUtility.SaveFilePanel("Select Save Location", "", "quest_nodes.json", "json");
             }
 
-            if (activeTreeFilePath.Length > 0)
+            if (activeTreeFilePath.Length > 0 && questNodeArray != null)
             {
                 string jsonString = JsonUtility.ToJson(questNodeArray);
                 File.WriteAllText(activeTreeFilePath, jsonString);
@@ -74,10 +88,9 @@ namespace QuestBuilder {
 
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnNodeSelectionChanged(QuestViewNode node)
         {
-
+            inspector.UpdateSelection(node);
         }
 
 

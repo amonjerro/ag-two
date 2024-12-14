@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace QuestBuilder {
     public class QuestViewNode : Node
@@ -17,11 +18,10 @@ namespace QuestBuilder {
             outputPorts = new List<Port>();
             questNode = node;
             style.left = questNode.positionX;
-            style.right = questNode.positionY;
+            style.top = questNode.positionY;
 
             CreateInputPorts();
             CreateOutputPorts();
-
         }
 
         private void CreateInputPorts()
@@ -33,7 +33,7 @@ namespace QuestBuilder {
                     input = null;
                     break;
                 default:
-                    input = InstantiatePort(Orientation.Vertical, Direction.Input, Port.Capacity.Single, typeof(bool));
+                    input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
                     break;
             }
             if (input != null)
@@ -51,16 +51,17 @@ namespace QuestBuilder {
                     break;
                 case NodeTypes.Decision:
                 case NodeTypes.Challenge:
-                    outputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(bool));
+                    outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
                     outputPort.portName = "Option 1";
                     outputPorts.Add(outputPort);
 
-                    Port secondOutput = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(bool));
+                    Port secondOutput = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
                     secondOutput.portName = "Option 2";
                     outputPorts.Add(secondOutput);
                     break;
                 default:
-                    outputPort = InstantiatePort(Orientation.Vertical, Direction.Output, Port.Capacity.Single, typeof(bool));
+                    outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
+                    outputPort.portName = "";
                     outputPorts.Add(outputPort);
                     break;
             }
@@ -73,8 +74,8 @@ namespace QuestBuilder {
         {
             base.SetPosition(newPos);
 
-            questNode.positionX = newPos.x;
-            questNode.positionY = newPos.y;
+            questNode.positionX = newPos.xMin;
+            questNode.positionY = newPos.yMin;
         }
 
         // Override base event with our logic

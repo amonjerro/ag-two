@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
+using System.Linq;
 
 namespace QuestBuilder {
     public class NodeTreeView : GraphView
@@ -10,7 +12,6 @@ namespace QuestBuilder {
 
         QuestNodeArray rawDataTree;
         public Action<QuestViewNode> OnNodeSelected;
-
 
         public NodeTreeView()
         {
@@ -28,27 +29,80 @@ namespace QuestBuilder {
 
         public void PopulateView(QuestNodeArray questData)
         {
+            rawDataTree = questData;
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements);
             graphViewChanged += OnGraphViewChanged;
 
+
+            
+        }
+
+        public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            base.BuildContextualMenu(evt);
+
+            evt.menu.AppendSeparator();
+            foreach(NodeTypes nodeType in Enum.GetValues(typeof(NodeTypes)))
+            {
+                string name = nodeType.ToString();
+                evt.menu.AppendAction(name + " Node", (a) => CreateNode(nodeType));
+            }
+        }
+
+        public override List<Port> GetCompatiblePorts(Port start, NodeAdapter adapter)
+        {
+            return ports.ToList().Where(endPort => 
+            endPort.direction != start.direction &&
+            endPort.node != start.node).ToList();
         }
 
         private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange) { 
             // Delete elements in graph view
             if(graphViewChange.elementsToRemove != null)
             {
-
+                foreach(GraphElement elem in graphViewChange.elementsToRemove)
+                {
+                    QuestViewNode nodeView = elem as QuestViewNode;
+                    if(nodeView != null)
+                    {
+                        // Delete this node
+                        rawDataTree.DeleteNode(nodeView.questNode);
+                    }
+                }
             }
 
             // Edges need to be created
             if(graphViewChange.edgesToCreate != null)
             {
+                foreach(Edge edge in graphViewChange.edgesToCreate)
+                {
+                    QuestViewNode parentView = edge.output.node as QuestViewNode;
+                    QuestViewNode childView = edge.input.node as QuestViewNode;
 
+                    rawDataTree.ConnectNodes(parentView.questNode, childView.questNode, edge);
+                }
             }
 
             return graphViewChange;
 
+        }
+
+        private void CreateNode(NodeTypes type)
+        {
+            QuestNodeData nodeData = new QuestNodeData();
+            switch (type)
+            {
+                case NodeTypes.Challenge:
+                case NodeTypes.Decision:
+                    nodeData.buttonStrings = new string[2];
+                    break;
+                default:
+                    nodeData.buttonStrings = new string[1];
+                    break;
+            }
+            nodeData.type = QuestController.MapTypeToString(type);
+            InstantiateNodeElement(nodeData);
         }
 
         private void InstantiateNodeElement(QuestNodeData data)
