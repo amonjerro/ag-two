@@ -24,6 +24,11 @@ public class QuestNodeArray
 {
     public List<QuestNodeData> nodes;
 
+    public QuestNodeArray()
+    {
+        nodes = new List<QuestNodeData>();
+    }
+
     public void DeleteNode(QuestNodeData node)
     {
         // Disconnect the item

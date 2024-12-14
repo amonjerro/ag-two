@@ -25,6 +25,7 @@ namespace QuestBuilder {
             StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/EditorExtensions/QuestBuilder/QuestBuilder.uss");
             styleSheets.Add(styleSheet);
 
+            rawDataTree = new QuestNodeArray();
         }
 
         public void PopulateView(QuestNodeArray questData)
@@ -102,6 +103,7 @@ namespace QuestBuilder {
                     break;
             }
             nodeData.type = QuestController.MapTypeToString(type);
+            rawDataTree.nodes.Add(nodeData);
             InstantiateNodeElement(nodeData);
         }
 
@@ -112,6 +114,9 @@ namespace QuestBuilder {
             AddElement(viewNode);
         }
 
-        
+        public QuestNodeArray GetNodeTree()
+        {
+            return rawDataTree;
+        }
     }
 }

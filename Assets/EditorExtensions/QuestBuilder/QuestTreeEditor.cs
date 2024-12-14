@@ -9,7 +9,6 @@ namespace QuestBuilder {
     public class QuestTreeEditor : EditorWindow
     {
         string activeTreeFilePath;
-        QuestNodeArray questNodeArray;
 
         NodeTreeView treeView;
         NodeInspector inspector;
@@ -59,8 +58,8 @@ namespace QuestBuilder {
             if (activeTreeFilePath.Length != 0)
             {
                 string fileContent = File.ReadAllText(activeTreeFilePath);
-                questNodeArray = JsonUtility.FromJson<QuestNodeArray>(fileContent);
-                DrawQuestStructure();
+                QuestNodeArray questNodeArray = JsonUtility.FromJson<QuestNodeArray>(fileContent);
+                DrawQuestStructure(questNodeArray);
             }
         }
 
@@ -71,20 +70,20 @@ namespace QuestBuilder {
                 activeTreeFilePath = EditorUtility.SaveFilePanel("Select Save Location", "", "quest_nodes.json", "json");
             }
 
-            if (activeTreeFilePath.Length > 0 && questNodeArray != null)
+            if (activeTreeFilePath.Length > 0)
             {
-                string jsonString = JsonUtility.ToJson(questNodeArray);
+                string jsonString = JsonUtility.ToJson(treeView.GetNodeTree());
                 File.WriteAllText(activeTreeFilePath, jsonString);
             }
         }
 
 
-        private void DrawQuestStructure()
+        private void DrawQuestStructure(QuestNodeArray questNodes)
         {
             // Guard clause to prevent funny stuff
-            if (questNodeArray == null) return;
+            if (questNodes == null) return;
 
-            treeView.PopulateView(questNodeArray);
+            treeView.PopulateView(questNodes);
 
         }
 
