@@ -59,13 +59,16 @@ public partial class QuestController
             // By key, bind the objects in the object map
             foreach(KeyValuePair<string, AQuestNode> pair in nodeObjectMap)
             {
-                string nextKey = dataObjectMap[pair.Key].next;
-                if (nextKey == "")
+                List<string> childrenKeys = dataObjectMap[pair.Key].next;
+                if (childrenKeys.Count == 0)
                 {
                     pair.Value.Next = null;
                 } else
                 {
-                    pair.Value.Next = nodeObjectMap[nextKey];
+                    foreach(string key in childrenKeys)
+                    {
+                        pair.Value.Children.Add(nodeObjectMap[key]);
+                    }
                 }
             }
 

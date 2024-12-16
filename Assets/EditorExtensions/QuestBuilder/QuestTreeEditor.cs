@@ -19,8 +19,8 @@ namespace QuestBuilder {
         {
             QuestTreeEditor editor = GetWindow<QuestTreeEditor>();
             editor.titleContent = new GUIContent("Quest Tree Editor");
-
             editor.saveChangesMessage = "This quest has unsaved changes. Would you like to save first?";
+            
         }
 
         public void CreateGUI()
@@ -49,7 +49,8 @@ namespace QuestBuilder {
 
             inspector.Init();
             treeView.OnNodeSelected = OnNodeSelectionChanged;
-
+            treeView.SetEditorReference(this);
+            activeTreeFilePath = "";
         }
 
         private void LoadTree()
@@ -65,6 +66,13 @@ namespace QuestBuilder {
 
         private void SaveTree()
         {
+            // Validation
+            if (!NodeDataHasValidIntegrity())
+            {
+                EditorUtility.DisplayDialog("Data Integrity Error", "There are nodes in this tree with missing data", "Ok");
+                return;
+            }
+
             if (activeTreeFilePath == "")
             {
                 activeTreeFilePath = EditorUtility.SaveFilePanel("Select Save Location", "", "quest_nodes.json", "json");
@@ -74,6 +82,7 @@ namespace QuestBuilder {
             {
                 string jsonString = JsonUtility.ToJson(treeView.GetNodeTree());
                 File.WriteAllText(activeTreeFilePath, jsonString);
+                EditorUtility.DisplayDialog("Save Successful", "Data saved successfully", "Ok");
             }
         }
 
@@ -92,6 +101,38 @@ namespace QuestBuilder {
             inspector.UpdateSelection(node);
         }
 
+
+        public override void SaveChanges()
+        {
+            base.SaveChanges();
+            SaveTree();
+        }
+
+        public override void DiscardChanges()
+        {
+            base.DiscardChanges();
+        }
+
+        private bool NodeDataHasValidIntegrity()
+        {
+            QuestNodeArray dataArray = treeView.GetNodeTree();
+            bool isValid = true;
+
+            foreach(QuestNodeData qnd in dataArray.nodes)
+            {
+                if (qnd.key == "")
+                {
+                    return false;
+                }
+            }
+
+            return isValid;
+        }
+
+        public void ChangesHaveOcurred()
+        {
+            hasUnsavedChanges = true;
+        }
 
     }
 }

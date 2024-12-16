@@ -26,6 +26,8 @@ public abstract class AQuestNode
     public int Duration { get; set; }
     public int CurrentTickCount { get; set; }
 
+    public List<AQuestNode> Children { get; set; }
+
     public AQuestNode Next { get; set; }
 
     public bool PendingReview { get; set; }
@@ -45,6 +47,11 @@ public abstract class AQuestNode
     {
         End();
         return Next;
+    }
+
+    public AQuestNode()
+    {
+        Children = new List<AQuestNode>();
     }
 }
 

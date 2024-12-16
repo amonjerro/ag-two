@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
@@ -12,6 +13,7 @@ namespace QuestBuilder {
 
         QuestNodeArray rawDataTree;
         public Action<QuestViewNode> OnNodeSelected;
+        QuestTreeEditor editorReference = null;
 
         public NodeTreeView()
         {
@@ -26,6 +28,7 @@ namespace QuestBuilder {
             styleSheets.Add(styleSheet);
 
             rawDataTree = new QuestNodeArray();
+            graphViewChanged += OnGraphViewChanged;
         }
 
         public void PopulateView(QuestNodeArray questData)
@@ -58,7 +61,12 @@ namespace QuestBuilder {
             endPort.node != start.node).ToList();
         }
 
-        private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange) { 
+        private GraphViewChange OnGraphViewChanged(GraphViewChange graphViewChange) {
+            if (editorReference != null)
+            {
+                editorReference.ChangesHaveOcurred();
+            }
+            
             // Delete elements in graph view
             if(graphViewChange.elementsToRemove != null)
             {
@@ -70,6 +78,14 @@ namespace QuestBuilder {
                         // Delete this node
                         rawDataTree.DeleteNode(nodeView.questNode);
                     }
+
+                    Edge edge = elem as Edge;
+                    if (edge != null)
+                    {
+                        //Remove this edge
+                        QuestViewNode parentView = edge.output.node as QuestViewNode;
+                        QuestViewNode childView = edge.input.node as QuestViewNode;
+                    }
                 }
             }
 
@@ -80,7 +96,8 @@ namespace QuestBuilder {
                 {
                     QuestViewNode parentView = edge.output.node as QuestViewNode;
                     QuestViewNode childView = edge.input.node as QuestViewNode;
-
+                    parentView.AddChildConnection(childView);
+                    childView.Parent = parentView;
                     rawDataTree.ConnectNodes(parentView.questNode, childView.questNode, edge);
                 }
             }
@@ -91,6 +108,10 @@ namespace QuestBuilder {
 
         private void CreateNode(NodeTypes type)
         {
+            if (editorReference != null)
+            {
+                editorReference.ChangesHaveOcurred();
+            }
             QuestNodeData nodeData = new QuestNodeData();
             switch (type)
             {
@@ -103,6 +124,7 @@ namespace QuestBuilder {
                     break;
             }
             nodeData.type = QuestController.MapTypeToString(type);
+            nodeData.key = GUID.Generate().ToString();
             rawDataTree.nodes.Add(nodeData);
             InstantiateNodeElement(nodeData);
         }
@@ -117,6 +139,11 @@ namespace QuestBuilder {
         public QuestNodeArray GetNodeTree()
         {
             return rawDataTree;
+        }
+
+        public void SetEditorReference(QuestTreeEditor qte)
+        {
+            editorReference = qte;
         }
     }
 }

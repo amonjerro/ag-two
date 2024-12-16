@@ -12,11 +12,15 @@ public class QuestNodeData
     public string description;
     public string[] buttonStrings;
     public int duration;
-    public string next;
+    public List<string> next;
 
-    public string guid;
     public float positionX;
     public float positionY;
+
+    public QuestNodeData()
+    {
+        next = new List<string>();
+    }
 }
 
 [System.Serializable]
@@ -33,8 +37,10 @@ public class QuestNodeArray
     {
         // Disconnect the item
         foreach (QuestNodeData nodeData in nodes) {
-            if (nodeData.next == node.key) {
-                nodeData.next = "";
+            if (nodeData.next.Contains(node.key))
+            {
+                int indexOf = nodeData.next.IndexOf(node.key);
+                nodeData.next[indexOf] = "";
                 break;
             }
         }
@@ -45,7 +51,7 @@ public class QuestNodeArray
 
     public void ConnectNodes(QuestNodeData parent, QuestNodeData child, Edge edge)
     {
-        parent.next = child.key;
+        parent.next.Add(child.key);
     }
 }
 

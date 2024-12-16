@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/EditorExtensions/QuestBuilder/QuestBuilder.uss?fileID=7433441132597879392&amp;guid=31d2ee116d0cc224aad4941fa5e6a74e&amp;type=3#QuestBuilder" />
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
         <SplitView>
-            <NodeInspector />
+            <QuestBuilder.NodeInspector />
             <QuestBuilder.NodeTreeView focusable="true" style="flex-shrink: 1;" />
         </SplitView>
     </ui:VisualElement>

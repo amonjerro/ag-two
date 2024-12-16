@@ -13,9 +13,13 @@ namespace QuestBuilder {
         public Port input;
         public List<Port> outputPorts;
         public Action<QuestViewNode> OnNodeSelected;
+        public QuestViewNode Parent { get; set; }
+
+        List<QuestViewNode> childrenNodes;
         public QuestViewNode(QuestNodeData node)
         {
             outputPorts = new List<Port>();
+            childrenNodes = new List<QuestViewNode>(); 
             questNode = node;
             style.left = questNode.positionX;
             style.top = questNode.positionY;
@@ -83,6 +87,30 @@ namespace QuestBuilder {
         {
             base.OnSelected();
             OnNodeSelected?.Invoke(this);
+        }
+
+        public void AddChildConnection(QuestViewNode node)
+        {
+            Debug.Log("Child connection added");
+            childrenNodes.Add(node);
+        }
+
+        public void UpdateChildrenKey(string guid, string newValue)
+        {
+            QuestViewNode relevantChild = null;
+            foreach (QuestViewNode child in childrenNodes)
+            {
+                if (child.questNode.key == guid)
+                {
+                    relevantChild = child;
+                    break;
+                }
+            }
+            if (relevantChild != null)
+            {
+                Debug.Log("Found Child");
+                relevantChild.questNode.key = newValue;
+            }
         }
     }
 }
