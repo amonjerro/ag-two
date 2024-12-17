@@ -37,6 +37,11 @@ namespace QuestBuilder {
             treeView = root.Q<NodeTreeView>();
             inspector = root.Q<NodeInspector>();
 
+            Button newButton = new Button();
+            newButton.text = "New Tree";
+            newButton.clicked += NewTree;
+            inspector.Add(newButton);
+
             Button loadButton = new Button();
             loadButton.text = "Load Tree";
             loadButton.clicked += LoadTree;
@@ -51,6 +56,12 @@ namespace QuestBuilder {
             treeView.OnNodeSelected = OnNodeSelectionChanged;
             treeView.SetEditorReference(this);
             activeTreeFilePath = "";
+        }
+
+        private void NewTree()
+        {
+            activeTreeFilePath = "";
+            treeView.ClearTree();
         }
 
         private void LoadTree()
@@ -83,7 +94,9 @@ namespace QuestBuilder {
                 string jsonString = JsonUtility.ToJson(treeView.GetNodeTree());
                 File.WriteAllText(activeTreeFilePath, jsonString);
                 EditorUtility.DisplayDialog("Save Successful", "Data saved successfully", "Ok");
+                hasUnsavedChanges = false;
             }
+            
         }
 
 

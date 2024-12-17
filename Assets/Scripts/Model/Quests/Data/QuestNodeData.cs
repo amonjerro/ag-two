@@ -21,6 +21,13 @@ public class QuestNodeData
     {
         next = new List<string>();
     }
+
+    public void CreateNextSlots(int slots)
+    {
+        for (int i = 0; i < slots; i++) {
+            next.Add("");
+        }
+    }
 }
 
 [System.Serializable]
@@ -49,9 +56,14 @@ public class QuestNodeArray
         nodes.Remove(node);
     }
 
-    public void ConnectNodes(QuestNodeData parent, QuestNodeData child, Edge edge)
+    public void DisconnectNodes(QuestNodeData parent, int childIndex)
     {
-        parent.next.Add(child.key);
+        parent.next[childIndex] = "";
+    }
+
+    public void ConnectNodes(QuestNodeData parent, QuestNodeData child, int edgeNumber)
+    {
+        parent.next[edgeNumber] = child.key;
     }
 }
 

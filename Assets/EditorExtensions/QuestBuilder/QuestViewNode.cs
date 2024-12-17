@@ -21,6 +21,8 @@ namespace QuestBuilder {
             outputPorts = new List<Port>();
             childrenNodes = new List<QuestViewNode>(); 
             questNode = node;
+
+            title = node.title;
             style.left = questNode.positionX;
             style.top = questNode.positionY;
 
@@ -62,11 +64,15 @@ namespace QuestBuilder {
                     Port secondOutput = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
                     secondOutput.portName = "Option 2";
                     outputPorts.Add(secondOutput);
+
+                    childrenNodes.Add(null);
+                    childrenNodes.Add(null);
                     break;
                 default:
                     outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
                     outputPort.portName = "";
                     outputPorts.Add(outputPort);
+                    childrenNodes.Add(null);
                     break;
             }
             foreach (Port port in outputPorts) {
@@ -89,32 +95,22 @@ namespace QuestBuilder {
             OnNodeSelected?.Invoke(this);
         }
 
-        public void AddChildConnection(QuestViewNode node)
-        {
-            int childCount = childrenNodes.Count;
 
-            if (childCount == 0) {
-                childrenNodes.Add(node);
-            }
-            
+        public void AddChildConnection(QuestViewNode node, int portNumber)
+        {
+            childrenNodes[portNumber] = node;
         }
 
-        public void UpdateChildrenKey(string guid, string newValue)
+        public int GetPortNumber(Port port)
         {
-            QuestViewNode relevantChild = null;
-            foreach (QuestViewNode child in childrenNodes)
-            {
-                if (child.questNode.key == guid)
-                {
-                    relevantChild = child;
-                    break;
-                }
-            }
-            if (relevantChild != null)
-            {
-                Debug.Log("Found Child");
-                relevantChild.questNode.key = newValue;
-            }
+            return outputPorts.IndexOf(port);
+        }
+
+        public int RemoveChild(QuestViewNode child)
+        {
+            int indexOf = childrenNodes.IndexOf(child);
+            childrenNodes[indexOf] = null;
+            return indexOf;
         }
     }
 }

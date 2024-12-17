@@ -31,12 +31,19 @@ namespace QuestBuilder {
             graphViewChanged += OnGraphViewChanged;
         }
 
-        public void PopulateView(QuestNodeArray questData)
+        public void ClearTree()
         {
-            rawDataTree = questData;
+            rawDataTree = new QuestNodeArray();
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements);
             graphViewChanged += OnGraphViewChanged;
+        }
+
+        public void PopulateView(QuestNodeArray questData)
+        {
+            ClearTree();
+            rawDataTree = questData;
+            
 
             // Set up reference table
             Dictionary<string, QuestViewNode> nodeMap = new Dictionary<string, QuestViewNode>();
@@ -61,9 +68,13 @@ namespace QuestBuilder {
                     // Create the edges
                     for (int i = 0; i < viewNode.questNode.next.Count; i++) {
                         string key = viewNode.questNode.next[i];
-                        QuestViewNode child = nodeMap[key];
-                        Edge e = viewNode.outputPorts[i].ConnectTo(child.input);
-                        AddElement(e);
+                        
+                        if (nodeMap.ContainsKey(key)) {
+                            QuestViewNode child = nodeMap[key];
+                            Edge e = viewNode.outputPorts[i].ConnectTo(child.input);
+                            viewNode.AddChildConnection(child, i);
+                            AddElement(e);
+                        }
                     }
                 }
             }
@@ -104,6 +115,7 @@ namespace QuestBuilder {
                     {
                         // Delete this node
                         rawDataTree.DeleteNode(nodeView.questNode);
+
                     }
 
                     Edge edge = elem as Edge;
@@ -112,6 +124,9 @@ namespace QuestBuilder {
                         //Remove this edge
                         QuestViewNode parentView = edge.output.node as QuestViewNode;
                         QuestViewNode childView = edge.input.node as QuestViewNode;
+
+                        int index = parentView.RemoveChild(childView);
+                        rawDataTree.DisconnectNodes(parentView.questNode, index);
                     }
                 }
             }
@@ -122,10 +137,11 @@ namespace QuestBuilder {
                 foreach(Edge edge in graphViewChange.edgesToCreate)
                 {
                     QuestViewNode parentView = edge.output.node as QuestViewNode;
+                    int outputPort = parentView.GetPortNumber(edge.output);
                     QuestViewNode childView = edge.input.node as QuestViewNode;
-                    parentView.AddChildConnection(childView);
+                    parentView.AddChildConnection(childView, outputPort);
                     childView.Parent = parentView;
-                    rawDataTree.ConnectNodes(parentView.questNode, childView.questNode, edge);
+                    rawDataTree.ConnectNodes(parentView.questNode, childView.questNode, outputPort);
                 }
             }
 
@@ -145,9 +161,14 @@ namespace QuestBuilder {
                 case NodeTypes.Challenge:
                 case NodeTypes.Decision:
                     nodeData.buttonStrings = new string[2];
+                    nodeData.CreateNextSlots(2);
+                    break;
+                case NodeTypes.End:
+                    nodeData.buttonStrings = new string[1];
                     break;
                 default:
                     nodeData.buttonStrings = new string[1];
+                    nodeData.CreateNextSlots(1);
                     break;
             }
             nodeData.type = QuestController.MapTypeToString(type);
