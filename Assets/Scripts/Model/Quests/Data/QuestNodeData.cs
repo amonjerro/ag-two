@@ -1,5 +1,21 @@
 using System.Collections.Generic;
 
+[System.Serializable]
+public class ChallengeValues
+{
+    public int nature;
+    public int combat;
+    public int dungeoneering;
+    public int social;
+    public int arcane;
+
+    public Stats ToStats()
+    {
+        Stats stats = new Stats(combat, dungeoneering, nature, social, arcane);
+        return stats;
+    }
+}
+
 
 [System.Serializable]
 public class QuestNodeData
@@ -11,6 +27,7 @@ public class QuestNodeData
     public string[] buttonStrings;
     public int duration;
     public List<string> next;
+    public ChallengeValues challengeValues;
 
     public float positionX;
     public float positionY;

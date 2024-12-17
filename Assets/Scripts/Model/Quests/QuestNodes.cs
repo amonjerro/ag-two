@@ -191,16 +191,26 @@ public class ChallengeNode : DecisionNode
         Decision = Option2;
     }
 
+    private float CalculateStatSuccessLikelihood(int challengeStatValue, int partyStatValue, int bonus)
+    {
+        float numerator = Mathf.Clamp01(challengeStatValue - partyStatValue);
+        float denominator = bonus;
+        return 1 - (numerator / denominator);
+    }
+
     public float ShowSuccessLikelihood()
     {
         int difficultyBonus = ChallengeToBonusMap();
-        float combatSuccess = (combinedPartyStats.Combat.Value + difficultyBonus - challengeStats.Combat.Value) / (float)(combinedPartyStats.Combat.Value + difficultyBonus);
-        float dungeonSuccess = (combinedPartyStats.Dungeoneering.Value + difficultyBonus - challengeStats.Dungeoneering.Value) / (float)(combinedPartyStats.Dungeoneering.Value + difficultyBonus);
-        float arcaneSuccess = (combinedPartyStats.Arcane.Value + difficultyBonus - challengeStats.Arcane.Value) / (float)(combinedPartyStats.Arcane.Value + difficultyBonus);
-        float natureSuccess = (combinedPartyStats.Nature.Value + difficultyBonus - challengeStats.Nature.Value) / (float)(combinedPartyStats.Nature.Value + difficultyBonus);
-        float socialSuccess = (combinedPartyStats.Social.Value + difficultyBonus - challengeStats.Social.Value) / (float)(combinedPartyStats.Social.Value + difficultyBonus);
+        Stats cs = challengeStats;
+        Stats ps = combinedPartyStats;
+        float combatChallenge = CalculateStatSuccessLikelihood(cs.Combat.Value, ps.Combat.Value, difficultyBonus);
+        float socialChallenge = CalculateStatSuccessLikelihood(cs.Social.Value, ps.Social.Value, difficultyBonus);
+        float natureChallenge = CalculateStatSuccessLikelihood(cs.Nature.Value, ps.Nature.Value, difficultyBonus);
+        float arcaneChallenge = CalculateStatSuccessLikelihood(cs.Arcane.Value, ps.Arcane.Value, difficultyBonus);
+        float dungeoneeringChallenge = CalculateStatSuccessLikelihood(cs.Dungeoneering.Value, ps.Dungeoneering.Value, difficultyBonus);
 
-        return combatSuccess * dungeonSuccess * arcaneSuccess * natureSuccess * socialSuccess;
+        return combatChallenge * socialChallenge * natureChallenge * arcaneChallenge * dungeoneeringChallenge;
+        
     }
 
     protected override void End()

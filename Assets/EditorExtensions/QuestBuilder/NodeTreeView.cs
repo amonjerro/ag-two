@@ -159,6 +159,10 @@ namespace QuestBuilder {
             switch (type)
             {
                 case NodeTypes.Challenge:
+                    nodeData.buttonStrings = new string[2];
+                    nodeData.CreateNextSlots(2);
+                    nodeData.challengeValues = new ChallengeValues();
+                    break;
                 case NodeTypes.Decision:
                     nodeData.buttonStrings = new string[2];
                     nodeData.CreateNextSlots(2);

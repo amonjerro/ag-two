@@ -16,6 +16,7 @@ namespace QuestBuilder {
         public QuestViewNode Parent { get; set; }
 
         List<QuestViewNode> childrenNodes;
+        public NodeTypes nodeType;
         public QuestViewNode(QuestNodeData node)
         {
             outputPorts = new List<Port>();
@@ -25,15 +26,14 @@ namespace QuestBuilder {
             title = node.title;
             style.left = questNode.positionX;
             style.top = questNode.positionY;
-
+            nodeType = QuestController.MapStringToType(questNode.type);
             CreateInputPorts();
             CreateOutputPorts();
         }
 
         private void CreateInputPorts()
         {
-            NodeTypes type = QuestController.MapStringToType(questNode.type);
-            switch (type)
+            switch (nodeType)
             {
                 case NodeTypes.Start:
                     input = null;
@@ -50,9 +50,8 @@ namespace QuestBuilder {
         }
 
         private void CreateOutputPorts() {
-            NodeTypes type = QuestController.MapStringToType(questNode.type);
             Port outputPort = null;
-            switch (type) {
+            switch (nodeType) {
                 case NodeTypes.End:
                     break;
                 case NodeTypes.Decision:

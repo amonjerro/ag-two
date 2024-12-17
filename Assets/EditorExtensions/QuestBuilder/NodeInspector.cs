@@ -15,6 +15,14 @@ namespace QuestBuilder
         TextField keyField;
         TextField descriptionField;
         Foldout buttonStrings;
+        Foldout challengeValues;
+        IntegerField arcaneChallenge;
+        IntegerField socialChallenge;
+        IntegerField dungeoneeringChallenge;
+        IntegerField natureChallenge;
+        IntegerField combatChallenge;
+
+
         IntegerField durationField;
         QuestViewNode activeNode;
 
@@ -53,7 +61,35 @@ namespace QuestBuilder
             buttonStrings = new Foldout { text = "Button Strings" };
             Add(buttonStrings);
 
+            challengeValues = new Foldout { text = "Challenge Values" };
+            Add(challengeValues);
 
+            arcaneChallenge = new IntegerField("Arcane");
+            arcaneChallenge.RegisterValueChangedCallback(HandleChange);
+            arcaneChallenge.name = "arc";
+            challengeValues.Add(arcaneChallenge);
+
+            socialChallenge = new IntegerField("Social");
+            socialChallenge.RegisterValueChangedCallback(HandleChange);
+            socialChallenge.name = "soc";
+            challengeValues.Add(socialChallenge);
+
+            dungeoneeringChallenge = new IntegerField("Dungeoneering");
+            dungeoneeringChallenge.RegisterValueChangedCallback(HandleChange);
+            dungeoneeringChallenge.name = "dun";
+            challengeValues.Add(dungeoneeringChallenge);
+
+            natureChallenge = new IntegerField("Nature");
+            natureChallenge.RegisterValueChangedCallback(HandleChange);
+            natureChallenge.name = "nat";
+            challengeValues.Add(natureChallenge);
+
+            combatChallenge = new IntegerField("Combat");
+            combatChallenge.RegisterValueChangedCallback(HandleChange);
+            combatChallenge.name = "com";
+            challengeValues.Add(combatChallenge);
+
+            challengeValues.visible = false;
         }
 
         public void UpdateSelection(QuestViewNode viewNode)
@@ -64,8 +100,20 @@ namespace QuestBuilder
             descriptionField.value = viewNode.questNode.description;
             durationField.value = viewNode.questNode.duration;
 
+
             // clear the button string view
             buttonStrings.Clear();
+
+            //clear the challenge values
+            challengeValues.visible = viewNode.nodeType == NodeTypes.Challenge;
+            if (challengeValues.visible)
+            {
+                arcaneChallenge.value = viewNode.questNode.challengeValues.arcane;
+                socialChallenge.value = viewNode.questNode.challengeValues.social;
+                dungeoneeringChallenge.value = viewNode.questNode.challengeValues.dungeoneering;
+                natureChallenge.value = viewNode.questNode.challengeValues.nature;
+                combatChallenge.value = viewNode.questNode.challengeValues.combat;
+            }
 
             for (int i = 0; i < QuestController.TypeToButtonStrings(QuestController.MapStringToType(viewNode.questNode.type)); i++)
             {
@@ -75,6 +123,7 @@ namespace QuestBuilder
                 textField.value = viewNode.questNode.buttonStrings[i];
                 buttonStrings.Add(textField);
             }
+
         }
 
         private void HandleChange(ChangeEvent<string> evt)
@@ -89,7 +138,38 @@ namespace QuestBuilder
 
         private void HandleChange(ChangeEvent<int> evt)
         {
-            activeNode.questNode.duration = evt.newValue;
+            if (activeNode == null)
+            {
+                return;
+            }
+
+            VisualElement ve = (VisualElement)evt.currentTarget;
+
+            ApplyChange(ve.name, evt.newValue);
+        }
+
+        private void ApplyChange(string inputName, int newValue)
+        {
+            switch (inputName) {
+                case "com":
+                    activeNode.questNode.challengeValues.combat = newValue;
+                    break;
+                case "dun":
+                    activeNode.questNode.challengeValues.dungeoneering = newValue;
+                    break;
+                case "nat":
+                    activeNode.questNode.challengeValues.nature = newValue;
+                    break;
+                case "soc":
+                    activeNode.questNode.challengeValues.social = newValue;
+                    break;
+                case "arc":
+                    activeNode.questNode.challengeValues.arcane = newValue;
+                    break;
+                default:
+                    activeNode.questNode.duration = newValue;
+                    break;
+            }
         }
 
         private void ApplyChange(string inputName, string newValue)
