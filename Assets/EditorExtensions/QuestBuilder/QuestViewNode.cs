@@ -91,8 +91,12 @@ namespace QuestBuilder {
 
         public void AddChildConnection(QuestViewNode node)
         {
-            Debug.Log("Child connection added");
-            childrenNodes.Add(node);
+            int childCount = childrenNodes.Count;
+
+            if (childCount == 0) {
+                childrenNodes.Add(node);
+            }
+            
         }
 
         public void UpdateChildrenKey(string guid, string newValue)

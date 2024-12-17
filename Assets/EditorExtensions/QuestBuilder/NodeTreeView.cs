@@ -38,8 +38,35 @@ namespace QuestBuilder {
             DeleteElements(graphElements);
             graphViewChanged += OnGraphViewChanged;
 
-
+            // Set up reference table
+            Dictionary<string, QuestViewNode> nodeMap = new Dictionary<string, QuestViewNode>();
+            List<QuestViewNode> viewNodes = new List<QuestViewNode>();
             
+            // Create the nodes
+            foreach(QuestNodeData questNode in rawDataTree.nodes)
+            {
+                QuestViewNode viewNode = InstantiateNodeElement(questNode);
+                viewNode.SetPosition(new Rect(questNode.positionX, questNode.positionY, 0, 0));
+                nodeMap.Add(questNode.key, viewNode);
+                viewNodes.Add(viewNode);
+            }
+
+
+            // Create Edges
+            foreach (QuestViewNode viewNode in viewNodes) {
+
+                // If not the end node
+                if (viewNode.questNode.next.Count > 0) {
+
+                    // Create the edges
+                    for (int i = 0; i < viewNode.questNode.next.Count; i++) {
+                        string key = viewNode.questNode.next[i];
+                        QuestViewNode child = nodeMap[key];
+                        Edge e = viewNode.outputPorts[i].ConnectTo(child.input);
+                        AddElement(e);
+                    }
+                }
+            }
         }
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
@@ -129,11 +156,12 @@ namespace QuestBuilder {
             InstantiateNodeElement(nodeData);
         }
 
-        private void InstantiateNodeElement(QuestNodeData data)
+        private QuestViewNode InstantiateNodeElement(QuestNodeData data)
         {
             QuestViewNode viewNode = new QuestViewNode(data);
             viewNode.OnNodeSelected = OnNodeSelected;
             AddElement(viewNode);
+            return viewNode;
         }
 
         public QuestNodeArray GetNodeTree()
