@@ -146,7 +146,12 @@ public class ChallengeNode : DecisionNode
     private bool MeetAllChallenges(int bonus)
     {
         bool combatMet = combinedPartyStats.Combat.Value + Random.Range(1, bonus) >= challengeStats.Combat.Value;
-        return combatMet;
+        bool arcaneMet = combinedPartyStats.Arcane.Value + Random.Range(1, bonus) >= challengeStats.Arcane.Value;
+        bool socialMet = combinedPartyStats.Social.Value + Random.Range(1, bonus) >= challengeStats.Social.Value;
+        bool dungeonMet = combinedPartyStats.Dungeoneering.Value + Random.Range(1, bonus) >= challengeStats.Dungeoneering.Value;
+        bool natureMet = combinedPartyStats.Nature.Value + Random.Range(1, bonus) >= challengeStats.Nature.Value;
+
+        return combatMet & arcaneMet;
     }
 
     private int ChallengeToBonusMap()
@@ -184,7 +189,18 @@ public class ChallengeNode : DecisionNode
         }
 
         Decision = Option2;
-        
+    }
+
+    public float ShowSuccessLikelihood()
+    {
+        int difficultyBonus = ChallengeToBonusMap();
+        float combatSuccess = (combinedPartyStats.Combat.Value + difficultyBonus - challengeStats.Combat.Value) / (float)(combinedPartyStats.Combat.Value + difficultyBonus);
+        float dungeonSuccess = (combinedPartyStats.Dungeoneering.Value + difficultyBonus - challengeStats.Dungeoneering.Value) / (float)(combinedPartyStats.Dungeoneering.Value + difficultyBonus);
+        float arcaneSuccess = (combinedPartyStats.Arcane.Value + difficultyBonus - challengeStats.Arcane.Value) / (float)(combinedPartyStats.Arcane.Value + difficultyBonus);
+        float natureSuccess = (combinedPartyStats.Nature.Value + difficultyBonus - challengeStats.Nature.Value) / (float)(combinedPartyStats.Nature.Value + difficultyBonus);
+        float socialSuccess = (combinedPartyStats.Social.Value + difficultyBonus - challengeStats.Social.Value) / (float)(combinedPartyStats.Social.Value + difficultyBonus);
+
+        return combatSuccess * dungeonSuccess * arcaneSuccess * natureSuccess * socialSuccess;
     }
 
     protected override void End()
