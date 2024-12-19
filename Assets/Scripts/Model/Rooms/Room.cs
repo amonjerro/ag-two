@@ -42,6 +42,8 @@ namespace Rooms
         {
             components.Add(component);
         }
+
+        public abstract AbsRoomClickEvent HandleClick();
     }
     
     public class OperationsRoom : Room
@@ -57,6 +59,10 @@ namespace Rooms
         {
             // No tasks can be assigned to the operations room
 
+        }
+
+        public override AbsRoomClickEvent HandleClick() {
+            return new SceneTransitionEvent(roomType);
         }
     }
 
@@ -93,6 +99,9 @@ namespace Rooms
             debrisClearTask.HandleTick();
         }
 
+        public override AbsRoomClickEvent HandleClick() { 
+            return new MenuOpenEvent(roomType);
+        }
 
     }
 

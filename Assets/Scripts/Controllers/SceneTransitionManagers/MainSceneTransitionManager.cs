@@ -26,7 +26,7 @@ public class MainSceneTransitionManager : MonoBehaviour
 
         fadePanel.transform.SetAsLastSibling();
         // Begin to load the scene
-        AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(scene);
 
 
         // Don't allow the scene to activate until we're read

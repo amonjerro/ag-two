@@ -78,10 +78,20 @@ namespace Rooms
 
         public bool IsRoomHovered(int worldX, int worldY)
         {
-            int localX = (worldX + 6) / 4;
-            int localY = (worldY - 1) / 2;
 
-            return roomMap.ContainsKey((localX, localY));
+            return roomMap.ContainsKey(WorldToKey(worldX, worldY));
         }
-}
+
+        private (int, int) WorldToKey(int x, int y)
+        {
+            return ( (x + 6) / 4 , (y - 1) / 2 );
+        }
+
+        public AbsRoomClickEvent HandleClick(int worldX, int worldY)
+        {
+            Room room = roomMap[WorldToKey(worldX, worldY)];
+            return room.HandleClick();
+
+        }
+    }
 }

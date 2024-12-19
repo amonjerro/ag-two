@@ -54,12 +54,24 @@ namespace GameCursor
             int positionX = Mathf.FloorToInt(realWorldPosition.x);
             int positionY = Mathf.FloorToInt(realWorldPosition.y);
 
-            Debug.Log(roomManagerRef.IsRoomHovered(positionX, positionY));
+            if (roomManagerRef.IsRoomHovered(positionX, positionY)) {
+                AbsRoomClickEvent roomClickEvent = roomManagerRef.HandleClick(positionX, positionY);
+                switch (roomClickEvent.type)
+                {
+                    case RoomClickEventTypes.MenuOpen:
+                        // Create logic for UI Manager opening up the specific panel
+                        Debug.Log("This should be opening a menu and it doesn't");
+                        break;
+                    default:
+                        MainSceneTransitionManager transitionManager = ServiceLocator.Instance.GetService<MainSceneTransitionManager>();
+                        transitionManager.FadeToScene(roomClickEvent.GetValue());
+                        break;
+                }
+            }
         }
 
         private void OnSelect(InputValue value)
         {
-            Debug.Log("On Select");
             switch (currentState) { 
                 case CursorStates.Build:
                     
