@@ -109,7 +109,10 @@ namespace QuestBuilder {
             foreach(NodeTypes nodeType in Enum.GetValues(typeof(NodeTypes)))
             {
                 string name = nodeType.ToString();
-                evt.menu.AppendAction(name + " Node", (a) => CreateNode(nodeType));
+                evt.menu.AppendAction(name + " Node", (a) => {
+                    QuestViewNode node = CreateNode(nodeType);
+                    node.SetPosition(new Rect(a.eventInfo.mousePosition, Vector2.zero));
+                });
             }
         }
 
