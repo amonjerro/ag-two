@@ -14,6 +14,7 @@ namespace QuestBuilder
         TextField titleField;
         TextField keyField;
         TextField descriptionField;
+        Toggle providesRewards;
         Foldout buttonStrings;
         Foldout challengeValues;
         IntegerField arcaneChallenge;
@@ -61,6 +62,10 @@ namespace QuestBuilder
             buttonStrings = new Foldout { text = "Button Strings" };
             Add(buttonStrings);
 
+            providesRewards = new Toggle("Provides Rewards");
+            providesRewards.RegisterValueChangedCallback(HandleChange);
+            Add(providesRewards);
+
             challengeValues = new Foldout { text = "Challenge Values" };
             Add(challengeValues);
 
@@ -89,7 +94,10 @@ namespace QuestBuilder
             combatChallenge.name = "com";
             challengeValues.Add(combatChallenge);
 
+            
+
             challengeValues.visible = false;
+            providesRewards.visible = false;
         }
 
         public void UpdateSelection(QuestViewNode viewNode)
@@ -106,6 +114,8 @@ namespace QuestBuilder
 
             //clear the challenge values
             challengeValues.visible = viewNode.nodeType == NodeTypes.Challenge;
+            providesRewards.visible = viewNode.nodeType == NodeTypes.End;
+
             if (challengeValues.visible)
             {
                 arcaneChallenge.value = viewNode.questNode.challengeValues.arcane;
@@ -144,8 +154,12 @@ namespace QuestBuilder
             }
 
             VisualElement ve = (VisualElement)evt.currentTarget;
-
             ApplyChange(ve.name, evt.newValue);
+        }
+
+        private void HandleChange(ChangeEvent<bool> evt)
+        {
+            activeNode.questNode.providesReward = evt.newValue;
         }
 
         private void ApplyChange(string inputName, int newValue)

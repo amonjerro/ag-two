@@ -10,6 +10,12 @@ namespace Rooms
         public List<RoomData> roomData;
         private Dictionary<RoomType, RoomData> roomDataDict;
 
+        [SerializeField]
+        int fortressWidth;
+
+        [SerializeField]
+        int fortressHeight;
+
         private void Awake()
         {
             roomMap = new Dictionary<(int, int), Room>();
@@ -30,8 +36,17 @@ namespace Rooms
 
         private void SetupInitialRooms()
         {
-            roomMap.Add((0, 0), RoomFactory.MakeRoom(roomData[0]));
-            roomMap.Add((1, 0), RoomFactory.MakeRoom(roomData[1]));
+            for (int x = 0; x < fortressWidth; x++)
+            {
+                for (int y = 0; y < fortressHeight; y++) {
+                    if (y == 0 && x == 0)
+                    {
+                        roomMap.Add((x, y), RoomFactory.MakeRoom(roomDataDict[RoomType.OPS]));
+                        continue;
+                    }
+                    roomMap.Add((x, y), RoomFactory.MakeRoom(roomDataDict[RoomType.DBR]));
+                } 
+            }
         }
 
 

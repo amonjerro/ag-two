@@ -28,7 +28,7 @@ namespace QuestBuilder {
             styleSheets.Add(styleSheet);
 
             rawDataTree = new QuestNodeArray();
-            graphViewChanged += OnGraphViewChanged;
+            InitializeTree();
         }
 
         public void ClearTree()
@@ -38,6 +38,27 @@ namespace QuestBuilder {
             DeleteElements(graphElements);
             graphViewChanged += OnGraphViewChanged;
         }
+
+        public void InitializeTree()
+        {
+            // Create a start and end node
+            graphViewChanged -= OnGraphViewChanged;
+            QuestViewNode startNode = CreateNode(NodeTypes.Start);
+            startNode.title = "Start Node";
+            startNode.questNode.title = "Start Node";
+            QuestViewNode endNode = CreateNode(NodeTypes.End);
+            endNode.title = "Decline Quest";
+            endNode.questNode.title = "Decline Quest";
+
+            endNode.SetPosition(new Rect(200, 200, 0, 0));
+            Edge e = startNode.outputPorts[1].ConnectTo(endNode.input);
+            startNode.AddChildConnection(endNode, 1);
+            rawDataTree.ConnectNodes(startNode.questNode, endNode.questNode, 1);
+
+            AddElement(e);
+            graphViewChanged += OnGraphViewChanged;
+        }
+
 
         public void PopulateView(QuestNodeArray questData)
         {
@@ -149,7 +170,7 @@ namespace QuestBuilder {
 
         }
 
-        private void CreateNode(NodeTypes type)
+        private QuestViewNode CreateNode(NodeTypes type)
         {
             if (editorReference != null)
             {
@@ -164,6 +185,7 @@ namespace QuestBuilder {
                     nodeData.challengeValues = new ChallengeValues();
                     break;
                 case NodeTypes.Decision:
+                case NodeTypes.Start:
                     nodeData.buttonStrings = new string[2];
                     nodeData.CreateNextSlots(2);
                     break;
@@ -178,7 +200,8 @@ namespace QuestBuilder {
             nodeData.type = QuestController.MapTypeToString(type);
             nodeData.key = GUID.Generate().ToString();
             rawDataTree.nodes.Add(nodeData);
-            InstantiateNodeElement(nodeData);
+            QuestViewNode qvn = InstantiateNodeElement(nodeData);
+            return qvn;
         }
 
         private QuestViewNode InstantiateNodeElement(QuestNodeData data)

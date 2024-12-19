@@ -56,6 +56,7 @@ namespace QuestBuilder {
                     break;
                 case NodeTypes.Decision:
                 case NodeTypes.Challenge:
+                case NodeTypes.Start:
                     outputPort = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
                     outputPort.portName = "Option 1";
                     outputPorts.Add(outputPort);

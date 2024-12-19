@@ -52,6 +52,7 @@ public partial class QuestController
         {
             case NodeTypes.Challenge:
             case NodeTypes.Decision:
+            case NodeTypes.Start:
                 return 2;
             default:
                 return 1;

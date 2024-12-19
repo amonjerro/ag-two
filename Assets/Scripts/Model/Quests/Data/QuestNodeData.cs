@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 
 [System.Serializable]
@@ -25,6 +26,7 @@ public class QuestNodeData
     public string title;
     public string description;
     public string[] buttonStrings;
+    public bool providesReward;
     public int duration;
     public List<string> next;
     public ChallengeValues challengeValues;

@@ -62,6 +62,7 @@ namespace QuestBuilder {
         {
             activeTreeFilePath = "";
             treeView.ClearTree();
+            treeView.InitializeTree();
         }
 
         private void LoadTree()
