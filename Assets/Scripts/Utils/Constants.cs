@@ -17,8 +17,15 @@ public static class Constants
         }
     }
 
-    public static int MapRoomTypeToUIPanel()
+    public static int MapComponentTypeToUIPanelInt(ComponentType type)
     {
-        return 0;
+        switch (type)
+        {
+            case ComponentType.BUILDABLE:
+                return 1;
+            default:
+                return 0;
+        }
+        
     }
 } 

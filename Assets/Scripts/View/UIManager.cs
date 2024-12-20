@@ -4,21 +4,33 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    public UIPanel factionPanel; 
-    // Start is called before the first frame update
-    void Start()
+    GameObject buildInterface;
+
+    [SerializeField]
+    GameObject mainInterface;
+
+    public void ShowBuildInterface()
     {
-        
+        // Pause the timer
+        ServiceLocator.Instance.GetService<TimeManager>().IsPaused = true;
+
+        // Hide the regular main interface
+        mainInterface.SetActive(false);
+
+        // Show the Build Interface
+        buildInterface.SetActive(true);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public void HideBuildInterface() {
+        // Unpause the timer
+        ServiceLocator.Instance.GetService<TimeManager>().IsPaused = false;
 
-    public void ShowFactionInfo(Faction type)
-    {
-        factionPanel.Show();
+        // Hide the build interface
+        buildInterface.SetActive(false);
+
+        // Show the regular main interface
+        mainInterface.SetActive(true);
+        CameraMovement cam = Camera.main.GetComponent<CameraMovement>();
+        cam.Unfocus();
     }
 }

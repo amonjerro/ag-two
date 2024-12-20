@@ -28,7 +28,7 @@ namespace Rooms
     {
         protected bool _taskAssigned;
         protected string _roomName;
-        public string Name { get { return _roomName; } }
+        public string Name { get { return _roomName; } set { _roomName = value; } }
 
         public BuildRestrictions buildRestriction;
         public RoomType roomType;
@@ -48,9 +48,9 @@ namespace Rooms
     
     public class OperationsRoom : Room
     {
-        public OperationsRoom(string roomName)
+        public OperationsRoom()
         {
-            _roomName = roomName;
+            components = new List<RoomComponent>();
             buildRestriction = BuildRestrictions.NONE;
             roomType = RoomType.OPS;
         }
@@ -70,9 +70,9 @@ namespace Rooms
     {
 
         BuildTask debrisClearTask;
-        public DebrisRoom(string roomName)
+        public DebrisRoom()
         {
-            _roomName = roomName;
+            components = new List<RoomComponent>();
             buildRestriction = BuildRestrictions.NONE;
             roomType = RoomType.DBR;
             _taskAssigned = false;

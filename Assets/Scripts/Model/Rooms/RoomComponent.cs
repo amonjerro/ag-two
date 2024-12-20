@@ -4,12 +4,14 @@ namespace Rooms
 {
     public enum ComponentType
     {
+        BUILDABLE,
         UPGRADEABLE,
         HOLDS_ADVENTURERS
     }
 
     public abstract class RoomComponent
     {
+        protected Room parentRoom;
         protected ComponentType _type;
         public ComponentType ComponentType { get { return _type; } protected set { _type = value; }  }
         public abstract bool MaxedOut { get; }
@@ -17,6 +19,33 @@ namespace Rooms
         public abstract int GetCost();
         public abstract void Grow();
         public abstract void Grow(int toWhere);
+    }
+
+    public class BuildableComponent : RoomComponent
+    {
+        int buildCost;
+        public override bool MaxedOut { get { return false; } }
+        public BuildableComponent(int cost)
+        {
+            ComponentType = ComponentType.BUILDABLE;
+            buildCost = cost;
+        }
+
+        public override int GetCost()
+        {
+            return buildCost;
+        }
+
+        public override void Grow(int toWhere)
+        {
+            
+        }
+
+        public override void Grow()
+        {
+           
+        }
+
     }
 
     public class HoldComponent : RoomComponent
@@ -29,14 +58,23 @@ namespace Rooms
 
         public override bool MaxedOut { get { return maxedOut; } }
 
-        public HoldComponent(List<int> capacityLevels, int costPerOccupancy)
+        public HoldComponent(int costPerOccupancy, int capacityCount, int growthFactor)
         {
             ComponentType = ComponentType.HOLDS_ADVENTURERS;
             maxedOut = false;
             currentLevel = 0;
             occupancy = 0;
-            this.capacityLevels = capacityLevels;
-            this.costPerOccupancy = costPerOccupancy;   
+            capacityLevels = new List<int>();
+            this.costPerOccupancy = costPerOccupancy;
+            PopulateHoldList(capacityCount, growthFactor);
+
+        }
+
+        private void PopulateHoldList(int capacityCount, int growthFactor)
+        {
+            for (int i = 1; i <= capacityCount; i++) {
+                capacityLevels.Add(i * growthFactor);
+            }
         }
 
         public override int GetCost()
@@ -72,12 +110,20 @@ namespace Rooms
 
         public override bool MaxedOut { get { return maxedOut; } }
 
-        public UpgradeableComponent(List<int> upgradeCosts)
+        public UpgradeableComponent(int baseCost, int count, int costFactor)
         {
             ComponentType = ComponentType.UPGRADEABLE;
             currentLevel = 0;
             maxedOut = false;
-            this.upgradeCosts = upgradeCosts;
+            upgradeCosts = new List<int>();
+            ExpandCostList(baseCost, count, costFactor);
+        }
+
+        private void ExpandCostList(int baseCost, int count, int factor)
+        {
+            for (int i = 0; i < count; i++) {
+                upgradeCosts.Add(baseCost + (factor * i));
+            }
         }
 
         public override int GetCost()

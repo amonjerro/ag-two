@@ -84,7 +84,7 @@ namespace Rooms
 
         private (int, int) WorldToKey(int x, int y)
         {
-            return ( (x + 6) / 4 , (y - 1) / 2 );
+            return ( (x + 6) / 4 , y / 2 );
         }
 
         public AbsRoomClickEvent HandleClick(int worldX, int worldY)
@@ -92,6 +92,13 @@ namespace Rooms
             Room room = roomMap[WorldToKey(worldX, worldY)];
             return room.HandleClick();
 
+        }
+
+        public (int, int) WorldGridSnap(int x, int y)
+        {
+            Debug.Log($"{x}, {y}");
+            (int, int) coordinates = WorldToKey(x, y);
+            return (4*coordinates.Item1-6, 2*coordinates.Item2+1);
         }
     }
 }

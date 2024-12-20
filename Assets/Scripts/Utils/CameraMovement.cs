@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -32,5 +33,16 @@ public class CameraMovement : MonoBehaviour
             _camera.orthographicSize + Time.deltaTime * this.scrollRate * value,
             5, 10);
         _camera.orthographicSize = resultantValue;
+    }
+
+    public void FocusOn(Vector3 location)
+    {
+        transform.position = location;
+        _camera.orthographicSize = 1.25f;
+    }
+
+    public void Unfocus()
+    {
+        _camera.orthographicSize = 5.0f;
     }
 }

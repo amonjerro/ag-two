@@ -57,13 +57,13 @@ namespace TileBuilder
         public override void HandleClick(Vector3 mouseLocation)
         {
             controller.SetRectOrigin(mouseLocation);
-            cursorReference.SetBoxOrigin(mouseLocation.x, mouseLocation.y);
+            //cursorReference.SetBoxOrigin(mouseLocation.x, mouseLocation.y);
             Exit();
         }
 
         public override void Cancel()
         {
-            cursorReference.HideSelectionBox();
+            //cursorReference.HideSelectionBox();
             cursorReference.SetCursorState(CursorStates.FreeHand);
             fsm.MoveToState(BuildStates.Start);
         }
@@ -79,7 +79,7 @@ namespace TileBuilder
 
         public override void OnExit()
         {
-            cursorReference.ShowSelectionBox();
+            //cursorReference.ShowSelectionBox();
             fsm.MoveToState(BuildStates.Make);
         }
     }
@@ -113,7 +113,7 @@ namespace TileBuilder
         public override void OnExit()
         {
             controller.UpdateTileColors(Color.white);
-            cursorReference.HideSelectionBox();
+            //cursorReference.HideSelectionBox();
             cursorReference.SetCursorState(CursorStates.FreeHand);
             fsm.MoveToState(BuildStates.Start);
         }

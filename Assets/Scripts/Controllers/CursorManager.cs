@@ -20,9 +20,6 @@ namespace GameCursor
         [SerializeField]
         private CursorStates currentState;
 
-        [SerializeField]
-        private SelectionBox selectionBox;
-
         RoomManager roomManagerRef;
 
         private void Awake()
@@ -60,7 +57,10 @@ namespace GameCursor
                 {
                     case RoomClickEventTypes.MenuOpen:
                         // Create logic for UI Manager opening up the specific panel
-                        Debug.Log("This should be opening a menu and it doesn't");
+                        (int, int) snappedPositions = roomManagerRef.WorldGridSnap(positionX, positionY);
+                        Debug.Log($"{snappedPositions.Item1},{snappedPositions.Item2}");
+                        _camera.FocusOn(new Vector3(snappedPositions.Item1, snappedPositions.Item2,-10));
+                        UIManager manager = ServiceLocator.Instance.GetService<UIManager>();
                         break;
                     default:
                         MainSceneTransitionManager transitionManager = ServiceLocator.Instance.GetService<MainSceneTransitionManager>();
@@ -97,22 +97,6 @@ namespace GameCursor
                 default:
                     break;
             }
-        }
-
-        // Selection Box Interaction
-        public void ShowSelectionBox()
-        {
-            selectionBox.Show();
-        }
-
-        public void SetBoxOrigin(float x, float y)
-        {
-            selectionBox.SetOrigin(x, y);
-        }
-
-        public void HideSelectionBox()
-        {
-            selectionBox.Hide();
         }
     }
 }

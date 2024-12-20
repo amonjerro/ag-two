@@ -9,6 +9,6 @@ namespace Rooms
         public string roomName;
         public Sprite roomSprite;
         public RoomType roomType;
-        public List<ComponentType> roomComponents;
+        public List<ComponentData> componentData;
     }
 }
