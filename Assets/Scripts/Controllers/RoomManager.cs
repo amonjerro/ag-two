@@ -20,6 +20,7 @@ namespace Rooms
         {
             roomMap = new Dictionary<(int, int), Room>();
             roomDataDict = new Dictionary<RoomType, RoomData> ();
+            List<Room> availableRooms = new List<Room> ();
             TimeManager.Tick += HandleTick;
 
             SetupRoomDataDict();

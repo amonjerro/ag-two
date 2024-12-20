@@ -1,6 +1,7 @@
 
 using System.Collections.Generic;
 using Tasks;
+using UnityEditor.Tilemaps;
 
 namespace Rooms
 {
@@ -46,6 +47,15 @@ namespace Rooms
         }
 
         public abstract AbsRoomClickEvent HandleClick();
+
+        protected void ValidateTaskType(Task task, TaskType expectedType)
+        {
+            // BuildTasks can be assigned to a Debris room
+            if (task.TaskType != expectedType)
+            {
+                throw new System.ArgumentException("Incorrect Task Type assigned");
+            }
+        }
     }
     
     public class OperationsRoom : Room
@@ -82,11 +92,7 @@ namespace Rooms
 
         public override void EnqueueTask(Task task)
         {
-            // BuildTasks can be assigned to a Debris room
-            if (task.TaskType != TaskType.Build)
-            {
-                throw new System.ArgumentException("Incorrect Task Type assigned");
-            }
+            ValidateTaskType(task, TaskType.Build);
 
             debrisClearTask = (BuildTask)task;
             _taskAssigned = true;
@@ -107,4 +113,68 @@ namespace Rooms
 
     }
 
+    public class Barracks : Room
+    {
+        BuildTask upgradeTask;
+        public Barracks()
+        {
+            roomType = RoomType.BRK;
+            buildRestriction = BuildRestrictions.ABOVE_GROUND;
+            _taskAssigned = false;
+        }
+
+        // Barracks can take build upgrade tasks
+        public override void EnqueueTask(Task task)
+        {
+            ValidateTaskType(task, TaskType.Build);
+            upgradeTask = (BuildTask)task;
+            _taskAssigned = true;
+        }
+
+        public override void RoomTick()
+        {
+            if (!_taskAssigned)
+            {
+                return;
+            }
+
+            upgradeTask.HandleTick();
+        }
+
+        public override AbsRoomClickEvent HandleClick() { 
+            return new MenuOpenEvent(roomType);
+        }
+    }
+    public class LibraryRoom : Room
+    {
+        ResearchTask researchTask;
+
+        public LibraryRoom()
+        {
+            roomType = RoomType.LIB;
+            buildRestriction = BuildRestrictions.NONE;
+            _taskAssigned = false;
+        }
+
+        public override void EnqueueTask(Task task)
+        {
+            ValidateTaskType(task, TaskType.Research);
+            researchTask = (ResearchTask)task;
+            _taskAssigned = true;
+        }
+
+        public override void RoomTick()
+        {
+            if (!_taskAssigned)
+            {
+                return;
+            }
+
+            researchTask.HandleTick();
+        }
+
+        public override AbsRoomClickEvent HandleClick() {
+            return new MenuOpenEvent(roomType);
+        }
+    }
 }
