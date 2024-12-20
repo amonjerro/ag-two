@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MainSceneTransitionManager : MonoBehaviour
 {
     public FadePanel fadePanel;
+    TimeManager timeManager;
     private void Start()
     {
         // Load the roster
@@ -18,7 +19,8 @@ public class MainSceneTransitionManager : MonoBehaviour
         StartCoroutine(fadePanel.FadeOut());
 
         // Start the clock
-        ServiceLocator.Instance.GetService<TimeManager>().LoadTime(GameInstance.tickCount);
+        timeManager = ServiceLocator.Instance.GetService<TimeManager>();
+        timeManager.LoadTime(GameInstance.totalTickCount);
     }
 
     protected IEnumerator LoadScene(int scene)
@@ -45,7 +47,8 @@ public class MainSceneTransitionManager : MonoBehaviour
 
     protected virtual void SaveDataForTransition()
     {
-
+        timeManager.IsPaused = true;
+        GameInstance.totalTickCount = timeManager.GetTimeToSave();
     }
 
     public void FadeToScene(int sceneIndex)

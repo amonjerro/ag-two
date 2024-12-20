@@ -19,7 +19,7 @@ public class TimeManager : MonoBehaviour
     private int _totalTickCount;
     private int _tickCount;
     private int _days;
-    private uint _cycle;
+    private int _cycle;
     
     private Season _currentSeason;
 
@@ -42,13 +42,7 @@ public class TimeManager : MonoBehaviour
     }
 
     void Start() {
-        _elapsedTime = 0.0f;
-        _tickCount = 14;
-        _days = 1;
-        _cycle = 1;
-        _currentSeason = Season.Spring;
-        textClock.text = "07:00";
-        textCalendar.text = "Day 1, Spring. Year 1";
+
     }
 
     void Update() {
@@ -65,6 +59,8 @@ public class TimeManager : MonoBehaviour
             UpdateClockText();
             UpdateCalendarText();
         }
+
+        // Redesign this
         //Normal Time
         if(Input.GetKeyUp(KeyCode.Alpha1)){
             SetTickLength(1.0f);
@@ -101,6 +97,7 @@ public class TimeManager : MonoBehaviour
 
     private void HandleTick(){
         _tickCount++;
+        _totalTickCount++;
 
         if (_tickCount >= TICK_TO_DAY){
             //Reset tick count
@@ -110,7 +107,7 @@ public class TimeManager : MonoBehaviour
 
         if(_days >= DAYS_TO_SEASON){
             UpdateSeason();
-            _days = 0;
+            _days = 1;
         }
 
 
@@ -141,8 +138,49 @@ public class TimeManager : MonoBehaviour
 
     public void LoadTime(int totalTickCount)
     {
+        _currentSeason = Season.Spring;
+
         _totalTickCount = totalTickCount;
         IsPaused = false;
+
+        _elapsedTime = 0.0f;
+        _tickCount = totalTickCount % TICK_TO_DAY;
+
+        DoTickMath();
+        UpdateClockText();
+        UpdateCalendarText();
+    }
+
+    private void DoTickMath()
+    {
+        _days = 1 + (_totalTickCount / TICK_TO_DAY);
+        _cycle = 1 + (_days / DAYS_TO_SEASON * 4);
+        int seasonInt = _days / DAYS_TO_SEASON;
+        _currentSeason = IntToSeason(seasonInt % 4);
+        _days = _days % DAYS_TO_SEASON;
+
+    }
+
+    private Season IntToSeason(int season)
+    {
+        switch (season)
+        {
+            case 0:
+                return Season.Fall;
+            case 1:
+                return Season.Winter;
+            case 2:
+                return Season.Spring;
+            case 3:
+                return Season.Summer;
+            default:
+                return Season.Fall;
+        }
+    }
+
+    public int GetTimeToSave()
+    {
+        return _totalTickCount;
     }
 
 }

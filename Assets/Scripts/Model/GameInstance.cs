@@ -9,6 +9,6 @@ namespace SaveGame
         public static List<Adventurer> roster;
         public static List<QuestData> completedQuests;
         public static List<RoomSaveData> savedRoomData;
-        public static int tickCount = 14;
+        public static int totalTickCount = 14;
     }
 }
