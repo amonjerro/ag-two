@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PickAdventurerButton : MonoBehaviour
 {
-    AAdventurerCommand command;
+    AbstractCommand command;
 
     public void Execute()
     {
@@ -16,7 +16,7 @@ public class PickAdventurerButton : MonoBehaviour
         command.Execute();
     }
 
-    public void SetCommand(AAdventurerCommand command)
+    public void SetCommand(AbstractCommand command)
     {
         this.command = command;
     }

@@ -58,9 +58,10 @@ namespace GameCursor
                     case RoomClickEventTypes.MenuOpen:
                         // Create logic for UI Manager opening up the specific panel
                         (int, int) snappedPositions = roomManagerRef.WorldGridSnap(positionX, positionY);
-                        Debug.Log($"{snappedPositions.Item1},{snappedPositions.Item2}");
                         _camera.FocusOn(new Vector3(snappedPositions.Item1, snappedPositions.Item2,-10));
                         UIManager manager = ServiceLocator.Instance.GetService<UIManager>();
+                        SetCursorState(CursorStates.Build);
+                        manager.ShowBuildInterface();
                         break;
                     default:
                         MainSceneTransitionManager transitionManager = ServiceLocator.Instance.GetService<MainSceneTransitionManager>();
@@ -87,12 +88,20 @@ namespace GameCursor
             _camera.Move(value.Get<Vector2>());
         }
 
+        public void CancelBuild()
+        {
+            _camera.Unfocus();
+            SetCursorState(CursorStates.FreeHand);
+            UIManager manager = ServiceLocator.Instance.GetService<UIManager>();
+            manager.HideBuildInterface();
+        }
+
         private void OnCancel(InputValue value)
         {
             switch (currentState)
             {
                 case CursorStates.Build:
-                    
+                    CancelBuild();
                     break;
                 default:
                     break;

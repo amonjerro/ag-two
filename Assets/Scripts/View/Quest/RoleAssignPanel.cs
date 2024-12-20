@@ -13,10 +13,10 @@ public class RoleAssignPanel : QuestUIPanel
     Vector3 rosterWidgetOffset;
 
     [SerializeField]
-    QuestButton embarkButton;
+    CommandButton embarkButton;
 
     [SerializeField]
-    QuestButton cancel;
+    CommandButton cancel;
 
     StatBlock[] statBlocks;
     AdventurerManager managerReference;

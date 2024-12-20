@@ -7,6 +7,10 @@ namespace Rooms
     public class RoomData : ScriptableObject
     {
         public string roomName;
+        
+        [TextArea]
+        public string roomDescription;
+
         public Sprite roomSprite;
         public RoomType roomType;
         public List<ComponentData> componentData;

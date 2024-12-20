@@ -1,9 +1,9 @@
 using TMPro;
 using UnityEngine;
 
-public class QuestButton : MonoBehaviour
+public class CommandButton : MonoBehaviour
 {
-    AQuestCommand command;
+    AbstractCommand command;
 
     public void RunCommand()
     {
@@ -15,7 +15,7 @@ public class QuestButton : MonoBehaviour
         command.Execute();
     }
 
-    public void SetCommand(AQuestCommand command)
+    public void SetCommand(AbstractCommand command)
     {
         this.command = command;
     }

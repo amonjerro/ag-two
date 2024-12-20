@@ -28,7 +28,9 @@ namespace Rooms
     {
         protected bool _taskAssigned;
         protected string _roomName;
+        protected string _roomDescription;
         public string Name { get { return _roomName; } set { _roomName = value; } }
+        public string Description { get { return _roomDescription; } set { _roomDescription = value; } }
 
         public BuildRestrictions buildRestriction;
         public RoomType roomType;

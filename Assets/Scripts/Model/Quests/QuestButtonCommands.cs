@@ -1,11 +1,6 @@
 using UnityEngine;
 
-public abstract class AQuestCommand
-{
-    public abstract void Execute();
-}
-
-public class AbandonQuestCommand : AQuestCommand
+public class AbandonQuestCommand : AbstractCommand
 {
     QuestController questController;
     QuestNodePanel questUIManager;
@@ -21,7 +16,7 @@ public class AbandonQuestCommand : AQuestCommand
     }
 }
 
-public class DecisionAcceptCommand : AQuestCommand {
+public class DecisionAcceptCommand : AbstractCommand {
 
     QuestController questController;
     QuestNodePanel questUIManager;
@@ -38,7 +33,7 @@ public class DecisionAcceptCommand : AQuestCommand {
     }
 }
 
-public class DecisionRejectCommand : AQuestCommand
+public class DecisionRejectCommand : AbstractCommand
 {
     QuestController questController;
     QuestNodePanel questUIManager;
@@ -56,7 +51,7 @@ public class DecisionRejectCommand : AQuestCommand
 }
 
 
-public class NextPageCommand : AQuestCommand
+public class NextPageCommand : AbstractCommand
 {
     QuestNodePanel questUIManager;
     public NextPageCommand(QuestNodePanel uiManager)
@@ -70,7 +65,7 @@ public class NextPageCommand : AQuestCommand
     }
 }
 
-public class AcknowledgeCommand : AQuestCommand
+public class AcknowledgeCommand : AbstractCommand
 {
     QuestNodePanel questUIManager;
     QuestController questController;
@@ -88,7 +83,7 @@ public class AcknowledgeCommand : AQuestCommand
     }
 }
 
-public class SeeQuestNode : AQuestCommand
+public class SeeQuestNode : AbstractCommand
 {
     AQuestNode data;
     QuestUIPanel questPanel;
@@ -105,7 +100,7 @@ public class SeeQuestNode : AQuestCommand
     }
 }
 
-public class DismissPanelCommand : AQuestCommand
+public class DismissPanelCommand : AbstractCommand
 {
     UIPanel dismissable;
     public DismissPanelCommand(UIPanel panel)

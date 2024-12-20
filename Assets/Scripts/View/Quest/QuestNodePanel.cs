@@ -23,16 +23,16 @@ public class QuestNodePanel : QuestUIPanel
     private bool showingSingleConfirm = false;
 
     [SerializeField]
-    QuestButton singleConfirm;
+    CommandButton singleConfirm;
 
     [SerializeField]
-    QuestButton toRosterButton;
+    CommandButton toRosterButton;
 
     [SerializeField]
-    QuestButton Decision1;
+    CommandButton Decision1;
 
     [SerializeField]
-    QuestButton Decision2;
+    CommandButton Decision2;
 
 
     private void Start()

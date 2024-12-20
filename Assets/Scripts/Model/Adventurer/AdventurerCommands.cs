@@ -1,12 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class AAdventurerCommand
-{
-    public abstract void Execute();
-}
 
-public class StageAdventurerCommand : AAdventurerCommand
+public class StageAdventurerCommand : AbstractCommand
 {
     PickAdventurerButton button;
     int boundIndex;
@@ -43,7 +39,7 @@ public class StageAdventurerCommand : AAdventurerCommand
 }
 
 
-public class ShowRosterCommand : AAdventurerCommand
+public class ShowRosterCommand : AbstractCommand
 {
     RosterWidget roster;
     UIPanel dismissPanel;

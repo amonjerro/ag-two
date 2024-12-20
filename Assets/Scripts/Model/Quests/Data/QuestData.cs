@@ -37,4 +37,9 @@ public class QuestData
     {
         return this.adventurers;
     }
+
+    public override string ToString()
+    {
+        return questTitle;
+    }
 }
