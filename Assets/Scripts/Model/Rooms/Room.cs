@@ -118,6 +118,7 @@ namespace Rooms
         BuildTask upgradeTask;
         public Barracks()
         {
+            components = new List<RoomComponent>();
             roomType = RoomType.BRK;
             buildRestriction = BuildRestrictions.ABOVE_GROUND;
             _taskAssigned = false;
@@ -151,6 +152,7 @@ namespace Rooms
 
         public LibraryRoom()
         {
+            components = new List<RoomComponent>();
             roomType = RoomType.LIB;
             buildRestriction = BuildRestrictions.NONE;
             _taskAssigned = false;

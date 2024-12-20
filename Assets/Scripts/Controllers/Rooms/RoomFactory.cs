@@ -7,6 +7,12 @@ namespace Rooms
             RoomBuilder roomBuilder = new RoomBuilder();
 
             switch (data.roomType) {
+                case RoomType.LIB:
+                    roomBuilder.Reset(new LibraryRoom());
+                    break;
+                case RoomType.BRK:
+                    roomBuilder.Reset(new Barracks());
+                    break;
                 case RoomType.DBR:
                     roomBuilder.Reset(new DebrisRoom());
                     break;
@@ -16,6 +22,7 @@ namespace Rooms
             }
 
             roomBuilder.SetName(data.roomName);
+            roomBuilder.SetDescription(data.roomDescription);
             for (int i = 0; i < data.componentData.Count; i++)
             {
                 roomBuilder.AddComponent(MakeRoomComponent(data.componentData[i]));
@@ -58,6 +65,10 @@ namespace Rooms
         public void SetName(string name)
         {
             room.Name = name;
+        }
+
+        public void SetDescription(string description) { 
+            room.Description = description;
         }
     }
 }

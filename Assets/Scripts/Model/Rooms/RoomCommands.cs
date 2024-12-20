@@ -11,6 +11,7 @@ public class ShowRoomDetailCommand : AbstractCommand
     public ShowRoomDetailCommand(TextMeshProUGUI title, TextMeshProUGUI desc, Room room) { 
         titleText = title;
         descriptionText = desc;
+        this.room = room;
     }
 
     public override void Execute()

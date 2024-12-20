@@ -34,7 +34,7 @@ public class CameraMovement : MonoBehaviour
     public void FocusOn(Vector3 location)
     {
         transform.position = location;
-        _camera.orthographicSize = 1.25f;
+        _camera.orthographicSize = 1.75f;
     }
 
     public void Unfocus()

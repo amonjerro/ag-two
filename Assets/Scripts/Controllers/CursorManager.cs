@@ -61,7 +61,9 @@ namespace GameCursor
                         _camera.FocusOn(new Vector3(snappedPositions.Item1, snappedPositions.Item2,-10));
                         UIManager manager = ServiceLocator.Instance.GetService<UIManager>();
                         SetCursorState(CursorStates.Build);
+                        manager.SetRoomToInspect(roomManagerRef.GetRoom(positionX, positionY));
                         manager.ShowBuildInterface();
+
                         break;
                     default:
                         MainSceneTransitionManager transitionManager = ServiceLocator.Instance.GetService<MainSceneTransitionManager>();

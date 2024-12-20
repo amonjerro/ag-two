@@ -1,13 +1,20 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Rooms;
 
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject buildInterface;
+    RoomInterface buildInterface;
 
     [SerializeField]
     GameObject mainInterface;
+
+
+    public void SetRoomToInspect(Room room)
+    {
+        buildInterface.SetRoom(room);
+    }
 
     public void ShowBuildInterface()
     {

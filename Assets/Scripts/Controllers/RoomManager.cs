@@ -5,10 +5,11 @@ namespace Rooms
 {
     public class RoomManager : MonoBehaviour
     {
-        Dictionary<(int, int), Room> roomMap;
+        
         public List<Room> availableRooms;
         public List<RoomData> roomData;
         private Dictionary<RoomType, RoomData> roomDataDict;
+        private Dictionary<(int, int), Room> roomMap;
 
         [SerializeField]
         int fortressWidth;
@@ -20,7 +21,7 @@ namespace Rooms
         {
             roomMap = new Dictionary<(int, int), Room>();
             roomDataDict = new Dictionary<RoomType, RoomData> ();
-            List<Room> availableRooms = new List<Room> ();
+            availableRooms = new List<Room> ();
             TimeManager.Tick += HandleTick;
 
             SetupRoomDataDict();
@@ -37,6 +38,9 @@ namespace Rooms
 
         private void SetupInitialRooms()
         {
+            AddAvailableRoom(RoomFactory.MakeRoom(roomDataDict[RoomType.BRK]));
+            AddAvailableRoom(RoomFactory.MakeRoom(roomDataDict[RoomType.LIB]));
+
             for (int x = 0; x < fortressWidth; x++)
             {
                 for (int y = 0; y < fortressHeight; y++) {
@@ -99,6 +103,10 @@ namespace Rooms
         {
             (int, int) coordinates = WorldToKey(x, y);
             return (4*coordinates.Item1-6, 2*coordinates.Item2+1);
+        }
+
+        public Room GetRoom(int x, int y) { 
+            return roomMap[WorldToKey(x, y)];
         }
     }
 }
