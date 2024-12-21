@@ -87,7 +87,7 @@ namespace Rooms
             return roomMap.ContainsKey(WorldToKey(worldX, worldY));
         }
 
-        private (int, int) WorldToKey(int x, int y)
+        public (int, int) WorldToKey(int x, int y)
         {
             return ( (x + 8) / 4 , y / 2 );
         }
@@ -107,6 +107,22 @@ namespace Rooms
 
         public Room GetRoom(int x, int y) { 
             return roomMap[WorldToKey(x, y)];
+        }
+
+        public List<Room> FilterAvailableRooms(BuildRestrictions excludeRestriction)
+        {
+            List<Room> roomList = new List<Room>();
+
+            foreach(Room room in availableRooms)
+            {
+                if (room.buildRestriction == excludeRestriction)
+                {
+                    continue;
+                }
+                roomList.Add(room);
+            }
+
+            return roomList;
         }
     }
 }

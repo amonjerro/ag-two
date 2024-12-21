@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CommandButton : MonoBehaviour
 {
@@ -25,4 +26,12 @@ public class CommandButton : MonoBehaviour
         TextMeshProUGUI buttonText = GetComponentInChildren<TextMeshProUGUI>();
         buttonText.text = value;
     }
+
+    public void SetButtonEnabled(bool value)
+    {
+        Button button = GetComponent<Button>();
+        button.interactable = value;
+    }
+
+
 }

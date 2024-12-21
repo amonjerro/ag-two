@@ -11,8 +11,9 @@ public class UIManager : MonoBehaviour
     GameObject mainInterface;
 
 
-    public void SetRoomToInspect(Room room)
+    public void SetRoomToInspect(Room room, (int, int) coordinates)
     {
+        buildInterface.SetCoordinates(coordinates);
         buildInterface.SetRoom(room);
     }
 

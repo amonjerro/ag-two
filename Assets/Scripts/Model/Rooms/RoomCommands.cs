@@ -20,3 +20,21 @@ public class ShowRoomDetailCommand : AbstractCommand
         titleText.text = room.Name;
     }
 }
+
+public class BuildCommand : AbstractCommand
+{
+    (int, int) roomCoordinates;
+    RoomType roomType;
+
+    public BuildCommand((int, int) roomCoordinates, RoomType buildType)
+    {
+        this.roomCoordinates = roomCoordinates;
+        this.roomType = buildType;
+    }
+
+    public override void Execute()
+    {
+        RoomManager roomManager = ServiceLocator.Instance.GetService<RoomManager>();
+        roomManager.BeginRoomBuild(roomCoordinates.Item1, roomCoordinates.Item2, roomType);
+    }
+}

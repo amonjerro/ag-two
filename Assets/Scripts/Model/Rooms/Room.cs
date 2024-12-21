@@ -56,6 +56,16 @@ namespace Rooms
                 throw new System.ArgumentException("Incorrect Task Type assigned");
             }
         }
+
+        public RoomComponent GetRoomComponent(ComponentType componentType) {
+            foreach (RoomComponent component in components) { 
+                if (component.ComponentType == componentType)
+                {
+                    return component;
+                }
+            }
+            return null;
+        }
     }
     
     public class OperationsRoom : Room
