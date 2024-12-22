@@ -1,5 +1,6 @@
 
 using GameCursor;
+using Tasks;
 using UnityEngine;
 
 public class NotificationPill : UIPanel
@@ -8,25 +9,19 @@ public class NotificationPill : UIPanel
     Animator animator;
     [SerializeField]
     Animator childAnimator;
-
-    QuestController questController;
     
     [SerializeField]
-    QuestEventUI panel;
+    NotificationPanel panel;
     private void Start()
     {
-        questController = ServiceLocator.Instance.GetService<AdventurerManager>().GetQuestController();
+
     }
 
     public void ShowNotificationData()
     {
-        AQuestNode node = questController.GetNotification();
-        SeeQuestNode command = new SeeQuestNode(node, panel);
-        command.Execute();
+        TaskNotify taskNotify = TaskNotifyQueue.ViewTaskNotify();
         panel.Show();
-
         childAnimator.SetBool("bOpen", true);
-
         ServiceLocator.Instance.GetService<CursorManager>().SetCursorState(CursorStates.QuestEvent);
 
     }
@@ -48,9 +43,6 @@ public class NotificationPill : UIPanel
 
     public void TryDismiss()
     {
-        if (questController.NotificationsEmpty)
-        {
-            animator.SetBool("bShow", false);
-        }
+
     }
 }

@@ -70,8 +70,10 @@ namespace Rooms
     
     public class OperationsRoom : Room
     {
+        List<QuestTask> tasks;
         public OperationsRoom()
         {
+            tasks = new List<QuestTask>();
             components = new List<RoomComponent>();
             buildRestriction = BuildRestrictions.NONE;
             roomType = RoomType.OPS;
@@ -79,12 +81,23 @@ namespace Rooms
 
         public override void EnqueueTask(Task task)
         {
-            // No tasks can be assigned to the operations room
-
+            if (task.TaskType != TaskType.Quest)
+            {
+                throw new System.ArgumentException("This type of task can't be set to the operations room");
+            }
+            
+            tasks.Add((QuestTask)task);
         }
 
         public override AbsRoomClickEvent HandleClick() {
             return new SceneTransitionEvent(roomType);
+        }
+
+        public override void RoomTick()
+        {
+            foreach (QuestTask task in tasks) { 
+                task.HandleTick();
+            }
         }
     }
 

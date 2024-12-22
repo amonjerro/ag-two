@@ -11,6 +11,8 @@ namespace Tasks {
     {
         protected TaskType _task;
         public TaskType TaskType { get { return _task; } }
+
+        public string Title { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public int Duration {  get; set; }
@@ -46,12 +48,14 @@ namespace Tasks {
 
         protected override void OnComplete()
         {
-            throw new System.NotImplementedException();
+            BuildCompleteNotify buildCompleteNotify = new BuildCompleteNotify();
+            buildCompleteNotify.Show();
         }
     }
 
     public class QuestTask : Task
     {
+        public AQuestNode questNode { get; set; }
         protected override void OnComplete()
         {
             throw new System.NotImplementedException();

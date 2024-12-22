@@ -1,5 +1,4 @@
-using UnityEngine;
-
+using Tasks;
 public class AbandonQuestCommand : AbstractCommand
 {
     QuestController questController;
@@ -18,118 +17,82 @@ public class AbandonQuestCommand : AbstractCommand
 
 public class DecisionAcceptCommand : AbstractCommand {
 
-    QuestController questController;
-    QuestNodePanel questUIManager;
-    public DecisionAcceptCommand(QuestController controller, QuestNodePanel uIManager)
+    DecisionNode internalNodeReference;
+    QuestNodeNotify notification;
+    public DecisionAcceptCommand(DecisionNode decisionNode, QuestNodeNotify notification)
     {
-        questController = controller;
-        questUIManager = uIManager;
+        internalNodeReference = decisionNode;
+        this.notification = notification;
+        this.notification.SetQuestNode(decisionNode);
     }
 
     public override void Execute()
     {
-        questController.DecideNode(questUIManager.GetOpenNode(), true);
-        questUIManager.Dismiss();
+        internalNodeReference.Decide(true);
+        notification.Acknowledge();
     }
 }
 
 public class DecisionRejectCommand : AbstractCommand
 {
-    QuestController questController;
-    QuestNodePanel questUIManager;
-    public DecisionRejectCommand(QuestController controller, QuestNodePanel uIManager)
+
+    DecisionNode internalNodeReference;
+    QuestNodeNotify notification;
+    public DecisionRejectCommand(DecisionNode decNode, QuestNodeNotify notification)
     {
-        questController = controller;
-        questUIManager = uIManager;
+        internalNodeReference = decNode;
+        this.notification = notification;
+        this.notification.SetQuestNode(decNode);
     }
 
     public override void Execute()
     {
-        questController.DecideNode(questUIManager.GetOpenNode(), false);
-        questUIManager.Dismiss();
+        internalNodeReference.Decide(false);
+        notification.Acknowledge();
     }
 }
 
-
-public class NextPageCommand : AbstractCommand
-{
-    QuestNodePanel questUIManager;
-    public NextPageCommand(QuestNodePanel uiManager)
-    {
-        questUIManager = uiManager;
-    }
-
-    public override void Execute()
-    {
-        questUIManager.CyclePage();
-    }
-}
 
 public class AcknowledgeCommand : AbstractCommand
 {
-    QuestNodePanel questUIManager;
-    QuestController questController;
 
-    public AcknowledgeCommand(QuestController questController, QuestNodePanel questUIManager)
+    QuestNodeNotify notify;
+
+    public AcknowledgeCommand(QuestNodeNotify notification)
     {
-        this.questUIManager = questUIManager;
-        this.questController = questController;
+        notify = notification;
     }
 
     public override void Execute()
     {
-        questController.ProceedToNext(questUIManager.GetOpenNode());
-        questUIManager.Dismiss();
+        notify.Acknowledge();
     }
 }
 
-public class SeeQuestNode : AbstractCommand
+public class SeeQuestCommand : AbstractCommand
 {
-    AQuestNode data;
-    QuestUIPanel questPanel;
-
-    public SeeQuestNode(AQuestNode data, QuestUIPanel questPanel)
+    public SeeQuestCommand(QuestData data)
     {
-        this.data = data;
-        this.questPanel = questPanel;
+
     }
 
     public override void Execute()
     {
-        questPanel.SetQuestNode(data);
+
     }
 }
 
-public class DismissPanelCommand : AbstractCommand
-{
-    UIPanel dismissable;
-    public DismissPanelCommand(UIPanel panel)
-    {
-        dismissable = panel;
-    }
-
-    public override void Execute()
-    {
-        dismissable.Dismiss();
-    }
-}
-
-public class EmbarkCommand : DismissPanelCommand
+public class EmbarkCommand : AbstractCommand
 {
     AdventurerManager man;
     QuestData data;
     AQuestNode node;
-    public EmbarkCommand(AdventurerManager manager, AQuestNode node, UIPanel dismissable) : base(dismissable)
+    public EmbarkCommand() 
     {
-        man = manager;
-        data = manager.GetQuestController().GetQuestByKey(node.QuestKey);
-        this.node = node;
     }
 
 
     public override void Execute() {
-        man.BindToQuest(data);
-        man.GetQuestController().AddActiveQuest(node.Next);
-        base.Execute();
+
     }
 }

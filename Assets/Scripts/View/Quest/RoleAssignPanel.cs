@@ -41,9 +41,6 @@ public class RoleAssignPanel : QuestUIPanel
                 )
             );
         }
-        cancel.SetCommand(new DismissPanelCommand(this));
-        
-
     }
 
     public override void Dismiss()
@@ -68,7 +65,7 @@ public class RoleAssignPanel : QuestUIPanel
     {
         SetManagerReference();
         questNode = node;
-        embarkButton.SetCommand(new EmbarkCommand(managerReference, questNode, this));
+        //embarkButton.SetCommand(new EmbarkCommand(managerReference, questNode, this));
     }
 
     public void UpdateStats(Dictionary<int, Adventurer> stagingRoster)

@@ -38,11 +38,6 @@ public class QuestNodePanel : QuestUIPanel
     private void Start()
     {
         QuestController qc = ServiceLocator.Instance.GetService<AdventurerManager>().GetQuestController();
-        singleConfirm.SetCommand(new AcknowledgeCommand(qc,this));
-        Decision1.SetCommand(new DecisionAcceptCommand(qc, this));
-        Decision2.SetCommand(new DecisionRejectCommand(qc, this));
-        toRosterButton.SetCommand(new NextPageCommand(this));
-
     }
 
     private void DetermineButtonLayout(NodeTypes type)

@@ -43,7 +43,7 @@ public class OpenQuestsMenu : QuestUIPanel
         foreach (QuestData dataItem in questData) {
             GameObject createdObject = Instantiate(questOptionPrefab, contentDrawer.transform);
             CommandButton qb = createdObject.GetComponent<CommandButton>();
-            qb.SetCommand(new SeeQuestNode(dataItem.rootNode, this));
+            qb.SetCommand(new SeeQuestCommand(dataItem));
             qb.SetText(dataItem.ToString());
         }
     }

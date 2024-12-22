@@ -17,6 +17,9 @@ namespace Rooms
         [SerializeField]
         int fortressHeight;
 
+        [SerializeField]
+        NotificationPill notificationPill;
+
         private void Awake()
         {
             roomMap = new Dictionary<(int, int), Room>();
