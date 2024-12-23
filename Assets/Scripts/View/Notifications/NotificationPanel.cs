@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 public class NotificationPanel : UIPanel
 {
 
@@ -11,6 +12,9 @@ public class NotificationPanel : UIPanel
     [SerializeField]
     UIPanel sidePanel;
 
+    [SerializeField]
+    Image image;
+    
     [SerializeField]
     TextMeshProUGUI notificationTitle;
 
@@ -46,6 +50,9 @@ public class NotificationPanel : UIPanel
                     default:
                         break;
                 }
+                break;
+            case TaskType.Build:
+                BuildTask buildTask = (BuildTask)task;
                 break;
             default:
                 return;

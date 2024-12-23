@@ -23,7 +23,6 @@ public class DecisionAcceptCommand : AbstractCommand {
     {
         internalNodeReference = decisionNode;
         this.notification = notification;
-        this.notification.SetQuestNode(decisionNode);
     }
 
     public override void Execute()
@@ -42,7 +41,6 @@ public class DecisionRejectCommand : AbstractCommand
     {
         internalNodeReference = decNode;
         this.notification = notification;
-        this.notification.SetQuestNode(decNode);
     }
 
     public override void Execute()

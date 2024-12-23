@@ -1,3 +1,5 @@
+using Rooms;
+
 namespace Tasks
 {
     public abstract class TaskNotify
@@ -15,10 +17,11 @@ namespace Tasks
 
     public class BuildCompleteNotify : TaskNotify
     {
-
+        public (int, int) coordinates { get; set; }
+        public RoomType roomType {get; set; } 
         public override void Show()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void OnAcknowledge()

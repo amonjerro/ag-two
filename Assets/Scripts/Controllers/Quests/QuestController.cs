@@ -7,10 +7,6 @@ public partial class QuestController
     List<QuestData> closedQuestData;
     List<AQuestNode> currentlyActiveQuests;
     Dictionary<string, QuestData> questMap;
-    Queue<AQuestNode> notifications;
-
-    // View
-    NotificationPill pill;
 
     public static NodeTypes MapStringToType(string type)
     {
@@ -59,8 +55,6 @@ public partial class QuestController
         }
     }
 
-    public bool NotificationsEmpty { get { return notifications.Count == 0; } }
-
     public void Tick()
     {
         // Check to see if there are any active quests
@@ -69,8 +63,6 @@ public partial class QuestController
             return;
         }
 
-        bool notify = false;
-        bool notificationsEmpty = NotificationsEmpty;
         List<int> nodesToRemove = new List<int>();
         int counter = 0;
 
@@ -81,7 +73,6 @@ public partial class QuestController
 
             if(questNode.CurrentTickCount >= questNode.Duration)
             {
-                notify = true;
                 // Inform upwards that an event is pertinent with regards to this quest
                 questNode.PendingReview = true;
                 nodesToRemove.Add(counter);
@@ -89,35 +80,13 @@ public partial class QuestController
             }
             counter++;
         }
-
-        if (notify)
-        {
-            // For every node that has been flagged as notification, remove it from the list
-            // and move it to the notifications queue
-            for (int i = nodesToRemove.Count - 1; i >= 0; i--)
-            {
-                AQuestNode removedNode = currentlyActiveQuests[i];
-                currentlyActiveQuests.RemoveAt(i);
-                notifications.Enqueue(removedNode);
-            }
-
-            if (notificationsEmpty)
-            {
-                pill.Show();
-            } else
-            {
-                pill.UpdateNotification();
-            }
-        }
     }
 
-    public QuestController(List<SO_QuestData> questDataObjects, NotificationPill pill) { 
+    public QuestController(List<SO_QuestData> questDataObjects) { 
         currentlyActiveQuests = new List<AQuestNode>();
         openQuestData = new List<QuestData>();
         questMap = new Dictionary<string, QuestData>();
         closedQuestData = new List<QuestData>();
-        notifications = new Queue<AQuestNode>();
-        this.pill = pill;
 
         LoadQuests(questDataObjects);
         TimeManager.Tick += Tick;
@@ -184,10 +153,6 @@ public partial class QuestController
         state.adventurers = data.GetAdventurers();
         quest.OnStart(state);
         currentlyActiveQuests.Add(quest);
-    }
-
-    public AQuestNode GetNotification() {
-        return notifications.Dequeue();
     }
 
     public void StopActiveQuest(AQuestNode quest)

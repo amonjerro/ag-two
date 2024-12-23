@@ -12,9 +12,12 @@ public class NotificationPill : UIPanel
     
     [SerializeField]
     NotificationPanel panel;
+
+    private bool isShowing;
     private void Start()
     {
-
+        TaskNotifyQueue.newEvent += NotificationResponse;
+        isShowing = false;
     }
 
     public void ShowNotificationData()
@@ -33,8 +36,26 @@ public class NotificationPill : UIPanel
 
     public override void Show()
     {
-        animator.SetBool("bShow", true);
+        isShowing = true;
+        animator.SetBool("bShow", isShowing);
     }
+
+    private void OnDestroy()
+    {
+        TaskNotifyQueue.newEvent -= NotificationResponse;
+    }
+
+    public void NotificationResponse()
+    {
+        if (isShowing)
+        {
+            UpdateNotification();
+        } else
+        {
+            Show();
+        }
+    }
+
 
     public override void Dismiss()
     {
@@ -43,6 +64,7 @@ public class NotificationPill : UIPanel
 
     public void TryDismiss()
     {
-
+        isShowing = false;
+        animator.SetBool("bShow", isShowing);
     }
 }

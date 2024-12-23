@@ -27,7 +27,7 @@ public class AdventurerManager : MonoBehaviour
         _availableAdventurers = new HashSet<Adventurer>();
         adventurerRoster = new List<Adventurer>();
         _adventurerRecruiter = new AdventurerRecruiter();
-        _questController = new QuestController(_questData, (NotificationPill)questMessageQueuePanel);
+        _questController = new QuestController(_questData);
         _stagingRoster = new Dictionary<int, Adventurer>();
 
         DebugSetup();

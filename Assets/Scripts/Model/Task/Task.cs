@@ -1,3 +1,5 @@
+using Rooms;
+
 namespace Tasks {
     public enum TaskType
     {
@@ -46,10 +48,15 @@ namespace Tasks {
     public class BuildTask : Task
     {
 
+        public (int, int) RoomCoordinates {  get; set; }
+        public RoomType TypeBeingBuilt { get; set; }
+
         protected override void OnComplete()
         {
             BuildCompleteNotify buildCompleteNotify = new BuildCompleteNotify();
-            buildCompleteNotify.Show();
+            buildCompleteNotify.coordinates = RoomCoordinates;
+            buildCompleteNotify.roomType = TypeBeingBuilt;
+            TaskNotifyQueue.AddTaskNotification(buildCompleteNotify);
         }
     }
 
@@ -58,7 +65,9 @@ namespace Tasks {
         public AQuestNode questNode { get; set; }
         protected override void OnComplete()
         {
-            throw new System.NotImplementedException();
+            QuestNodeNotify questNodeNotify = new QuestNodeNotify();
+            questNodeNotify.SetQuestNode(questNode);
+            TaskNotifyQueue.AddTaskNotification(questNodeNotify);
         }
     }
 
