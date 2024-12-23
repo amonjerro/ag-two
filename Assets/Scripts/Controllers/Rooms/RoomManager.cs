@@ -1,15 +1,18 @@
+using SaveGame;
 using System.Collections.Generic;
 using UnityEngine;
+using Tasks;
 
 namespace Rooms
 {
     public class RoomManager : MonoBehaviour
     {
-        
+
         public List<Room> availableRooms;
         public List<RoomData> roomData;
         private Dictionary<RoomType, RoomData> roomDataDict;
         private Dictionary<(int, int), Room> roomMap;
+        private Dictionary<(int, int), RoomTile> roomTiles;
 
         [SerializeField]
         int fortressWidth;
@@ -18,12 +21,13 @@ namespace Rooms
         int fortressHeight;
 
         [SerializeField]
-        NotificationPill notificationPill;
+        ParticleSystem roomParticleSystem;
 
         private void Awake()
         {
             roomMap = new Dictionary<(int, int), Room>();
             roomDataDict = new Dictionary<RoomType, RoomData> ();
+            roomTiles = new Dictionary<(int, int), RoomTile>();
             availableRooms = new List<Room> ();
             TimeManager.Tick += HandleTick;
 
@@ -52,7 +56,16 @@ namespace Rooms
                         roomMap.Add((x, y), RoomFactory.MakeRoom(roomDataDict[RoomType.OPS]));
                         continue;
                     }
-                    roomMap.Add((x, y), RoomFactory.MakeRoom(roomDataDict[RoomType.DBR]));
+
+                    // Add Debris Room
+                    Room debrisRoom = RoomFactory.MakeRoom(roomDataDict[RoomType.DBR]);
+                    RoomComponent buildableComponent = debrisRoom.GetRoomComponent(ComponentType.BUILDABLE);
+                    if (buildableComponent != null)
+                    {
+                        BuildableComponent bc = buildableComponent as BuildableComponent;
+                        bc.AddHeightCost(y);
+                    }
+                    roomMap.Add((x, y), debrisRoom);
                 } 
             }
         }
@@ -77,7 +90,26 @@ namespace Rooms
 
         public void BeginRoomBuild(int x, int y, RoomType roomType)
         {
+
+            // Do all the player feedback stuff  //
+            // Update the room sprite to be the build sprite
+            roomTiles[(x, y)].SetSprite(roomDataDict[RoomType.BLD].roomSprite);
+
+            // Move the particle system to the right place
+            (int, int) worldPosition = WorldGridSnap(x, y);
+            roomParticleSystem.transform.position = new Vector3(worldPosition.Item1, worldPosition.Item2, 0);
+            roomParticleSystem.Play();
+
+            // Do all the game logic stuff //
+            Room room = roomMap[(x, y)];
+            RoomComponent component = room.GetRoomComponent(ComponentType.BUILDABLE);
             
+            // Manage the resources
+            GameInstance.gold -= component.GetCost();
+
+            // Create the task
+            BuildTask buildTask = TaskFactory.MakeBuildTask((x, y), roomType);
+            room.EnqueueTask(buildTask);
         }
 
         public Sprite GetSpriteByType(RoomType type) {
@@ -126,6 +158,11 @@ namespace Rooms
             }
 
             return roomList;
+        }
+
+        public void RegisterTile((int, int) key, RoomTile tile)
+        {
+            roomTiles.Add(key, tile);
         }
     }
 }

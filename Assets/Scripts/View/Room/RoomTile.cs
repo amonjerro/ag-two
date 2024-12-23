@@ -13,7 +13,20 @@ namespace Rooms
         private void Start()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
-            spriteRenderer.sprite = ServiceLocator.Instance.GetService<RoomManager>().GetSpriteByType(roomType);
+            RoomManager roomManagerRef = ServiceLocator.Instance.GetService<RoomManager>();
+            spriteRenderer.sprite = roomManagerRef.GetSpriteByType(roomType);
+            roomManagerRef.RegisterTile((posX, posY), this);
+
+        }
+
+        public void SetSprite(Sprite sprite)
+        {
+            spriteRenderer.sprite = sprite;
+        }
+
+        public void SetType(RoomType type)
+        {
+            roomType = type;
         }
     }
 }

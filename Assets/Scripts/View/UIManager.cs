@@ -10,6 +10,9 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject mainInterface;
 
+    [SerializeField]
+    NotificationPill pill;
+
 
     public void SetRoomToInspect(Room room, (int, int) coordinates)
     {
@@ -40,5 +43,10 @@ public class UIManager : MonoBehaviour
         mainInterface.SetActive(true);
         CameraMovement cam = Camera.main.GetComponent<CameraMovement>();
         cam.Unfocus();
+    }
+
+    public void DismissNotifications()
+    {
+        pill.Dismiss();
     }
 }

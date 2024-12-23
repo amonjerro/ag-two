@@ -38,3 +38,12 @@ public class BuildCommand : AbstractCommand
         roomManager.BeginRoomBuild(roomCoordinates.Item1, roomCoordinates.Item2, roomType);
     }
 }
+
+public class BuildAcknowledge : AbstractCommand
+{
+    public override void Execute()
+    {
+        UIManager uiManager = ServiceLocator.Instance.GetService<UIManager>();
+        uiManager.DismissNotifications();
+    }
+}

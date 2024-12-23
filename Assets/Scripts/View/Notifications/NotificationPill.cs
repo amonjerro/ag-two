@@ -64,7 +64,13 @@ public class NotificationPill : UIPanel
 
     public void TryDismiss()
     {
-        isShowing = false;
-        animator.SetBool("bShow", isShowing);
+        if (TaskNotifyQueue.Count > 0) {
+            childAnimator.SetBool("bOpen", false);
+            UpdateNotification();
+        } else
+        {
+            isShowing = false;
+            animator.SetBool("bShow", isShowing);
+        }
     }
 }

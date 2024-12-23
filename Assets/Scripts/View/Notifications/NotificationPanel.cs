@@ -52,7 +52,7 @@ public class NotificationPanel : UIPanel
                 }
                 break;
             case TaskType.Build:
-                BuildTask buildTask = (BuildTask)task;
+                AddCommand("Carry On", new BuildAcknowledge());
                 break;
             default:
                 return;

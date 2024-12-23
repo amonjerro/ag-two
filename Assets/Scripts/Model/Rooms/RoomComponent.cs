@@ -24,11 +24,13 @@ namespace Rooms
     public class BuildableComponent : RoomComponent
     {
         int buildCost;
+        int yFactor;
         public override bool MaxedOut { get { return false; } }
-        public BuildableComponent(int cost)
+        public BuildableComponent(int cost, int yFactor)
         {
             ComponentType = ComponentType.BUILDABLE;
             buildCost = cost;
+            this.yFactor = yFactor;
         }
 
         public override int GetCost()
@@ -44,6 +46,16 @@ namespace Rooms
         public override void Grow()
         {
            
+        }
+
+        public void AddHeightCost(int yOffset)
+        {
+            if (yOffset < 0)
+            {
+                buildCost -= yOffset * yFactor * 2; 
+                return;
+            }
+            buildCost += yOffset * yFactor;
         }
 
     }
