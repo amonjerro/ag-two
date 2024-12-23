@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 using Tasks;
-using UnityEditor.Tilemaps;
+using UnityEngine;
 
 namespace Rooms
 {
@@ -104,7 +104,7 @@ namespace Rooms
     public class DebrisRoom : Room
     {
 
-        BuildTask debrisClearTask;
+        Task debrisClearTask;
         public DebrisRoom()
         {
             components = new List<RoomComponent>();
@@ -117,7 +117,7 @@ namespace Rooms
         {
             ValidateTaskType(task, TaskType.Build);
 
-            debrisClearTask = (BuildTask)task;
+            debrisClearTask = task;
             _taskAssigned = true;
         }
 
@@ -126,7 +126,7 @@ namespace Rooms
             if (!_taskAssigned) {
                 return;
             }
-
+            Debug.Log("Ticking build");
             debrisClearTask.HandleTick();
         }
 

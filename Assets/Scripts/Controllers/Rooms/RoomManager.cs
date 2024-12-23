@@ -93,10 +93,10 @@ namespace Rooms
 
             // Do all the player feedback stuff  //
             // Update the room sprite to be the build sprite
-            roomTiles[(x, y)].SetSprite(roomDataDict[RoomType.BLD].roomSprite);
+            roomTiles[(x, y)].SetSprite(roomDataDict[RoomType.BLD].roomSprite, Color.white);
 
             // Move the particle system to the right place
-            (int, int) worldPosition = WorldGridSnap(x, y);
+            (int, int) worldPosition = KeyToWorld((x, y));
             roomParticleSystem.transform.position = new Vector3(worldPosition.Item1, worldPosition.Item2, 0);
             roomParticleSystem.Play();
 
@@ -110,6 +110,9 @@ namespace Rooms
             // Create the task
             BuildTask buildTask = TaskFactory.MakeBuildTask((x, y), roomType);
             room.EnqueueTask(buildTask);
+
+            Debug.Log("Build Task Created Succesfully");
+            ServiceLocator.Instance.GetService<UIManager>().HideBuildInterface();
         }
 
         public Sprite GetSpriteByType(RoomType type) {
@@ -122,10 +125,7 @@ namespace Rooms
             return roomMap.ContainsKey(WorldToKey(worldX, worldY));
         }
 
-        public (int, int) WorldToKey(int x, int y)
-        {
-            return ( (x + 8) / 4 , y / 2 );
-        }
+        
 
         public AbsRoomClickEvent HandleClick(int worldX, int worldY)
         {
@@ -134,10 +134,19 @@ namespace Rooms
 
         }
 
+        public (int, int) WorldToKey(int x, int y)
+        {
+            return ((x + 8) / 4, y / 2);
+        }
+
+        private (int, int) KeyToWorld((int, int) position) {
+            return (4 * position.Item1 - 6, 2 * position.Item2 + 1);
+        }
+
         public (int, int) WorldGridSnap(int x, int y)
         {
             (int, int) coordinates = WorldToKey(x, y);
-            return (4*coordinates.Item1-6, 2*coordinates.Item2+1);
+            return KeyToWorld(coordinates);
         }
 
         public Room GetRoom(int x, int y) { 

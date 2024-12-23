@@ -19,9 +19,10 @@ namespace Rooms
 
         }
 
-        public void SetSprite(Sprite sprite)
+        public void SetSprite(Sprite sprite, Color color)
         {
             spriteRenderer.sprite = sprite;
+            spriteRenderer.color = color;
         }
 
         public void SetType(RoomType type)

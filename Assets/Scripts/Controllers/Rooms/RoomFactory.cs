@@ -38,7 +38,7 @@ namespace Rooms
                 case ComponentType.UPGRADEABLE:
                     return new UpgradeableComponent(data.cost, data.upgradeCount, data.upgradeCostFactor);
                 default:
-                    return new BuildableComponent(data.cost);
+                    return new BuildableComponent(data.cost, data.upgradeCostFactor);
             }
         }
     }

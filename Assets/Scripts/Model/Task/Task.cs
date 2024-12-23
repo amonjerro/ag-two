@@ -47,7 +47,9 @@ namespace Tasks {
 
     public class BuildTask : Task
     {
-
+        public BuildTask() {
+            _task = TaskType.Build;
+        }
         public (int, int) RoomCoordinates {  get; set; }
         public RoomType TypeBeingBuilt { get; set; }
 
