@@ -1,5 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="project://database/Assets/EditorExtensions/QuestBuilder/QuestBuilder.uss?fileID=7433441132597879392&amp;guid=31d2ee116d0cc224aad4941fa5e6a74e&amp;type=3#QuestBuilder" />
+    <Style src="project://database/Assets/EditorExtensions/DialogueEditor/DialogueEditor.uss?fileID=7433441132597879392&amp;guid=131c58e4b90e2994dbccb1a6a3f0360c&amp;type=3#DialogueEditor" />
     <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
         <SplitView>
             <QuestBuilder.NodeInspector />

@@ -1,7 +1,5 @@
 using System;
-using QuestBuilder;
 using UnityEditor;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QuestBuilder

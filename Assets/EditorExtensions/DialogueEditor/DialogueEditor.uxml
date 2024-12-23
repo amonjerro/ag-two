@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/EditorExtensions/DialogueEditor/DialogueEditor.uss?fileID=7433441132597879392&amp;guid=131c58e4b90e2994dbccb1a6a3f0360c&amp;type=3#DialogueEditor" />
+    <DialogueEditor.DialogueSplitView style="flex-direction: row;">
+        <DialogueEditor.DialogueInspector />
+        <DialogueEditor.DialogueTreeView focusable="true" style="flex-shrink: 1;" />
+    </DialogueEditor.DialogueSplitView>
+</ui:UXML>
