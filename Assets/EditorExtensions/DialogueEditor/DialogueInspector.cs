@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 
@@ -52,8 +53,8 @@ namespace DialogueEditor
         {
             activeNode = viewNode;
             keyField.value = viewNode.nodeData.pid;
-            mainTextField.value = viewNode.nodeData.text;
-
+            mainTextField.value = viewNode.nodeData.name;
+            descriptionField.value = viewNode.nodeData.text;
 
             // clear the button string view
             linkDetails.Clear();
@@ -83,10 +84,14 @@ namespace DialogueEditor
         {
             switch (inputName)
             {
-
+                case "description":
+                    activeNode.nodeData.text = newValue;
+                    break;
+                case "key":
+                    // Key is read only, no changes can be done or should be recorded
+                    break;
                 case "title":
                     activeNode.title = newValue;
-                    activeNode.nodeData.text = newValue;
                     break;
                 default:
                     int childIndex = Int32.Parse(inputName.Substring(inputName.IndexOf('-') + 1));

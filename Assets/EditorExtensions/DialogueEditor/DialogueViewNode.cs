@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,9 +28,6 @@ namespace DialogueEditor
             style.top = nodeData.position.y;
 
             CreateUtilities();
-
-            CreateInputPorts();
-            CreateOutputPorts();
         }
 
         private void CreateUtilities()
@@ -44,23 +40,16 @@ namespace DialogueEditor
 
         }
 
-        private void CreateInputPorts()
+        public void CreateInputNode()
         {
-
+            input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+            inputContainer.Add(input);
         }
-
-        private void CreateOutputPorts()
-        {
-            foreach (Port port in outputPorts)
-            {
-                outputContainer.Add(port);
-            }
-        }
-
-        private void CreateNewOutputPort()
+        public void CreateNewOutputPort()
         {
             Port port = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, typeof(bool));
             port.portName = $"Option {outputPorts.Count}";
+            childrenNodes.Add(null);
             outputPorts.Add(port);
             outputContainer.Add(port);
         }

@@ -87,6 +87,8 @@ namespace DialogueEditor
                         if (nodeMap.ContainsKey(link.link))
                         {
                             DialogueViewNode child = nodeMap[link.link];
+                            child.CreateInputNode();
+                            viewNode.CreateNewOutputPort();
                             Edge e = viewNode.outputPorts[i].ConnectTo(child.input);
                             viewNode.AddChildConnection(child, i);
                             AddElement(e);

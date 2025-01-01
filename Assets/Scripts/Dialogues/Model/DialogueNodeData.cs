@@ -61,6 +61,11 @@ namespace DialogueEditor
         }
     }
 
+    public enum AffinityInfluenceTypes
+    {
+
+    }
+
     [Serializable]
     public class DialogueNodeTree
     {
