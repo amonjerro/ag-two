@@ -6,6 +6,7 @@ public static class FactionData
     static Dictionary<Faction, int> completedQuests = new Dictionary<Faction, int>();
 }
 
+[System.Serializable]
 public enum Faction
 {
     KnightsCircle,
