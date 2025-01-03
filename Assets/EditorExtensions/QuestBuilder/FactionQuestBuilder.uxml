@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <SplitView style="flex-direction: row;">
+        <QuestBuilder.FactionQuestInspector />
+        <QuestBuilder.FactionQuestTree focusable="true" />
+    </SplitView>
+</ui:UXML>
