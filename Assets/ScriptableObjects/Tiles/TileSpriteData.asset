@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c883d71eba19707409051817dffc7650, type: 3}
+  m_Name: TileSpriteData
+  m_EditorClassIdentifier: 
+  roadSprites:
+  - connectionOrientation: 0
+    sprite: {fileID: 21300000, guid: 56cadb6a98ab0c44c93047255700edaa, type: 3}
+  - connectionOrientation: 2
+    sprite: {fileID: 21300000, guid: 6226f7d07f585d3489844233d68aedb6, type: 3}
+  - connectionOrientation: 1
+    sprite: {fileID: 21300000, guid: 832f91b4a945cb24596f51ae450bcb64, type: 3}
+  - connectionOrientation: 3
+    sprite: {fileID: 21300000, guid: aa387ed4b3d19134bbbf68182bacbc76, type: 3}
+  forestSprites:
+  - connectionOrientation: 0
+    sprite: {fileID: 21300000, guid: d7d559142aa8fcb4f89260857f00487e, type: 3}
+  - connectionOrientation: 1
+    sprite: {fileID: 21300000, guid: 879a0e0ac4dea714a8e1d62e3d3a52ee, type: 3}
+  - connectionOrientation: 3
+    sprite: {fileID: 21300000, guid: 4b7fe43170494a14cb9e3afb20e6bc04, type: 3}
+  - connectionOrientation: 2
+    sprite: {fileID: 21300000, guid: 5a26446dc570312469d2f79fd017f437, type: 3}
+  mountainSprites:
+  - connectionOrientation: 0
+    sprite: {fileID: 21300000, guid: a50b3fd26f5faf44487b672dcf04f43f, type: 3}
+  - connectionOrientation: 1
+    sprite: {fileID: 21300000, guid: 8a635df213ab3564c83523c1dbd3857f, type: 3}
+  - connectionOrientation: 2
+    sprite: {fileID: 21300000, guid: f0a6a09c78d5ca14b8e9ba56c89fb818, type: 3}
+  - connectionOrientation: 3
+    sprite: {fileID: 21300000, guid: ea2e00f3f795aab4ba364c41bdfc5ba3, type: 3}
+  lakeSprites:
+  - connectionOrientation: 0
+    sprite: {fileID: 21300000, guid: 20dfcd0498ab0174c9e08848b5ac24f3, type: 3}
+  - connectionOrientation: 1
+    sprite: {fileID: 21300000, guid: 06e77930d22efef4cbfae5b495fe35d7, type: 3}
+  - connectionOrientation: 2
+    sprite: {fileID: 21300000, guid: 84bd54e9f79a7654ea0fd719f51ee42d, type: 3}
+  - connectionOrientation: 3
+    sprite: {fileID: 21300000, guid: 6c94f7e895f0f014bb58d8a6f3608636, type: 3}
