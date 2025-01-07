@@ -1,5 +1,4 @@
 using Rooms;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,7 +15,6 @@ namespace GameCursor
     public class CursorManager : MonoBehaviour
     {
         private CameraMovement _camera;
-        public bool isIgnoringCreatures;
         [SerializeField]
         private CursorStates currentState;
 
