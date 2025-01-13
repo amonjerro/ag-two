@@ -215,5 +215,8 @@ namespace ExplorationMap
             tileRevealEvent?.Invoke(coordinates);
         }
 
+        public MapTile GetTile((int, int) coordinates) { 
+            return tiles[coordinates];
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace ExplorationMap
             public Sprite sprite;
         }
 
+        public Sprite baseSprite;
+
+
         [SerializeField]
         List<OrientationSprite> roadSprites = new List<OrientationSprite>();
         [SerializeField]
@@ -47,6 +50,23 @@ namespace ExplorationMap
             foreach (OrientationSprite os in lakeSprites)
             {
                 lakeSpriteDict.Add(os.connectionOrientation, os.sprite);
+            }
+        }
+
+        public Sprite GetByTypeAndOrientation(ConnectionType type, ConnectionOrientations orientation)
+        {
+            switch (type)
+            {
+                case ConnectionType.ROAD:
+                    return roadSpriteDict[orientation];
+                case ConnectionType.FOREST:
+                    return forestSpriteDict[orientation];
+                case ConnectionType.LAKE:
+                    return lakeSpriteDict[orientation];
+                case ConnectionType.MOUNTAIN:
+                    return mountainSpriteDict[orientation];
+                default:
+                    return null;
             }
         }
 

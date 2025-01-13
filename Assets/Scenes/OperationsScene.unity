@@ -728,6 +728,7 @@ MonoBehaviour:
   mapHeight: 5
   mapWidth: 5
   mapTileData: {fileID: 11400000, guid: d8ed34fc77470fe4d805c737ad1de46f, type: 2}
+  mapTileSprites: {fileID: 11400000, guid: 1c277e2285be91845ac4ae156a43b4d7, type: 2}
 --- !u!114 &1281136658
 MonoBehaviour:
   m_ObjectHideFlags: 0

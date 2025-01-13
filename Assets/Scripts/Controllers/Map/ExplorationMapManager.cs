@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -16,12 +17,18 @@ namespace ExplorationMap
         [SerializeField]
         TileMovementSO mapTileData;
 
+        [SerializeField]
+        MapTileSpritesSO mapTileSprites;
+
         private int currentX;
         private int currentY;
+
+        private ConnectionOrientations[] orientationIterator = { ConnectionOrientations.NORTH, ConnectionOrientations.EAST, ConnectionOrientations.SOUTH, ConnectionOrientations.WEST };
 
         private void Awake()
         {
             explorationMap = new ExplorationMap(mapTileData);
+            mapTileSprites.SetUpData();
             currentX = 0;
             currentY = 0;
         }
@@ -44,5 +51,24 @@ namespace ExplorationMap
         }
 
         public ExplorationMap GetMapReference() { return explorationMap; }
+
+        public List<Sprite> GetSpritesForMapTile((int, int) coordinates)
+        {
+            List<Sprite> sprites = new List<Sprite>();
+            Sprite toAdd;
+
+            sprites.Add(mapTileSprites.baseSprite);
+            MapTile tile = explorationMap.GetTile(coordinates);
+            foreach(ConnectionOrientations co in orientationIterator)
+            {
+                toAdd = mapTileSprites.GetByTypeAndOrientation(tile.GetConnectionType(co), co);
+                if (toAdd != null)
+                {
+                    sprites.Add(toAdd);
+                }
+            }
+
+            return sprites;
+        }
     }
 }
