@@ -20,6 +20,12 @@ namespace ExplorationMap
         [SerializeField]
         MapTileSpritesSO mapTileSprites;
 
+        [SerializeField]
+        GameObject mapViewPrefab;
+
+        [SerializeField]
+        GameObject mapHierarchy;
+
         private int currentX;
         private int currentY;
 
@@ -31,10 +37,13 @@ namespace ExplorationMap
             mapTileSprites.SetUpData();
             currentX = 0;
             currentY = 0;
+            
         }
         private void Start()
         {
-            
+            Debug.Log("EMM Start");
+            CreateViewItems();
+            explorationMap.InitializeMap(mapWidth, mapHeight);
         }
 
         private void Update()
@@ -69,6 +78,18 @@ namespace ExplorationMap
             }
 
             return sprites;
+        }
+
+        private void CreateViewItems()
+        {
+            float startX = -mapWidth + 0.5f;
+            float startY = -mapHeight + 0.5f;
+            for (int x = 0; x < mapWidth*2+1; x++) {
+                for (int y = 0; y < mapHeight*2+1; y++) { 
+                    GameObject go = Instantiate(mapViewPrefab, new Vector3(x + startX, y + startY, 0), Quaternion.identity);
+                    go.transform.SetParent(mapHierarchy.transform, true);
+                }
+            }
         }
     }
 }

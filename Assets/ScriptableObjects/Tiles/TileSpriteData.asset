@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c883d71eba19707409051817dffc7650, type: 3}
   m_Name: TileSpriteData
   m_EditorClassIdentifier: 
+  baseSprite: {fileID: 21300000, guid: a939b3eadc1a5f84ab740626ebf96cc0, type: 3}
   roadSprites:
   - connectionOrientation: 0
     sprite: {fileID: 21300000, guid: 56cadb6a98ab0c44c93047255700edaa, type: 3}

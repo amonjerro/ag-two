@@ -30,7 +30,7 @@ public static class SpriteMerger
             }
         }
         targetTexture.Apply();
-        Sprite finalSprite = Sprite.Create(targetTexture, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f));
+        Sprite finalSprite = Sprite.Create(targetTexture, new Rect(0, 0, 32, 32), new Vector2(0.5f, 0.5f), 32);
         return finalSprite;
     }
 }

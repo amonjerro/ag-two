@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace ExplorationMap { 
@@ -8,12 +9,23 @@ namespace ExplorationMap {
         ExplorationMap mapReference;
         SpriteRenderer spriteRenderer;
 
+        private int locationX, locationY;
+
         private void Start()
         {
+            Debug.Log("TileStart");
             mapManagerRef = ServiceLocator.Instance.GetService<ExplorationMapManager>();
             mapReference = mapManagerRef.GetMapReference();
             spriteRenderer = GetComponent<SpriteRenderer>();
             ExplorationMap.tileRevealEvent += UpdateLooks;
+            spriteRenderer.color = Color.black;
+            locationX = Mathf.FloorToInt(transform.position.x);
+            locationY = Mathf.FloorToInt(transform.position.y);
+
+            if (mapReference.GetTileStatus((locationX, locationY)) == TileStatus.EXPLORED)
+            {
+                UpdateLooks((locationX, locationY));
+            }
         }
 
         private void OnDestroy()
@@ -23,9 +35,12 @@ namespace ExplorationMap {
 
         private void UpdateLooks((int, int) coordinates)
         {
-            List<Sprite> sprites = mapManagerRef.GetSpritesForMapTile(coordinates);
-            Sprite result = SpriteMerger.MergeSprites(sprites);
-            spriteRenderer.sprite = result;
+            if (coordinates.Item1 == locationX && coordinates.Item2 == locationY) {
+                List<Sprite> sprites = mapManagerRef.GetSpritesForMapTile(coordinates);
+                Sprite result = SpriteMerger.MergeSprites(sprites);
+                spriteRenderer.color = Color.white;
+                spriteRenderer.sprite = result;
+            }
         }
     }
 }

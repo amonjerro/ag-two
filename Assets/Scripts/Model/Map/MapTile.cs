@@ -76,6 +76,32 @@ namespace ExplorationMap
             data.SetUpTileTypeData();
         }
 
+        private MapTile MakeStartingTile()
+        {
+            MapTile tile = new MapTile();
+            tile.SetConnectionType(ConnectionType.ROAD, ConnectionOrientations.NORTH);
+            tile.SetConnectionType(ConnectionType.WILDERNESS, ConnectionOrientations.WEST);
+            tile.SetConnectionType(ConnectionType.WILDERNESS, ConnectionOrientations.EAST);
+            tile.SetConnectionType(ConnectionType.LAKE, ConnectionOrientations.SOUTH);
+            return tile;
+        }
+
+        public void InitializeMap(int width, int height)
+        {
+
+            for (int x = -width; x <= width; x++) {
+                for (int y = -height; y <= height; y++) {
+                    if (x == 0 && y == 0)
+                    {
+                        tiles.Add((0, 0), MakeStartingTile());
+                        statusMap.Add((0,0), TileStatus.EXPLORED);
+                        continue;
+                    }
+                    PopulateTile((x, y));
+                }
+            }
+        }
+
         private MapTile GetNeighborData((int, int) coordinates, ConnectionOrientations orientation)
         {
             (int, int) newCoordinates;
@@ -217,6 +243,11 @@ namespace ExplorationMap
 
         public MapTile GetTile((int, int) coordinates) { 
             return tiles[coordinates];
+        }
+
+        public TileStatus GetTileStatus((int, int) coordinates)
+        {
+            return statusMap[coordinates];
         }
     }
 }
