@@ -12,6 +12,9 @@ namespace ExplorationMap
         [SerializeField]
         private int mapWidth;
 
+        [SerializeField]
+        MapUIManager mapUIManager;
+
         ExplorationMap explorationMap;
 
         [SerializeField]
@@ -34,6 +37,7 @@ namespace ExplorationMap
         private void Awake()
         {
             explorationMap = new ExplorationMap(mapTileData);
+            mapUIManager = GetComponent<MapUIManager>();
             mapTileSprites.SetUpData();
             currentX = 0;
             currentY = 0;
@@ -73,9 +77,26 @@ namespace ExplorationMap
             clickEvent.Coordinates = (positionX, positionY);
             clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
             clickEvent.IsExplorable = explorationMap.TileIsExplorable((positionX, positionY));
+            mapUIManager.HandleMapClickEvent(clickEvent);
         }
 
         public ExplorationMap GetMapReference() { return explorationMap; }
+
+        public void SetupPartyEmbark()
+        {
+            // Dismiss the map UI
+            mapUIManager.DismissMapUI();
+
+            // Clear any previous party embark data
+
+            // Move the camera to the embark screen
+
+        }
+
+        public void EmbarkParty()
+        {
+
+        }
 
         public List<Sprite> GetSpritesForMapTile((int, int) coordinates)
         {

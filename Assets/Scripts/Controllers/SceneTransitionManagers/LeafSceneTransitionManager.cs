@@ -5,7 +5,10 @@ public class LeafSceneTransitionManager : MainSceneTransitionManager
     private void Start()
     {
         // Unfade the panel
-        StartCoroutine(fadePanel.FadeOut());
+        if (fadePanel.gameObject.activeInHierarchy)
+        {
+            StartCoroutine(fadePanel.FadeOut());
+        }
     }
 
     public void FadeToScene()
