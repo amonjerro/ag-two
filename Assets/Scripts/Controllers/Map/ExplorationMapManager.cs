@@ -41,9 +41,13 @@ namespace ExplorationMap
         }
         private void Start()
         {
-            Debug.Log("EMM Start");
             CreateViewItems();
             explorationMap.InitializeMap(mapWidth, mapHeight);
+        }
+
+        private void MoveMap()
+        {
+
         }
 
         private void Update()
@@ -56,7 +60,19 @@ namespace ExplorationMap
 
         }
 
-        private void OnSelect(InputValue value) { 
+        private void OnSelect(InputValue value) {
+            Mouse mouse = Mouse.current;
+            Vector3 mousePosition = new Vector3(mouse.position.x.value, mouse.position.y.value, 0);
+            Vector3 realWorldPosition = Camera.main.ScreenToWorldPoint(mousePosition + new Vector3(0,0,10));
+
+            // Adjust the position by how much the map viewport has moved
+            int positionX = Mathf.FloorToInt(realWorldPosition.x) + currentX;
+            int positionY = Mathf.FloorToInt(realWorldPosition.y) + currentY;
+
+            MapClickEvent clickEvent = new MapClickEvent();
+            clickEvent.Coordinates = (positionX, positionY);
+            clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
+            clickEvent.IsExplorable = explorationMap.TileIsExplorable((positionX, positionY));
         }
 
         public ExplorationMap GetMapReference() { return explorationMap; }

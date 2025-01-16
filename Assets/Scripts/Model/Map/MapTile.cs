@@ -249,5 +249,12 @@ namespace ExplorationMap
         {
             return statusMap[coordinates];
         }
+
+        public bool TileIsExplorable((int, int) coordinates) {
+            return statusMap[(coordinates.Item1 - 1, coordinates.Item2)] == TileStatus.EXPLORED || 
+                statusMap[(coordinates.Item1 + 1, coordinates.Item2)] == TileStatus.EXPLORED ||
+                statusMap[(coordinates.Item1, coordinates.Item2-1)] == TileStatus.EXPLORED || 
+                statusMap[(coordinates.Item1, coordinates.Item2+1)] == TileStatus.EXPLORED;
+        }
     }
 }
