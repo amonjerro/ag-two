@@ -1,18 +1,26 @@
 using System.Collections.Generic;
+using Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace ExplorationMap
 {
+    public enum ExplorationCursorState
+    {
+        Selecting,
+        GUIInteraction
+    }
+
     public class ExplorationMapManager : MonoBehaviour
     {
+        private ExplorationCursorState _cursorState;
+
         [SerializeField]
         private int mapHeight;
         
         [SerializeField]
         private int mapWidth;
 
-        [SerializeField]
         MapUIManager mapUIManager;
 
         ExplorationMap explorationMap;
@@ -29,8 +37,14 @@ namespace ExplorationMap
         [SerializeField]
         GameObject mapHierarchy;
 
+        [SerializeField]
+        GameObject embarkHierarchy;
+
         private int currentX;
         private int currentY;
+
+        ExplorationTask explorationTask;
+        QuestTask questTask;
 
         private ConnectionOrientations[] orientationIterator = { ConnectionOrientations.NORTH, ConnectionOrientations.EAST, ConnectionOrientations.SOUTH, ConnectionOrientations.WEST };
 
@@ -45,7 +59,11 @@ namespace ExplorationMap
         }
         private void Start()
         {
+            _cursorState = ExplorationCursorState.Selecting;
             CreateViewItems();
+            explorationTask = new ExplorationTask();
+            questTask = new QuestTask();
+
             explorationMap.InitializeMap(mapWidth, mapHeight);
         }
 
@@ -65,9 +83,21 @@ namespace ExplorationMap
         }
 
         private void OnSelect(InputValue value) {
+            switch (_cursorState)
+            {
+                case ExplorationCursorState.GUIInteraction:
+                    break;
+                default:
+                    HandleMapSelect();
+                    break;
+            }
+        }
+
+        private void HandleMapSelect()
+        {
             Mouse mouse = Mouse.current;
             Vector3 mousePosition = new Vector3(mouse.position.x.value, mouse.position.y.value, 0);
-            Vector3 realWorldPosition = Camera.main.ScreenToWorldPoint(mousePosition + new Vector3(0,0,10));
+            Vector3 realWorldPosition = Camera.main.ScreenToWorldPoint(mousePosition + new Vector3(0, 0, 10));
 
             // Adjust the position by how much the map viewport has moved
             int positionX = Mathf.FloorToInt(realWorldPosition.x) + currentX;
@@ -75,12 +105,21 @@ namespace ExplorationMap
 
             MapClickEvent clickEvent = new MapClickEvent();
             clickEvent.Coordinates = (positionX, positionY);
+            explorationTask.SetCoordinates(clickEvent.Coordinates);
+            
             clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
             clickEvent.IsExplorable = explorationMap.TileIsExplorable((positionX, positionY));
-            mapUIManager.HandleMapClickEvent(clickEvent);
+            if (mapUIManager.WillShowGUI(clickEvent)) {
+                mapUIManager.HandleMapClickEvent(clickEvent);
+                _cursorState = ExplorationCursorState.GUIInteraction;
+            }
         }
 
         public ExplorationMap GetMapReference() { return explorationMap; }
+        public void ResetCursor()
+        {
+            _cursorState = ExplorationCursorState.Selecting;
+        }
 
         public void SetupPartyEmbark()
         {
@@ -88,9 +127,13 @@ namespace ExplorationMap
             mapUIManager.DismissMapUI();
 
             // Clear any previous party embark data
+            explorationTask.Reset();
 
-            // Move the camera to the embark screen
-
+            mapHierarchy.SetActive(false);
+            
+            // Set up the embark screen
+            mapUIManager.ShowEmbarkUI();
+            embarkHierarchy.SetActive(true);
         }
 
         public void EmbarkParty()

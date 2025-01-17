@@ -1,4 +1,5 @@
 using Rooms;
+using System.Collections.Generic;
 
 namespace Tasks {
     public enum TaskType
@@ -62,9 +63,43 @@ namespace Tasks {
         }
     }
 
-    public class QuestTask : Task
+    public class ForgeTask : Task
+    {
+        protected override void OnComplete()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
+    public class PartyTask : Task
+    {
+        protected List<Adventurer> adventurers;
+
+        public PartyTask() {
+            adventurers = new List<Adventurer>();
+        }
+
+        public void Reset()
+        {
+            adventurers.Clear();
+        }
+
+        public void AddPartyMember(Adventurer adventurer)
+        {
+            adventurers.Add(adventurer);
+        }
+
+        protected override void OnComplete() {
+
+        }
+    }
+
+    public class QuestTask : PartyTask
     {
         public AQuestNode questNode { get; set; }
+
+        public QuestTask() : base() { }
+
         protected override void OnComplete()
         {
             QuestNodeNotify questNodeNotify = new QuestNodeNotify();
@@ -73,11 +108,23 @@ namespace Tasks {
         }
     }
 
-    public class ForgeTask : Task
+    public class ExplorationTask : PartyTask
     {
+        (int, int) locationCoordinates;
+        public ExplorationTask() : base() { 
+            
+        }
+
+        public void SetCoordinates((int, int) coordinates)
+        {
+            locationCoordinates = coordinates;
+        }
+
         protected override void OnComplete()
         {
-            throw new System.NotImplementedException(); 
+            ExplorationTaskNotify taskNotify = new ExplorationTaskNotify();
+
+            TaskNotifyQueue.AddTaskNotification(taskNotify);
         }
     }
 }

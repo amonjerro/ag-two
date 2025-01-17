@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace ExplorationMap { 
@@ -13,7 +12,6 @@ namespace ExplorationMap {
 
         private void Start()
         {
-            Debug.Log("TileStart");
             mapManagerRef = ServiceLocator.Instance.GetService<ExplorationMapManager>();
             mapReference = mapManagerRef.GetMapReference();
             spriteRenderer = GetComponent<SpriteRenderer>();

@@ -50,4 +50,16 @@ namespace Tasks
             qc.ProceedToNext(node);
         }
     }
+
+    public class ExplorationTaskNotify : TaskNotify
+    {
+        public override void Show()
+        {
+            throw new System.NotImplementedException();
+        }
+        public override void OnAcknowledge()
+        {
+            throw new System.NotImplementedException();
+        }
+    }
 }
