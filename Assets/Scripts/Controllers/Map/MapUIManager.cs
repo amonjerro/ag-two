@@ -11,6 +11,9 @@ namespace ExplorationMap
         [SerializeField]
         UIPanel LocationDescriptionPanel;
 
+        [SerializeField]
+        EmbarkInterface embarkInterface;
+
         public bool WillShowGUI(MapClickEvent clickEvent)  {
             return clickEvent.TileStatus == TileStatus.EXPLORED || (clickEvent.TileStatus == TileStatus.UNEXPLORED && clickEvent.IsExplorable);
         }
@@ -42,7 +45,12 @@ namespace ExplorationMap
 
         public void ShowEmbarkUI()
         {
+            embarkInterface.SetActive(true);
+        }
 
+        public void DismissEmbarkUI()
+        {
+            embarkInterface.SetActive(false);
         }
 
         public void DismissMapUI()
