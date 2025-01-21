@@ -1,4 +1,4 @@
-using System.Collections;
+using SaveGame;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,8 +18,6 @@ public class AdventurerManager : MonoBehaviour
 
     [SerializeField]
     List<SO_QuestData> _questData;
-    
-    public AdventurerProfile profile;
     
     // Start is called before the first frame update
     void Awake()
@@ -43,6 +41,14 @@ public class AdventurerManager : MonoBehaviour
 
     private void DebugSetup()
     {
+        // If we have data saved in the GameInstance, then we're good to get started.
+        if (GameInstance.roster.Count > 0)
+        {
+            return;
+        }
+
+
+        // Otherwise, let's instantiate some random ass adventurers to put in the list.
         adventurerRoster = AdventurerFactory.MakeAdventurerList(3);
         for (int i = 0; i < adventurerRoster.Count; i++)
         {
@@ -56,11 +62,6 @@ public class AdventurerManager : MonoBehaviour
 
     public void RemoveAdventurer(Adventurer item){
         adventurerRoster.Remove(item);
-    }
-
-    public void ShowAdventurerProfile(NPCInformation information)
-    {
-        profile.GetData(adventurerRoster[information.index]);
     }
 
     public List<QuestData> GetOpenQuests()
@@ -97,6 +98,10 @@ public class AdventurerManager : MonoBehaviour
     public List<Adventurer> GetAvailableAdventurers()
     {
         return _availableAdventurers.ToList();
+    }
+
+    public int AvailabilityCount() {
+        return _availableAdventurers.Count;
     }
 
     public void MakeUnavailable(Adventurer adventurer)

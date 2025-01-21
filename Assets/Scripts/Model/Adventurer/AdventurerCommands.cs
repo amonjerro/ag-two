@@ -43,30 +43,14 @@ public class ShowRosterCommand : AbstractCommand
 {
     RosterWidget roster;
     UIPanel dismissPanel;
-    RectTransform buttonLocation;
-    Vector3 offset;
-    int index;
 
-    public ShowRosterCommand(RectTransform transform, UIPanel dismiss, RosterWidget roster, Vector3 offset, int index)
+    public ShowRosterCommand(RectTransform transform, RosterWidget roster)
     {
-        buttonLocation = transform;
         this.roster = roster;
-        this.offset = offset;
-        dismissPanel = dismiss;
-        this.index = index;
     }
 
     public override void Execute()
     {
-
-        RectTransform rosterTransform = roster.GetComponent<RectTransform>();
-        Vector3 targetLocation = Vector3.zero;
-        Quaternion targetRotation = Quaternion.identity;
-        buttonLocation.GetLocalPositionAndRotation(out targetLocation, out targetRotation);
-        rosterTransform.SetLocalPositionAndRotation(new Vector3(targetLocation.x + offset.x, targetLocation.y, 0), targetRotation);
-        roster.SetBoundButton(index, buttonLocation.gameObject.GetComponent<PickAdventurerButton>());
         roster.Show();
-
-        dismissPanel.Show();
     }
 }

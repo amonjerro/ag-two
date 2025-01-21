@@ -58,5 +58,10 @@ namespace ExplorationMap
             LocationDescriptionPanel.Dismiss();
             ExplorationTaskPanel.Dismiss();
         }
+
+        public void ShowRosterUI()
+        {
+
+        }
     }
 }

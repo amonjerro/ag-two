@@ -1,69 +1,65 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RosterWidget : UIPanel
 {
-    [SerializeField]
-    GameObject pickAdventurerPrefab;
-
-    PickAdventurerButton boundButton;
-    int boundIndex;
-    RoleAssignPanel buttonParentPanel;
-
+    Button button;
     AdventurerManager manager;
-
-
-    [SerializeField]
-    GameObject contentDrawer;
+    int currentIndex;
+    int rosterIndex;
+    List<Adventurer> _availableAdventurers;
 
     private void Start()
     {
         manager = ServiceLocator.Instance.GetService<AdventurerManager>();
     }
 
-    private void DestroyOpenQuestObjects()
+
+    private void ShowAdventurer()
     {
-        foreach (Transform child in contentDrawer.transform)
+        Adventurer adventurer = _availableAdventurers[currentIndex];
+
+    }
+
+    public void StageAdventurer()
+    {
+        manager.AddToStagingRoster(rosterIndex, _availableAdventurers[currentIndex]);
+    }
+
+    public void NextAdventurer()
+    {
+        currentIndex++;
+        if(currentIndex == _availableAdventurers.Count)
         {
-            Destroy(child.gameObject);
+            currentIndex = 0;
+        }
+
+    }
+
+    public void PreviousAdventurer()
+    {
+        currentIndex--;
+        if (currentIndex == -1)
+        {
+            currentIndex = _availableAdventurers.Count - 1;
         }
     }
 
-    public void CreateRosterButtons()
+    public void SetRosterIndex(int i)
     {
-        foreach(Adventurer adventurer in manager.GetAvailableAdventurers())
-        {
-            GameObject button = Instantiate(pickAdventurerPrefab, contentDrawer.transform);
-            PickAdventurerButton buttonLogic = button.GetComponent<PickAdventurerButton>();
-            buttonLogic.SetCommand(new StageAdventurerCommand(
-                boundButton,boundIndex,
-                buttonParentPanel,
-                adventurer, manager, this)
-            );
-            TextMeshProUGUI textGUI = button.GetComponentInChildren<TextMeshProUGUI>();
-            textGUI.text = adventurer.Name;
-        }
+        rosterIndex = i;
     }
 
     public override void Show()
     {
-        // Destroy pre-existing quest objects in list
-        DestroyOpenQuestObjects();
-
-        // Create the roster objects
-        CreateRosterButtons();
-
-    }
-
-    public void SetBoundButton(int index, PickAdventurerButton button)
-    {
-        boundIndex = index;
-        boundButton = button;
-        buttonParentPanel = boundButton.GetComponentInParent<RoleAssignPanel>();
+        currentIndex = 0;
+        ShowAdventurer();
     }
 
     public override void Dismiss()
     {
-        GetComponentInParent<UIDismissTool>().Dismiss();
+
     }
 }
