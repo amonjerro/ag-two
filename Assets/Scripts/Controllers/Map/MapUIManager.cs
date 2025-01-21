@@ -14,6 +14,9 @@ namespace ExplorationMap
         [SerializeField]
         EmbarkInterface embarkInterface;
 
+        [SerializeField]
+        RosterWidget rosterWidget;
+
         public bool WillShowGUI(MapClickEvent clickEvent)  {
             return clickEvent.TileStatus == TileStatus.EXPLORED || (clickEvent.TileStatus == TileStatus.UNEXPLORED && clickEvent.IsExplorable);
         }
@@ -46,6 +49,7 @@ namespace ExplorationMap
         public void ShowEmbarkUI()
         {
             embarkInterface.SetActive(true);
+            embarkInterface.UpdateStatBlocks();
         }
 
         public void DismissEmbarkUI()
@@ -59,9 +63,16 @@ namespace ExplorationMap
             ExplorationTaskPanel.Dismiss();
         }
 
-        public void ShowRosterUI()
+        public void ShowRosterUI(int i)
         {
+            rosterWidget.gameObject.SetActive(true);
+            rosterWidget.SetRosterIndex(i);
+            rosterWidget.Show();
+        }
 
+        public void DismissRosterUI()
+        {
+            rosterWidget.Dismiss();
         }
     }
 }
