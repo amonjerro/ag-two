@@ -50,6 +50,7 @@ namespace ExplorationMap
         {
             embarkInterface.SetActive(true);
             embarkInterface.UpdateStatBlocks();
+            embarkInterface.UpdateButtons();
         }
 
         public void DismissEmbarkUI()

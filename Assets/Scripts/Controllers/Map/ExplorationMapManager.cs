@@ -121,6 +121,13 @@ namespace ExplorationMap
             _cursorState = ExplorationCursorState.Selecting;
         }
 
+        public void ReturnToMapView()
+        {
+            embarkHierarchy.SetActive(false);
+            mapUIManager.DismissEmbarkUI();
+            mapHierarchy.SetActive(true);
+        }
+
         public void SetupPartyEmbark()
         {
             // Dismiss the map UI

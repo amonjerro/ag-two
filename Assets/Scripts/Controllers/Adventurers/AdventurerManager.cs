@@ -78,10 +78,13 @@ public class AdventurerManager : MonoBehaviour
     {
         if (_stagingRoster.ContainsKey(index))
         {
+            _availableAdventurers.Add(_stagingRoster[index]);
             _stagingRoster[index] = adventurer;
+            _availableAdventurers.Remove(adventurer);
         } else
         {
             _stagingRoster.Add(index, adventurer);
+            _availableAdventurers.Remove(adventurer);
         }
     }
 
