@@ -77,7 +77,7 @@ namespace Rooms
             buildRestriction = BuildRestrictions.NONE;
             roomType = RoomType.OPS;
             validator = new TaskValidator();
-            validator.AddValidationRule(ValidationOperations.Match, TaskType.Party);
+            validator.AddValidationRule(ValidationOperations.Contains, new List<TaskType>() { TaskType.Quest, TaskType.Exploration });
         }
 
         public override void EnqueueTask(Task task)

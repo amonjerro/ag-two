@@ -1,3 +1,4 @@
+using Rooms;
 using SaveGame;
 using System.Collections;
 using UnityEngine;
@@ -12,6 +13,8 @@ public class MainSceneTransitionManager : MonoBehaviour
         // Load the roster
 
         // Ensure all rooms load properly
+        RoomManager roomManager = ServiceLocator.Instance.GetService<RoomManager>();
+        roomManager.LoadTasks(GameInstance.tasksToPopulate);
 
         // Ensure all quest data is properly loaded to the UI and controllers
 
@@ -21,6 +24,8 @@ public class MainSceneTransitionManager : MonoBehaviour
         // Start the clock
         timeManager = ServiceLocator.Instance.GetService<TimeManager>();
         timeManager.LoadTime(GameInstance.totalTickCount);
+
+        
     }
 
     protected IEnumerator LoadScene(int scene)

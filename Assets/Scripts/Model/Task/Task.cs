@@ -8,8 +8,7 @@ namespace Tasks {
         Build,
         Quest,
         Forge,
-        Exploration,
-        Party
+        Exploration
     }
 
     public abstract class Task

@@ -35,6 +35,29 @@ namespace Rooms
             SetupInitialRooms();
         }
 
+        public void LoadTasks(Queue<Task> tasks)
+        {
+            Task activeTask;
+            while (tasks.Count > 0) { 
+                activeTask = tasks.Dequeue();
+                switch (activeTask.TaskType) {
+                    case TaskType.Quest:
+                    case TaskType.Exploration:
+                        Room opsRoom = roomMap[(0, 0)];
+                        opsRoom.EnqueueTask(activeTask);
+                        break;
+                    case TaskType.Build:
+                        BuildTask bdTask = (BuildTask)activeTask;
+                        Room debris = roomMap[bdTask.RoomCoordinates];
+                        debris.EnqueueTask(activeTask);
+                        break;
+                    default:
+                        break;
+                }
+                
+            }
+        }
+
         private void SetupRoomDataDict()
         {
             roomDataDict.Clear();
