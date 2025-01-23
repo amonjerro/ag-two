@@ -1,4 +1,5 @@
 using Rooms;
+using Tasks;
 using System.Collections.Generic;
 
 namespace SaveGame
@@ -12,5 +13,7 @@ namespace SaveGame
 
         public static int gold = 100;
         public static int totalTickCount = 14;
+
+        public static Queue<Task> tasksToPopulate = new Queue<Task>();
     }
 }

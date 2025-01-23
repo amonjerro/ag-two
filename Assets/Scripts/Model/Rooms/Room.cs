@@ -1,7 +1,8 @@
 
+using System;
 using System.Collections.Generic;
 using Tasks;
-using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Rooms
 {
@@ -47,14 +48,12 @@ namespace Rooms
         }
 
         public abstract AbsRoomClickEvent HandleClick();
+        protected TaskValidator validator;
 
-        protected void ValidateTaskType(Task task, TaskType expectedType)
+        protected void ValidateTaskType(Task task)
         {
-            // BuildTasks can be assigned to a Debris room
-            if (task.TaskType != expectedType)
-            {
-                throw new System.ArgumentException("Incorrect Task Type assigned");
-            }
+            bool isValid = validator.Validate(task);
+            Assert.IsTrue(isValid);
         }
 
         public RoomComponent GetRoomComponent(ComponentType componentType) {
@@ -70,22 +69,20 @@ namespace Rooms
     
     public class OperationsRoom : Room
     {
-        List<QuestTask> tasks;
+        List<PartyTask> tasks;
         public OperationsRoom()
         {
-            tasks = new List<QuestTask>();
+            tasks = new List<PartyTask>();
             components = new List<RoomComponent>();
             buildRestriction = BuildRestrictions.NONE;
             roomType = RoomType.OPS;
+            validator = new TaskValidator();
+            validator.AddValidationRule(ValidationOperations.Match, TaskType.Party);
         }
 
         public override void EnqueueTask(Task task)
         {
-            if (task.TaskType != TaskType.Quest)
-            {
-                throw new System.ArgumentException("This type of task can't be set to the operations room");
-            }
-            
+            ValidateTaskType(task);
             tasks.Add((QuestTask)task);
         }
 
@@ -111,11 +108,13 @@ namespace Rooms
             buildRestriction = BuildRestrictions.NONE;
             roomType = RoomType.DBR;
             _taskAssigned = false;
+            validator = new TaskValidator();
+            validator.AddValidationRule(ValidationOperations.Match, TaskType.Build);
         }
 
         public override void EnqueueTask(Task task)
         {
-            ValidateTaskType(task, TaskType.Build);
+            ValidateTaskType(task);
 
             debrisClearTask = task;
             _taskAssigned = true;
@@ -126,7 +125,6 @@ namespace Rooms
             if (!_taskAssigned) {
                 return;
             }
-            Debug.Log("Ticking build");
             debrisClearTask.HandleTick();
         }
 
@@ -145,12 +143,14 @@ namespace Rooms
             roomType = RoomType.BRK;
             buildRestriction = BuildRestrictions.ABOVE_GROUND;
             _taskAssigned = false;
+            validator = new TaskValidator();
+            validator.AddValidationRule(ValidationOperations.Match, TaskType.Build);
         }
 
         // Barracks can take build upgrade tasks
         public override void EnqueueTask(Task task)
         {
-            ValidateTaskType(task, TaskType.Build);
+            ValidateTaskType(task);
             upgradeTask = (BuildTask)task;
             _taskAssigned = true;
         }
@@ -179,11 +179,13 @@ namespace Rooms
             roomType = RoomType.LIB;
             buildRestriction = BuildRestrictions.NONE;
             _taskAssigned = false;
+            validator = new TaskValidator();
+            validator.AddValidationRule(ValidationOperations.Match, TaskType.Research);
         }
 
         public override void EnqueueTask(Task task)
         {
-            ValidateTaskType(task, TaskType.Research);
+            ValidateTaskType(task);
             researchTask = (ResearchTask)task;
             _taskAssigned = true;
         }

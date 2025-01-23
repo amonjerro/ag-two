@@ -7,7 +7,9 @@ namespace Tasks {
         Research,
         Build,
         Quest,
-        Forge
+        Forge,
+        Exploration,
+        Party
     }
 
     public abstract class Task
@@ -111,13 +113,19 @@ namespace Tasks {
     public class ExplorationTask : PartyTask
     {
         (int, int) locationCoordinates;
+        List<Adventurer> assignedAdventurers;
         public ExplorationTask() : base() { 
-            
+            assignedAdventurers = new List<Adventurer>();
         }
 
         public void SetCoordinates((int, int) coordinates)
         {
             locationCoordinates = coordinates;
+        }
+
+        public void SetAssignedAdventurers(List<Adventurer> adventurers)
+        {
+            assignedAdventurers = adventurers;
         }
 
         protected override void OnComplete()

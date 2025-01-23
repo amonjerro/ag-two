@@ -44,6 +44,7 @@ public class AdventurerManager : MonoBehaviour
         // If we have data saved in the GameInstance, then we're good to get started.
         if (GameInstance.roster.Count > 0)
         {
+            adventurerRoster = GameInstance.roster;
             return;
         }
 
@@ -53,6 +54,7 @@ public class AdventurerManager : MonoBehaviour
         for (int i = 0; i < adventurerRoster.Count; i++)
         {
             _availableAdventurers.Add(adventurerRoster[i]);
+            GameInstance.roster.Add(adventurerRoster[i]);
         }
     }
 
@@ -115,10 +117,5 @@ public class AdventurerManager : MonoBehaviour
     public void MakeAvailable(Adventurer adventurer)
     {
         _availableAdventurers.Add(adventurer);
-    }
-
-    public void BindToQuest(QuestData questData)
-    {
-        _questController.BindStagingToQuest(questData, _stagingRoster);
     }
 }

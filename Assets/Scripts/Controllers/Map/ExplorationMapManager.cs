@@ -1,4 +1,6 @@
+using SaveGame;
 using System.Collections.Generic;
+using System.Linq;
 using Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -14,6 +16,7 @@ namespace ExplorationMap
     public class ExplorationMapManager : MonoBehaviour
     {
         private ExplorationCursorState _cursorState;
+        private MapClickEvent _latestEvent;
 
         [SerializeField]
         private int mapHeight;
@@ -109,6 +112,7 @@ namespace ExplorationMap
             
             clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
             clickEvent.IsExplorable = explorationMap.TileIsExplorable((positionX, positionY));
+            _latestEvent = clickEvent;
             if (mapUIManager.WillShowGUI(clickEvent)) {
                 mapUIManager.HandleMapClickEvent(clickEvent);
                 _cursorState = ExplorationCursorState.GUIInteraction;
@@ -126,6 +130,9 @@ namespace ExplorationMap
             embarkHierarchy.SetActive(false);
             mapUIManager.DismissEmbarkUI();
             mapHierarchy.SetActive(true);
+            AdventurerManager manager = ServiceLocator.Instance.GetService<AdventurerManager>();
+            ResetCursor();
+            manager.ResetStaging();
         }
 
         public void SetupPartyEmbark()
@@ -145,7 +152,14 @@ namespace ExplorationMap
 
         public void EmbarkParty()
         {
+            AdventurerManager manager = ServiceLocator.Instance.GetService<AdventurerManager>();
+            Dictionary<int, Adventurer> stagingRoster = manager.GetStagingRoster();
+            ExplorationTask task = new ExplorationTask();
+            task.SetCoordinates(_latestEvent.Coordinates);
+            task.SetAssignedAdventurers(stagingRoster.Values.ToList());
 
+            GameInstance.tasksToPopulate.Enqueue(task);
+            ReturnToMapView();
         }
 
         public List<Sprite> GetSpritesForMapTile((int, int) coordinates)
