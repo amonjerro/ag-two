@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public class LeafSceneTransitionManager : MainSceneTransitionManager
 {
     private void Start()

@@ -73,6 +73,11 @@ namespace QuestBuilder {
             // Create the nodes
             foreach(QuestNodeData questNode in rawDataTree.nodes)
             {
+                if (questNode.type == "start" && questNode.next.Count < 2)
+                {
+                    questNode.next.Add("");
+                }
+
                 QuestViewNode viewNode = InstantiateNodeElement(questNode);
                 viewNode.SetPosition(new Rect(questNode.positionX, questNode.positionY, 0, 0));
                 nodeMap.Add(questNode.key, viewNode);

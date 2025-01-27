@@ -17,6 +17,9 @@ namespace ExplorationMap
         [SerializeField]
         RosterWidget rosterWidget;
 
+        [SerializeField]
+        ErrorNotification errorNotification;
+
         public bool WillShowGUI(MapClickEvent clickEvent)  {
             return clickEvent.TileStatus == TileStatus.EXPLORED || (clickEvent.TileStatus == TileStatus.UNEXPLORED && clickEvent.IsExplorable);
         }
@@ -74,6 +77,12 @@ namespace ExplorationMap
         public void DismissRosterUI()
         {
             rosterWidget.Dismiss();
+        }
+
+        public void ShowError(string text)
+        {
+            errorNotification.SetMessage(text);
+            errorNotification.Show();
         }
     }
 }

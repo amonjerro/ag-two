@@ -154,6 +154,11 @@ namespace ExplorationMap
         {
             AdventurerManager manager = ServiceLocator.Instance.GetService<AdventurerManager>();
             Dictionary<int, Adventurer> stagingRoster = manager.GetStagingRoster();
+            if (stagingRoster.Count == 0) {
+                // Show some kind of message that at least one party member is required.
+                mapUIManager.ShowError("You can't embark an empty party!");
+                return;
+            }
             ExplorationTask task = new ExplorationTask();
             task.SetCoordinates(_latestEvent.Coordinates);
             task.SetAssignedAdventurers(stagingRoster.Values.ToList());
