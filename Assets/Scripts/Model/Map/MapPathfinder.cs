@@ -1,3 +1,4 @@
+using SaveGame;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -84,15 +85,13 @@ namespace ExplorationMap
 
         private class PathfindingNode
         {
-            public int nodeX;
-            public int nodeY;
+            public (int, int) loc;
             public int estimatedCost;
             public PathfindingNode parent = null;
 
             public PathfindingNode(int X, int Y, int Cost)
             {
-                nodeX = X;
-                nodeY = Y;    
+                loc = (X, Y);
                 estimatedCost = Cost;
             }
         }
@@ -122,26 +121,38 @@ namespace ExplorationMap
             HashSet<PathfindingNode> visited = new HashSet<PathfindingNode>();
             int candidateX;
             int candidateY;
+            // Initial setup
             for (int  i = 0; i < 4; i++)
             {
                 candidateX = (2-i) * (i % 2);
                 candidateY = (1-i) * ((1+i) % 2);
 
+                if ((candidateX, candidateY) == coordinates)
+                {
+                    // We have found our destination;
+                    return tileCosts.tileTypeData[root.connections[i]].value;
+                }
+
                 // Validate that they can be enqueued at all
-                
+                if (!IsValidPathOption((candidateX, candidateY), root.connections[i]))
+                {
+                    continue;
+                }
+
                 queue.Enqueue(
                     new PathfindingNode(
-                        candidateX, 
-                        candidateY, 
-                        GetDistance((candidateX, candidateY), coordinates) + tileCosts.tileTypeData[root.connections[i]].value)
+                        candidateX, candidateY, 
+                        GetDistance((candidateX, candidateY), coordinates) + tileCosts.tileTypeData[root.connections[i]].value
+                        )
                     );
             }
 
+            // Main pathfinding script
             PathfindingNode current;
             while(queue.Count > 0)
             {
                 current = queue.Dequeue();
-                if ((current.nodeX, current.nodeY) == coordinates)
+                if (current.loc == coordinates)
                 {
                     // We have found our destination;
                     break;
@@ -156,5 +167,10 @@ namespace ExplorationMap
             return Mathf.Abs(origin.Item1 - destination.Item1) + Mathf.Abs(origin.Item2 - destination.Item2);
         }
 
+        private bool IsValidPathOption((int, int) coordinates, ConnectionType type)
+        {
+            return explorationMap.GetTileStatus(coordinates) == TileStatus.EXPLORED && 
+                (GameInstance.TestWalkability(type) || tileCosts.tileTypeData[type].walkableByDefault);
+        }
     }
 }
