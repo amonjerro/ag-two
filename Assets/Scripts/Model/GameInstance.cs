@@ -1,6 +1,7 @@
 using Rooms;
 using Tasks;
 using System.Collections.Generic;
+using ExplorationMap;
 
 namespace SaveGame
 {
@@ -15,5 +16,10 @@ namespace SaveGame
         public static int totalTickCount = 14;
 
         public static Queue<Task> tasksToPopulate = new Queue<Task>();
+
+        public static bool TestWalkability(ConnectionType connectionType)
+        {
+            return false;
+        }
     }
 }

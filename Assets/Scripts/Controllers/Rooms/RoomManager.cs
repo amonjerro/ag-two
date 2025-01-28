@@ -43,6 +43,7 @@ namespace Rooms
                 switch (activeTask.TaskType) {
                     case TaskType.Quest:
                     case TaskType.Exploration:
+                        Debug.Log(activeTask.ToString());
                         Room opsRoom = roomMap[(0, 0)];
                         opsRoom.EnqueueTask(activeTask);
                         break;

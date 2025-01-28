@@ -36,6 +36,11 @@ namespace Tasks {
         public virtual void Complete() {
             OnComplete();
         }
+
+        public override string ToString()
+        {
+            return _task.ToString();
+        }
     }
 
     public class ResearchTask : Task
@@ -78,6 +83,7 @@ namespace Tasks {
 
         public PartyTask() {
             adventurers = new List<Adventurer>();
+            TimeElapsed = 0;
         }
 
         public void Reset()
@@ -130,7 +136,6 @@ namespace Tasks {
         protected override void OnComplete()
         {
             ExplorationTaskNotify taskNotify = new ExplorationTaskNotify();
-
             TaskNotifyQueue.AddTaskNotification(taskNotify);
         }
     }

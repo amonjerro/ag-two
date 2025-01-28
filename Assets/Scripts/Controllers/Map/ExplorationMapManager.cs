@@ -159,10 +159,14 @@ namespace ExplorationMap
                 mapUIManager.ShowError("You can't embark an empty party!");
                 return;
             }
+            // Make the exploration task
             ExplorationTask task = new ExplorationTask();
             task.SetCoordinates(_latestEvent.Coordinates);
             task.SetAssignedAdventurers(stagingRoster.Values.ToList());
-
+            task.Duration = explorationMap.GetTraversalCost(_latestEvent.Coordinates);
+            task.Title = $"Explore ({_latestEvent.Coordinates.Item1}, {_latestEvent.Coordinates.Item2})";
+            task.ShortDescription = "A party has been sent to investigate what lies at an unknown place in the map";
+            
             GameInstance.tasksToPopulate.Enqueue(task);
             ReturnToMapView();
         }

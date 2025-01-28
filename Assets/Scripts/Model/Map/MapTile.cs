@@ -32,7 +32,7 @@ namespace ExplorationMap
     // Base data class to represent the tiles in the exploration map
     public class MapTile
     {
-        ConnectionType[] connections = new ConnectionType[4];
+        public ConnectionType[] connections = new ConnectionType[4];
 
         public void SetConnectionType(ConnectionType type, ConnectionOrientations orientation)
         {
@@ -43,6 +43,7 @@ namespace ExplorationMap
         {
             return connections[(int)orientation];
         }
+
 
         public MapTile()
         {
@@ -58,22 +59,20 @@ namespace ExplorationMap
         }
     }
 
-
     // Base class that holds the data for the entire map, allowing players to explore the world
     public class ExplorationMap
     {
         Dictionary<(int, int), MapTile> tiles;
         Dictionary<(int, int), TileStatus> statusMap;
         public static Action<(int, int)> tileRevealEvent;
-        TileMovementSO data;
+        MapPathfinder pathfinder;
 
 
         public ExplorationMap(TileMovementSO data)
         {
             tiles = new Dictionary<(int, int), MapTile>();
             statusMap = new Dictionary<(int, int), TileStatus>();
-            this.data = data;
-            data.SetUpTileTypeData();
+            pathfinder = new MapPathfinder(data, this);
         }
 
         private MapTile MakeStartingTile()
@@ -188,14 +187,14 @@ namespace ExplorationMap
         private ConnectionType GetRandomConnectionType()
         {
             float roll = UnityEngine.Random.Range(0.0f, 1.0f);
-            if (roll <= data.GetOdds(ConnectionType.WILDERNESS)) {
+            if (roll <= pathfinder.GetTerrainProbability(ConnectionType.WILDERNESS)) {
                 return ConnectionType.WILDERNESS;
-            } else if (roll <= data.GetOdds(ConnectionType.ROAD))
+            } else if (roll <= pathfinder.GetTerrainProbability(ConnectionType.ROAD))
             {
                 return ConnectionType.ROAD;
-            } else if  (roll <= data.GetOdds(ConnectionType.FOREST)){
+            } else if  (roll <= pathfinder.GetTerrainProbability(ConnectionType.FOREST)){
                 return ConnectionType.FOREST;
-            } else if (roll <= data.GetOdds(ConnectionType.ROAD))
+            } else if (roll <= pathfinder.GetTerrainProbability(ConnectionType.ROAD))
             {
                 return ConnectionType.MOUNTAIN;
             }
@@ -255,6 +254,11 @@ namespace ExplorationMap
                 statusMap[(coordinates.Item1 + 1, coordinates.Item2)] == TileStatus.EXPLORED ||
                 statusMap[(coordinates.Item1, coordinates.Item2-1)] == TileStatus.EXPLORED || 
                 statusMap[(coordinates.Item1, coordinates.Item2+1)] == TileStatus.EXPLORED;
+        }
+
+        public int GetTraversalCost((int, int) destination)
+        {
+            return pathfinder.GetMovementCost(destination);
         }
     }
 }

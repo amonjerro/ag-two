@@ -1,7 +1,6 @@
 using UnityEngine;
 using ExplorationMap;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 [CreateAssetMenu(menuName=Constants.ScriptableObjectsPath+"TileMovementCost")]
 public class TileMovementSO : ScriptableObject
