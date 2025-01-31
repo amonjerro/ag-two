@@ -1,10 +1,32 @@
+using Rooms;
 using SaveGame;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ExplorationMap
 {
+    public class PathfindingNode
+    {
+        
+        public int X;
+        public int Y;
+
+        public (int, int) Loc { get { return (X, Y); } }
+
+        public int estimatedCost;
+        public int actualCost;
+        public PathfindingNode parent = null;
+
+        public PathfindingNode(int X, int Y, int Estimated, int Actual)
+        {
+            this.X = X;
+            this.Y = Y;
+            estimatedCost = Estimated;
+            actualCost = Actual;
+        }
+    }
     public class MapPathfinder
     {
 
@@ -15,6 +37,14 @@ namespace ExplorationMap
             public PriorityQueue()
             {
                 nodeHeap = new List<PathfindingNode>();
+            }
+
+            public PathfindingNode Peek()
+            {
+                if (nodeHeap.Count == 0) {
+                    return null;
+                }
+                return nodeHeap[0];
             }
 
             public void Enqueue(PathfindingNode node) { 
@@ -29,6 +59,25 @@ namespace ExplorationMap
                 nodeHeap.RemoveAt(nodeHeap.Count - 1);
                 HeapifyDown(0);
                 return minValue;
+            }
+
+            public void Update((int, int) coordinates, int newActualCost, int distance)
+            {
+                int index = 0;
+
+                // Find the item
+                for (int i = 0; i < nodeHeap.Count; i++)
+                {
+                    index++;
+                    if (coordinates == nodeHeap[i].Loc)
+                    {
+                        break;
+                    }
+                }
+                nodeHeap[index].actualCost = newActualCost;
+                nodeHeap[index].estimatedCost = nodeHeap[index].actualCost + distance;
+                HeapifyUp(index);
+
             }
             
             public int Count => nodeHeap.Count;
@@ -83,19 +132,6 @@ namespace ExplorationMap
 
         }
 
-        private class PathfindingNode
-        {
-            public (int, int) loc;
-            public int estimatedCost;
-            public PathfindingNode parent = null;
-
-            public PathfindingNode(int X, int Y, int Cost)
-            {
-                loc = (X, Y);
-                estimatedCost = Cost;
-            }
-        }
-
 
         ExplorationMap explorationMap;
         TileMovementSO tileCosts;
@@ -110,59 +146,115 @@ namespace ExplorationMap
             return tileCosts.GetOdds(type);
         }
 
-        public int GetMovementCost((int, int) coordinates)
+        // Fancy lookup with origin
+        private PathfindingNode FindPath((int, int) destination, (int, int) origin)
         {
-            int totalCost = 0;
-
             // Find the path
-            MapTile root = explorationMap.GetTile((0,0));
-            PathfindingNode node = new PathfindingNode(0, 0, GetDistance((0,0), coordinates));
+            MapTile currentTile;
+            PathfindingNode node = new PathfindingNode(origin.Item1, origin.Item2, GetDistance(origin, destination), 0);
             PriorityQueue queue = new PriorityQueue();
-            HashSet<PathfindingNode> visited = new HashSet<PathfindingNode>();
+            queue.Enqueue(node);
             int candidateX;
             int candidateY;
-            // Initial setup
-            for (int  i = 0; i < 4; i++)
-            {
-                candidateX = (2-i) * (i % 2);
-                candidateY = (1-i) * ((1+i) % 2);
-
-                if ((candidateX, candidateY) == coordinates)
-                {
-                    // We have found our destination;
-                    return tileCosts.tileTypeData[root.connections[i]].value;
-                }
-
-                // Validate that they can be enqueued at all
-                if (!IsValidPathOption((candidateX, candidateY), root.connections[i]))
-                {
-                    continue;
-                }
-
-                queue.Enqueue(
-                    new PathfindingNode(
-                        candidateX, candidateY, 
-                        GetDistance((candidateX, candidateY), coordinates) + tileCosts.tileTypeData[root.connections[i]].value
-                        )
-                    );
-            }
-
-            // Main pathfinding script
-            PathfindingNode current;
-            while(queue.Count > 0)
+            
+            HashSet<(int,int)> visited = new HashSet<(int,int)>();
+            Dictionary<(int,int), PathfindingNode> open = new Dictionary<(int,int), PathfindingNode>();
+            PathfindingNode current = node;
+            while (queue.Count > 0)
             {
                 current = queue.Dequeue();
-                if (current.loc == coordinates)
+                open.Remove(current.Loc);
+                currentTile = explorationMap.GetTile(current.Loc);
+                visited.Add(current.Loc);
+
+                // We have found our destination.
+                // This is the only valid escape
+                if (current.Loc == destination) {
+                    return current;
+                }
+
+                for (int i = 0; i < 4; i++)
                 {
-                    // We have found our destination;
-                    break;
+                    // Syntactic sugar
+                    int traversalCost = tileCosts.tileTypeData[currentTile.connections[i]].value;
+                    int candidateCost = current.actualCost + traversalCost;
+                    PathfindingNode newNode;
+
+                    // Math finagling to change a single index value into +1/-1 lookups in two dimensions clockwise
+                    candidateX = (2 - i) * (i % 2);
+                    candidateY = (1 - i) * ((1 + i) % 2);
+                    (int, int) candidateLoc = (candidateX, candidateY);
+                    bool candidateIsEnd = candidateLoc == destination;
+
+                    // Validate that neighbors can be enqueued at all
+                    if ((!candidateIsEnd && !IsValidPathOption(candidateLoc, currentTile.connections[i])) || visited.Contains(candidateLoc))
+                    {
+                        continue;
+                    }
+
+                    // Check to see if this candidate is already in the open list
+                    if (open.ContainsKey(candidateLoc))
+                    {
+                        int distance = GetDistance(candidateLoc, destination) ;
+                        int newActual = candidateCost;
+                        if (distance + newActual < open[candidateLoc].estimatedCost) { 
+                            queue.Update(candidateLoc, newActual, distance);
+                            open[candidateLoc].parent = current;
+                        }
+                        continue;
+                    }
+
+                    newNode = new PathfindingNode(
+                            candidateX, candidateY,
+                            GetDistance(candidateLoc, destination) + candidateCost,
+                            candidateCost);
+                    newNode.parent = current;
+                    queue.Enqueue(newNode);
+                    open.Add((candidateLoc), newNode);
                 }
             }
 
-            return totalCost;
+            // No path found, we return nothing
+            return null;
         }
 
-        private int GetDistance((int, int) origin, (int, int) destination)
+
+
+        public Stack<PathfindingNode> GetPath((int, int) coordinates, (int, int)? origin)
+        {
+            Stack<PathfindingNode> path = new Stack<PathfindingNode>();
+            (int, int) effectiveOrigin = origin ?? (0,0);
+            PathfindingNode activeNode = FindPath(coordinates, effectiveOrigin);
+           
+            // No path found
+            if (activeNode == null)
+            {
+                return null;
+            }
+            path.Push(activeNode);
+            while (activeNode.parent != null) {
+                activeNode = activeNode.parent;
+                path.Push(activeNode);
+            }
+            return path;
+        }
+
+        public int GetMovementCost((int, int) coordinates, (int, int)? origin)
+        {
+            (int, int) effectiveOrigin = origin ?? (0,0);
+            // Main pathfinding script
+            PathfindingNode current = FindPath(coordinates, effectiveOrigin);
+
+            if (current == null)
+            {
+                // No path found
+                return -1;
+            }
+
+            return current.actualCost;
+        }
+
+        private static int GetDistance((int, int) origin, (int, int) destination)
         {
             return Mathf.Abs(origin.Item1 - destination.Item1) + Mathf.Abs(origin.Item2 - destination.Item2);
         }

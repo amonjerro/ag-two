@@ -258,7 +258,7 @@ namespace ExplorationMap
 
         public int GetTraversalCost((int, int) destination)
         {
-            return pathfinder.GetMovementCost(destination);
+            return pathfinder.GetMovementCost(destination, null);
         }
     }
 }

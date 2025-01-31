@@ -108,6 +108,7 @@ namespace ExplorationMap
 
             MapClickEvent clickEvent = new MapClickEvent();
             clickEvent.Coordinates = (positionX, positionY);
+            Debug.Log(explorationMap.GetTraversalCost(clickEvent.Coordinates));
             explorationTask.SetCoordinates(clickEvent.Coordinates);
             
             clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
