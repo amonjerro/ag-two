@@ -34,8 +34,9 @@ public class MainSceneTransitionManager : MonoBehaviour
 
     protected IEnumerator LoadScene(int scene)
     {
-
-        fadePanel.transform.SetAsLastSibling();
+        if (fadePanel.gameObject.activeInHierarchy) {
+            fadePanel.transform.SetAsLastSibling();
+        }
         // Begin to load the scene
         AsyncOperation operation = SceneManager.LoadSceneAsync(scene);
 
@@ -48,7 +49,10 @@ public class MainSceneTransitionManager : MonoBehaviour
         {
             t += Time.deltaTime;
             t = Mathf.Clamp01(t);
-            fadePanel.SetOpacity(t);
+            if (fadePanel.gameObject.activeInHierarchy)
+            {
+                fadePanel.SetOpacity(t);
+            }
             yield return null;
         }
         operation.allowSceneActivation = true;
