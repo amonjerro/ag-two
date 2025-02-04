@@ -107,7 +107,7 @@ namespace ExplorationMap
             switch (orientation)
             {
                 case ConnectionOrientations.SOUTH:
-                    newCoordinates = (coordinates.Item1, coordinates.Item2 + 1);
+                    newCoordinates = (coordinates.Item1, coordinates.Item2 - 1);
                     return tiles[newCoordinates];
                 case ConnectionOrientations.EAST:
                     newCoordinates = (coordinates.Item1 + 1, coordinates.Item2);
@@ -117,7 +117,7 @@ namespace ExplorationMap
                     return tiles[newCoordinates];
                 case ConnectionOrientations.NORTH:
                 default:
-                    newCoordinates = (coordinates.Item1, coordinates.Item2 - 1);
+                    newCoordinates = (coordinates.Item1, coordinates.Item2 + 1);
                     return tiles[newCoordinates];
             }
         }
@@ -127,7 +127,7 @@ namespace ExplorationMap
             (int, int) newCoordinates;
             switch (orientation) {
                 case ConnectionOrientations.SOUTH:
-                    newCoordinates = (coordinates.Item1, coordinates.Item2+1);
+                    newCoordinates = (coordinates.Item1, coordinates.Item2-1);
                     if (statusMap.ContainsKey(newCoordinates))
                     {
                         return statusMap[newCoordinates];
@@ -152,7 +152,7 @@ namespace ExplorationMap
                     return TileStatus.UNEXPLORED;
                 case ConnectionOrientations.NORTH:
                 default:
-                    newCoordinates = (coordinates.Item1, coordinates.Item2 - 1);
+                    newCoordinates = (coordinates.Item1, coordinates.Item2 + 1);
                     if (statusMap.ContainsKey(newCoordinates)){
                         return statusMap[newCoordinates];
                     }
@@ -163,8 +163,14 @@ namespace ExplorationMap
 
         private void PopulateTile((int,  int) coordinates)
         {
-            statusMap.Add(coordinates, TileStatus.UNEXPLORED);
-            tiles.Add(coordinates, new MapTile());
+            if (!statusMap.ContainsKey(coordinates))
+            {
+                statusMap.Add(coordinates, TileStatus.UNEXPLORED);
+            }
+            if (!tiles.ContainsKey(coordinates)) {
+                tiles.Add(coordinates, new MapTile());
+            }
+            
         }
 
         private ConnectionOrientations GetOppositeOrientation(ConnectionOrientations orientation)
@@ -194,7 +200,7 @@ namespace ExplorationMap
                 return ConnectionType.ROAD;
             } else if  (roll <= pathfinder.GetTerrainProbability(ConnectionType.FOREST)){
                 return ConnectionType.FOREST;
-            } else if (roll <= pathfinder.GetTerrainProbability(ConnectionType.ROAD))
+            } else if (roll <= pathfinder.GetTerrainProbability(ConnectionType.MOUNTAIN))
             {
                 return ConnectionType.MOUNTAIN;
             }
@@ -207,7 +213,9 @@ namespace ExplorationMap
             // If a neighbor has already been explored, match their connection
             if (GetNeighborStatus(coordinates, orientation) == TileStatus.EXPLORED)
             {
-                tile.SetConnectionType(GetNeighborData(coordinates, orientation).GetConnectionType(GetOppositeOrientation(orientation)), orientation);
+                tile.SetConnectionType(
+                    GetNeighborData(coordinates, orientation).GetConnectionType(GetOppositeOrientation(orientation)), 
+                    orientation);
                 return;
             }
 
@@ -246,14 +254,40 @@ namespace ExplorationMap
 
         public TileStatus GetTileStatus((int, int) coordinates)
         {
-            return statusMap[coordinates];
+            if (statusMap.ContainsKey(coordinates))
+            {
+                return statusMap[coordinates];
+            }
+            return TileStatus.UNEXPLORED;
         }
 
         public bool TileIsExplorable((int, int) coordinates) {
+            // If the status map doesn't have this key, it sure as hell isn't explorable
+            if (!statusMap.ContainsKey(coordinates))
+            {
+                return false;
+            }
+
+            // If the status map doesn't have the neighbors, might as well as add them. This grows the map a bit
+            if (!NeighborsInMap(coordinates))
+            {
+                PopulateTile((coordinates.Item1 - 1,  coordinates.Item2));
+                PopulateTile((coordinates.Item1 + 1, coordinates.Item2));
+                PopulateTile((coordinates.Item1, coordinates.Item2 - 1));
+                PopulateTile((coordinates.Item1, coordinates.Item2 + 1));
+            }
+            
+
             return statusMap[(coordinates.Item1 - 1, coordinates.Item2)] == TileStatus.EXPLORED || 
                 statusMap[(coordinates.Item1 + 1, coordinates.Item2)] == TileStatus.EXPLORED ||
                 statusMap[(coordinates.Item1, coordinates.Item2-1)] == TileStatus.EXPLORED || 
                 statusMap[(coordinates.Item1, coordinates.Item2+1)] == TileStatus.EXPLORED;
+        }
+
+        private bool NeighborsInMap((int,int)coordinates)
+        {
+            return statusMap.ContainsKey((coordinates.Item1 - 1, coordinates.Item2)) && statusMap.ContainsKey((coordinates.Item1, coordinates.Item2-1))
+                && statusMap.ContainsKey((coordinates.Item1 + 1, coordinates.Item2)) && statusMap.ContainsKey((coordinates.Item1, coordinates.Item2+1));
         }
 
         public int GetTraversalCost((int, int) destination)

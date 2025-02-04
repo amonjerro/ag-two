@@ -15,6 +15,7 @@ public class ServiceLocator : MonoBehaviour
             Instance = this;
         }
         serviceDict = new Dictionary<Type, MonoBehaviour>();
+        Application.targetFrameRate = 60;
     }
 
     public T GetService<T>() where T : MonoBehaviour

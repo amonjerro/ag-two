@@ -40,6 +40,11 @@ namespace Rooms
             Task activeTask;
             while (tasks.Count > 0) { 
                 activeTask = tasks.Dequeue();
+
+                if (!GameInstance.activeTasks.Contains(activeTask)) { 
+                    GameInstance.activeTasks.Add(activeTask);
+                }
+
                 switch (activeTask.TaskType) {
                     case TaskType.Quest:
                     case TaskType.Exploration:
@@ -55,8 +60,9 @@ namespace Rooms
                     default:
                         break;
                 }
-                
             }
+            GameInstance.SortTasks();
+            GameInstance.tasksUpdated?.Invoke();
         }
 
         private void SetupRoomDataDict()
@@ -135,7 +141,6 @@ namespace Rooms
             BuildTask buildTask = TaskFactory.MakeBuildTask((x, y), roomType);
             room.EnqueueTask(buildTask);
 
-            Debug.Log("Build Task Created Succesfully");
             ServiceLocator.Instance.GetService<UIManager>().HideBuildInterface();
         }
 

@@ -22,6 +22,8 @@ namespace Tasks {
         public int Duration {  get; set; }
         public int TimeElapsed {  get; set; }
 
+        public int RemainingTime { get { return Duration - TimeElapsed; } }
+
         public virtual void HandleTick()
         {
             TimeElapsed++;

@@ -68,6 +68,12 @@ namespace ExplorationMap
             questTask = new QuestTask();
 
             explorationMap.InitializeMap(mapWidth, mapHeight);
+            for(int i = 0; i < 4; i++)
+            {
+                int candidateX = (2 - i) * (i % 2);
+                int candidateY = (1 - i) * ((1 + i) % 2);
+                explorationMap.UncoverTile((candidateX, candidateY));
+            }
         }
 
         private void MoveMap()
@@ -108,7 +114,6 @@ namespace ExplorationMap
 
             MapClickEvent clickEvent = new MapClickEvent();
             clickEvent.Coordinates = (positionX, positionY);
-            Debug.Log(explorationMap.GetTraversalCost(clickEvent.Coordinates));
             explorationTask.SetCoordinates(clickEvent.Coordinates);
             
             clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));

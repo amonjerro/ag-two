@@ -17,9 +17,13 @@ public class MainSceneTransitionManager : MonoBehaviour
         roomManager.LoadTasks(GameInstance.tasksToPopulate);
 
         // Ensure all quest data is properly loaded to the UI and controllers
+        
 
         // Unfade the panel
-        StartCoroutine(fadePanel.FadeOut());
+        if (fadePanel.gameObject.activeInHierarchy)
+        {
+            StartCoroutine(fadePanel.FadeOut());
+        }
 
         // Start the clock
         timeManager = ServiceLocator.Instance.GetService<TimeManager>();
