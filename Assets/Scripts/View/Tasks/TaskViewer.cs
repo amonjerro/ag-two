@@ -47,5 +47,10 @@ namespace Tasks
                 noTasksInfo.SetActive(false);
             }
         }
+
+        private void OnDestroy()
+        {
+            GameInstance.tasksUpdated -= UpdateDisplay;
+        }
     }
 }
