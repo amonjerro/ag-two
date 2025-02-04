@@ -28,7 +28,6 @@ public class StageAdventurerCommand : AbstractCommand
             // Set the image
         }
         // Handle Adventurer Selection
-        Debug.Log(boundIndex);
         man.AddToStagingRoster(boundIndex, adventurer);
         man.MakeUnavailable(adventurer);
 

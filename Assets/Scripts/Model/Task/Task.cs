@@ -133,6 +133,9 @@ namespace Tasks {
         public void SetAssignedAdventurers(List<Adventurer> adventurers)
         {
             assignedAdventurers = adventurers;
+            foreach (Adventurer a in assignedAdventurers) {
+                a.SendOnMission();
+            }
         }
 
         protected override void OnComplete()

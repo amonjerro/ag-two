@@ -118,6 +118,12 @@ namespace ExplorationMap
             
             clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
             clickEvent.IsExplorable = explorationMap.TileIsExplorable((positionX, positionY));
+
+            if(explorationMap.GetTraversalCost(clickEvent.Coordinates) == -1)
+            {
+                Debug.LogError("No path found!!!");
+            }
+
             _latestEvent = clickEvent;
             if (mapUIManager.WillShowGUI(clickEvent)) {
                 mapUIManager.HandleMapClickEvent(clickEvent);

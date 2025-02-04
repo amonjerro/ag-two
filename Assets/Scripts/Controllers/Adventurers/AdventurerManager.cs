@@ -45,6 +45,12 @@ public class AdventurerManager : MonoBehaviour
         if (GameInstance.roster.Count > 0)
         {
             adventurerRoster = GameInstance.roster;
+            for (int i = 0; i < adventurerRoster.Count; i++) { 
+                if (!adventurerRoster[i].IsOnMission())
+                {
+                    _availableAdventurers.Add(adventurerRoster[i]);
+                }
+            }
             return;
         }
 
@@ -82,11 +88,11 @@ public class AdventurerManager : MonoBehaviour
         {
             _availableAdventurers.Add(_stagingRoster[index]);
             _stagingRoster[index] = adventurer;
-            _availableAdventurers.Remove(adventurer);
+            MakeUnavailable(adventurer);
         } else
         {
             _stagingRoster.Add(index, adventurer);
-            _availableAdventurers.Remove(adventurer);
+            MakeUnavailable(adventurer);
         }
     }
 
