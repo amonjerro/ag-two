@@ -1,7 +1,5 @@
-using Rooms;
 using SaveGame;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -68,11 +66,11 @@ namespace ExplorationMap
                 // Find the item
                 for (int i = 0; i < nodeHeap.Count; i++)
                 {
-                    index++;
                     if (coordinates == nodeHeap[i].Loc)
                     {
                         break;
                     }
+                    index++;
                 }
                 nodeHeap[index].actualCost = newActualCost;
                 nodeHeap[index].estimatedCost = nodeHeap[index].actualCost + distance;
@@ -183,7 +181,7 @@ namespace ExplorationMap
                     // Math finagling to change a single index value into +1/-1 lookups in two dimensions clockwise
                     candidateX = (2 - i) * (i % 2);
                     candidateY = (1 - i) * ((1 + i) % 2);
-                    (int, int) candidateLoc = (candidateX, candidateY);
+                    (int, int) candidateLoc = (current.Loc.Item1 + candidateX, current.Loc.Item2 + candidateY);
                     bool candidateIsEnd = candidateLoc == destination;
 
                     // Validate that neighbors can be enqueued at all
@@ -205,12 +203,12 @@ namespace ExplorationMap
                     }
 
                     newNode = new PathfindingNode(
-                            candidateX, candidateY,
+                            candidateLoc.Item1, candidateLoc.Item2,
                             GetDistance(candidateLoc, destination) + candidateCost,
                             candidateCost);
                     newNode.parent = current;
                     queue.Enqueue(newNode);
-                    open.Add((candidateLoc), newNode);
+                    open.Add(candidateLoc, newNode);
                 }
             }
 
