@@ -49,7 +49,6 @@ namespace Tasks
             }
             else
             {
-                Debug.Log("Updating Display");
                 activeTaskInfo.SetActive(true);
                 taskName.text = tasks[0].Title;
                 taskTime.text = tasks[0].RemainingTime.ToString();
