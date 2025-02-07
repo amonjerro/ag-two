@@ -97,8 +97,30 @@ namespace Rooms
 
         public override void RoomTick()
         {
-            foreach (Task task in tasks) {
+            if (!_taskAssigned) {
+                return;
+            }
+
+            List<int> indexRemoval = new List<int>();
+            for (int i = 0; i < tasks.Count; i++) {
+                Task task = tasks[i];
                 task.HandleTick();
+                // Keep track for later deletion
+                if (task.IsComplete)
+                {
+                    indexRemoval.Add(i);
+                }
+            }
+
+            // Remove done stuff from the list
+            indexRemoval.Reverse();
+            for (int i = indexRemoval.Count - 1; i >= 0; i--) {
+                tasks.RemoveAt(indexRemoval[i]);
+            }
+            // Check for clear
+            if (tasks.Count == 0)
+            {
+                _taskAssigned = false;
             }
         }
 
@@ -145,6 +167,10 @@ namespace Rooms
                 return;
             }
             debrisClearTask.HandleTick();
+            if (debrisClearTask.IsComplete) {
+                debrisClearTask = null;
+                _taskAssigned = false;
+            }
         }
 
         public override AbsRoomClickEvent HandleClick() { 
@@ -187,6 +213,11 @@ namespace Rooms
             }
 
             upgradeTask.HandleTick();
+            if (upgradeTask.IsComplete)
+            {
+                upgradeTask = null;
+                _taskAssigned = false;
+            }
         }
 
         public override AbsRoomClickEvent HandleClick() { 
@@ -227,6 +258,12 @@ namespace Rooms
             }
 
             researchTask.HandleTick();
+
+            if (researchTask.IsComplete)
+            {
+                researchTask = null;
+                _taskAssigned = false;
+            }
         }
 
         public override AbsRoomClickEvent HandleClick() {

@@ -22,12 +22,15 @@ namespace Tasks {
         public int Duration {  get; set; }
         public int TimeElapsed {  get; set; }
 
+        public bool IsComplete { get { return TimeElapsed > Duration; } }
+
+
         public int RemainingTime { get { return Duration - TimeElapsed; } }
 
         public virtual void HandleTick()
         {
             TimeElapsed++;
-            if (TimeElapsed >= Duration)
+            if (IsComplete)
             {
                 Complete();
             }
