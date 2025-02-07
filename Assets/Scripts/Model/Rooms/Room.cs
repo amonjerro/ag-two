@@ -1,7 +1,7 @@
 
-using System;
 using System.Collections.Generic;
 using Tasks;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace Rooms
@@ -83,7 +83,7 @@ namespace Rooms
         public override void EnqueueTask(Task task)
         {
             ValidateTaskType(task);
-            tasks.Add((QuestTask)task);
+            tasks.Add((PartyTask)task);
         }
 
         public override AbsRoomClickEvent HandleClick() {
@@ -92,7 +92,7 @@ namespace Rooms
 
         public override void RoomTick()
         {
-            foreach (QuestTask task in tasks) { 
+            foreach (Task task in tasks) {
                 task.HandleTick();
             }
         }

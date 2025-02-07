@@ -123,6 +123,7 @@ namespace Tasks {
         List<Adventurer> assignedAdventurers;
         public ExplorationTask() : base() { 
             assignedAdventurers = new List<Adventurer>();
+            _task = TaskType.Exploration;
         }
 
         public void SetCoordinates((int, int) coordinates)

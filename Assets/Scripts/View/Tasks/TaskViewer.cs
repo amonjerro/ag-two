@@ -20,16 +20,17 @@ namespace Tasks
         private void Awake()
         {
             GameInstance.tasksUpdated += UpdateDisplay;
+            TimeManager.Tick += UpdateDisplay;
+
         }
 
         public override void Dismiss()
         {
-            throw new System.NotImplementedException();
         }
 
         public override void Show()
         {
-            
+
         }
 
         private void UpdateDisplay()
@@ -41,6 +42,7 @@ namespace Tasks
             }
             else
             {
+                Debug.Log("Updating Display");
                 activeTaskInfo.SetActive(true);
                 taskName.text = GameInstance.activeTasks[0].Title;
                 taskTime.text = GameInstance.activeTasks[0].RemainingTime.ToString();
@@ -51,6 +53,7 @@ namespace Tasks
         private void OnDestroy()
         {
             GameInstance.tasksUpdated -= UpdateDisplay;
+            TimeManager.Tick -= UpdateDisplay;
         }
     }
 }
