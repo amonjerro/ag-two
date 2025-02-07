@@ -18,18 +18,9 @@ namespace SaveGame
 
         public static Queue<Task> tasksToPopulate = new Queue<Task>();
 
-        public static List<Task> activeTasks = new List<Task>();
-
-        public static Action tasksUpdated;
-
         public static bool TestWalkability(ConnectionType connectionType)
         {
             return false;
-        }
-
-        public static void SortTasks()
-        {
-            activeTasks.Sort(delegate (Task t1, Task t2){ return t1.RemainingTime.CompareTo(t2.RemainingTime); });
         }
 
 

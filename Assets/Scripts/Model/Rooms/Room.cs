@@ -47,6 +47,8 @@ namespace Rooms
             components.Add(component);
         }
 
+        public abstract Task ClosestTask();
+
         public abstract AbsRoomClickEvent HandleClick();
         protected TaskValidator validator;
 
@@ -65,6 +67,8 @@ namespace Rooms
             }
             return null;
         }
+
+        public bool Busy { get { return _taskAssigned; } }
     }
     
     public class OperationsRoom : Room
@@ -84,6 +88,7 @@ namespace Rooms
         {
             ValidateTaskType(task);
             tasks.Add((PartyTask)task);
+            _taskAssigned = true;
         }
 
         public override AbsRoomClickEvent HandleClick() {
@@ -95,6 +100,20 @@ namespace Rooms
             foreach (Task task in tasks) {
                 task.HandleTick();
             }
+        }
+
+        public override Task ClosestTask()
+        {
+            Task task = tasks[0];
+            int largestRemaining = task.RemainingTime;
+            foreach (Task t in tasks) { 
+                if (t.RemainingTime < largestRemaining)
+                {
+                    task = t;
+                    largestRemaining = t.RemainingTime;
+                }
+            }
+            return task;
         }
     }
 
@@ -130,6 +149,11 @@ namespace Rooms
 
         public override AbsRoomClickEvent HandleClick() { 
             return new MenuOpenEvent(roomType);
+        }
+
+        public override Task ClosestTask()
+        {
+            return debrisClearTask;
         }
 
     }
@@ -168,6 +192,11 @@ namespace Rooms
         public override AbsRoomClickEvent HandleClick() { 
             return new MenuOpenEvent(roomType);
         }
+
+        public override Task ClosestTask()
+        {
+            return upgradeTask;
+        }
     }
     public class LibraryRoom : Room
     {
@@ -202,6 +231,11 @@ namespace Rooms
 
         public override AbsRoomClickEvent HandleClick() {
             return new MenuOpenEvent(roomType);
+        }
+
+        public override Task ClosestTask()
+        {
+            return researchTask;
         }
     }
 }

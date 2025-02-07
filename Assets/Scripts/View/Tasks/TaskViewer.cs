@@ -1,10 +1,13 @@
 using UnityEngine;
 using TMPro;
 using SaveGame;
+using Rooms;
+using System.Collections.Generic;
 namespace Tasks
 {
     public class TaskViewer : UIPanel
     {
+        RoomManager manRef;
         [SerializeField]
         GameObject activeTaskInfo;
 
@@ -19,9 +22,12 @@ namespace Tasks
 
         private void Awake()
         {
-            GameInstance.tasksUpdated += UpdateDisplay;
-            TimeManager.Tick += UpdateDisplay;
+        }
 
+        private void Start()
+        {
+            TimeManager.Tick += UpdateDisplay;
+            manRef = ServiceLocator.Instance.GetService<RoomManager>();
         }
 
         public override void Dismiss()
@@ -30,12 +36,13 @@ namespace Tasks
 
         public override void Show()
         {
-
+            
         }
 
         private void UpdateDisplay()
         {
-            if (GameInstance.activeTasks.Count == 0)
+            List<Task> tasks = manRef.GetActiveTasks();
+            if (tasks.Count == 0)
             {
                 activeTaskInfo.SetActive(false);
                 noTasksInfo.SetActive(true);
@@ -44,15 +51,14 @@ namespace Tasks
             {
                 Debug.Log("Updating Display");
                 activeTaskInfo.SetActive(true);
-                taskName.text = GameInstance.activeTasks[0].Title;
-                taskTime.text = GameInstance.activeTasks[0].RemainingTime.ToString();
+                taskName.text = tasks[0].Title;
+                taskTime.text = tasks[0].RemainingTime.ToString();
                 noTasksInfo.SetActive(false);
             }
         }
 
         private void OnDestroy()
         {
-            GameInstance.tasksUpdated -= UpdateDisplay;
             TimeManager.Tick -= UpdateDisplay;
         }
     }

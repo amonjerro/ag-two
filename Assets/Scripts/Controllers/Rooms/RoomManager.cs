@@ -41,10 +41,6 @@ namespace Rooms
             while (tasks.Count > 0) { 
                 activeTask = tasks.Dequeue();
 
-                if (!GameInstance.activeTasks.Contains(activeTask)) { 
-                    GameInstance.activeTasks.Add(activeTask);
-                }
-
                 switch (activeTask.TaskType) {
                     case TaskType.Quest:
                     case TaskType.Exploration:
@@ -61,8 +57,6 @@ namespace Rooms
                         break;
                 }
             }
-            GameInstance.SortTasks();
-            GameInstance.tasksUpdated?.Invoke();
         }
 
         private void SetupRoomDataDict()
@@ -201,6 +195,21 @@ namespace Rooms
         public void RegisterTile((int, int) key, RoomTile tile)
         {
             roomTiles.Add(key, tile);
+        }
+
+        public List<Task> GetActiveTasks()
+        {
+            List<Task> activeTasks = new List<Task>();
+            foreach(Room room in roomMap.Values)
+            {
+                if (room.Busy)
+                {
+                    activeTasks.Add(room.ClosestTask());
+                }
+            }
+
+            activeTasks.Sort(delegate (Task t1, Task t2) { return t1.RemainingTime.CompareTo(t2.RemainingTime); });
+            return activeTasks;
         }
     }
 }

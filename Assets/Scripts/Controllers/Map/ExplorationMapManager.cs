@@ -102,6 +102,28 @@ namespace ExplorationMap
             }
         }
 
+        private void CreateMapClickEvent(int positionX, int positionY)
+        {
+            MapClickEvent clickEvent = new MapClickEvent();
+            clickEvent.Coordinates = (positionX, positionY);
+            explorationTask.SetCoordinates(clickEvent.Coordinates);
+
+            clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
+            clickEvent.IsExplorable = explorationMap.TileIsExplorable((positionX, positionY));
+
+            if (explorationMap.GetTraversalCost(clickEvent.Coordinates) == -1)
+            {
+                Debug.LogError("No path found!!!");
+            }
+
+            _latestEvent = clickEvent;
+            if (mapUIManager.WillShowGUI(clickEvent))
+            {
+                mapUIManager.HandleMapClickEvent(clickEvent);
+                _cursorState = ExplorationCursorState.GUIInteraction;
+            }
+        }
+
         private void HandleMapSelect()
         {
             Mouse mouse = Mouse.current;
@@ -112,23 +134,7 @@ namespace ExplorationMap
             int positionX = Mathf.FloorToInt(realWorldPosition.x) + currentX;
             int positionY = Mathf.FloorToInt(realWorldPosition.y) + currentY;
 
-            MapClickEvent clickEvent = new MapClickEvent();
-            clickEvent.Coordinates = (positionX, positionY);
-            explorationTask.SetCoordinates(clickEvent.Coordinates);
-            
-            clickEvent.TileStatus = explorationMap.GetTileStatus((positionX, positionY));
-            clickEvent.IsExplorable = explorationMap.TileIsExplorable((positionX, positionY));
-
-            if(explorationMap.GetTraversalCost(clickEvent.Coordinates) == -1)
-            {
-                Debug.LogError("No path found!!!");
-            }
-
-            _latestEvent = clickEvent;
-            if (mapUIManager.WillShowGUI(clickEvent)) {
-                mapUIManager.HandleMapClickEvent(clickEvent);
-                _cursorState = ExplorationCursorState.GUIInteraction;
-            }
+            CreateMapClickEvent(positionX, positionY);
         }
 
         public ExplorationMap GetMapReference() { return explorationMap; }
