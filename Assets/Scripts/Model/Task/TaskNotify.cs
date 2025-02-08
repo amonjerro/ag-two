@@ -1,11 +1,12 @@
 using Rooms;
+using SaveGame;
+using UnityEngine;
 
 namespace Tasks
 {
     public abstract class TaskNotify
     {
         public Task task {  get; set; }
-        public abstract void Show();
         public abstract void OnAcknowledge();
 
         public void Acknowledge()
@@ -19,10 +20,7 @@ namespace Tasks
     {
         public (int, int) coordinates { get; set; }
         public RoomType roomType {get; set; } 
-        public override void Show()
-        {
-            
-        }
+
 
         public override void OnAcknowledge()
         {
@@ -39,11 +37,6 @@ namespace Tasks
             this.node = node;
         }
 
-        public override void Show()
-        {
-
-        }
-
         public override void OnAcknowledge()
         {
             QuestController qc = ServiceLocator.Instance.GetService<AdventurerManager>().GetQuestController();
@@ -53,13 +46,15 @@ namespace Tasks
 
     public class ExplorationTaskNotify : TaskNotify
     {
-        public override void Show()
-        {
-            throw new System.NotImplementedException();
-        }
         public override void OnAcknowledge()
         {
-            throw new System.NotImplementedException();
+            
+            ExplorationTask exploration = (ExplorationTask)task;
+            // Endure the player's progress
+            GameInstance.exploredCoordinates.Add(exploration.GetCoordinates());
+
+            // Return the adventurers to not on mission
+            exploration.ReleaseAdventurers();
         }
     }
 }

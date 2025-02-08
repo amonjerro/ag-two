@@ -52,7 +52,10 @@ public class NotificationPanel : UIPanel
                 }
                 break;
             case TaskType.Build:
-                AddCommand("Carry On", new BuildAcknowledge());
+                AddCommand("Carry On", new NotifyAcknowledge(notification));
+                break;
+            case TaskType.Exploration:
+                AddCommand("Carry On", new NotifyAcknowledge(notification));
                 break;
             default:
                 return;
@@ -68,18 +71,19 @@ public class NotificationPanel : UIPanel
     }
 
     public override void Show()
-    {   
+    {
+        verticalButtonContainer.ClearContents();
         for (int i = 0; i < commands.Count; i++) {
             verticalButtonContainer.AddChild(commandNames[i], commands[i]);
         }
         
-        animator.SetBool("bOpen", true);   
+        animator.SetBool("bShow", true);   
     }
 
     public override void Dismiss()
     {
         commands.Clear();
         commandNames.Clear();
-        animator.SetBool("bOpen", false);
+        animator.SetBool("bShow", false);
     }
 }

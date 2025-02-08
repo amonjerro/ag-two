@@ -23,10 +23,10 @@ public class NotificationPill : UIPanel
     public void ShowNotificationData()
     {
         TaskNotify taskNotify = TaskNotifyQueue.ViewTaskNotify();
+        panel.SetNotificationData(taskNotify);
         panel.Show();
         childAnimator.SetBool("bOpen", true);
         ServiceLocator.Instance.GetService<CursorManager>().SetCursorState(CursorStates.QuestEvent);
-
     }
 
     public void UpdateNotification()

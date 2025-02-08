@@ -1,5 +1,6 @@
 using TMPro;
 using Rooms;
+using Tasks;
 
 public class ShowRoomDetailCommand : AbstractCommand
 {
@@ -39,11 +40,17 @@ public class BuildCommand : AbstractCommand
     }
 }
 
-public class BuildAcknowledge : AbstractCommand
+public class NotifyAcknowledge : AbstractCommand
 {
+    TaskNotify notify;
+    public NotifyAcknowledge(TaskNotify taskNotify)
+    {
+        notify = taskNotify;
+    }
     public override void Execute()
     {
         UIManager uiManager = ServiceLocator.Instance.GetService<UIManager>();
+        notify.Acknowledge();
         uiManager.DismissNotifications();
     }
 }

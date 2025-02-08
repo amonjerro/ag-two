@@ -60,6 +60,11 @@ public class Adventurer
         _onMission = true;
     }
 
+    public void ReturnFromMission()
+    {
+        _onMission = false;
+    }
+
     public override string ToString(){
         return "Name: "+this.Name+" Race: "+this.race;
     }
