@@ -14,6 +14,7 @@ namespace Tasks {
     public abstract class Task
     {
         protected TaskType _task;
+        protected bool _paused;
         public TaskType TaskType { get { return _task; } }
 
         public string Title { get; set; }
@@ -24,16 +25,27 @@ namespace Tasks {
 
         public bool IsComplete { get { return TimeElapsed > Duration; } }
 
+        public bool IsPaused { get { return _paused; } }
 
         public int RemainingTime { get { return Duration - TimeElapsed; } }
 
         public virtual void HandleTick()
         {
+            if (_paused)
+            {
+                return;
+            }
+
             TimeElapsed++;
             if (IsComplete)
             {
                 Complete();
             }
+        }
+
+        public void Unpause()
+        {
+            _paused = false;
         }
         
         protected abstract void OnComplete();
@@ -101,6 +113,15 @@ namespace Tasks {
             adventurers.Add(adventurer);
         }
 
+        public void ReleaseAdventurers()
+        {
+            foreach (Adventurer adventurer in adventurers)
+            {
+                adventurer.ReturnFromMission();
+
+            }
+        }
+
         protected override void OnComplete() {
 
         }
@@ -132,6 +153,11 @@ namespace Tasks {
         public void SetCoordinates((int, int) coordinates)
         {
             locationCoordinates = coordinates;
+        }
+
+        public (int, int) GetCoordinates()
+        {
+            return locationCoordinates;
         }
 
         public void SetAssignedAdventurers(List<Adventurer> adventurers)

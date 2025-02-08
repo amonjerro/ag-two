@@ -52,10 +52,10 @@ public class NotificationPanel : UIPanel
                 }
                 break;
             case TaskType.Build:
-                AddCommand("Carry On", new NotifyAcknowledge());
+                AddCommand("Carry On", new NotifyAcknowledge(notification));
                 break;
             case TaskType.Exploration:
-                AddCommand("Carry On", new NotifyAcknowledge());
+                AddCommand("Carry On", new NotifyAcknowledge(notification));
                 break;
             default:
                 return;
