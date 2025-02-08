@@ -115,10 +115,11 @@ namespace Tasks {
 
         public void ReleaseAdventurers()
         {
+            AdventurerManager advMan = ServiceLocator.Instance.GetService<AdventurerManager>();
             foreach (Adventurer adventurer in adventurers)
             {
                 adventurer.ReturnFromMission();
-
+                advMan.MakeAvailable(adventurer);
             }
         }
 
