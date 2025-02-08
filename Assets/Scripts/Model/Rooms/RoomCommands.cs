@@ -39,7 +39,7 @@ public class BuildCommand : AbstractCommand
     }
 }
 
-public class BuildAcknowledge : AbstractCommand
+public class NotifyAcknowledge : AbstractCommand
 {
     public override void Execute()
     {

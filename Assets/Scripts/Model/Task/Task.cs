@@ -145,6 +145,7 @@ namespace Tasks {
         protected override void OnComplete()
         {
             ExplorationTaskNotify taskNotify = new ExplorationTaskNotify();
+            taskNotify.task = this;
             TaskNotifyQueue.AddTaskNotification(taskNotify);
         }
     }
