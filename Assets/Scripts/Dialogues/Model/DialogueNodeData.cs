@@ -3,12 +3,6 @@ using System.Collections.Generic;
 
 namespace DialogueEditor
 {
-    [Serializable]
-    public class Position
-    {
-        public float x;
-        public float y;
-    }
 
     [Serializable]
     public class Link
