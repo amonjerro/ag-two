@@ -32,5 +32,6 @@ The Dialogue Editor still has some work that needs to be done to fully separate 
 I've had some experience making maps from noise models and randomness before but I wanted to try something different for this game. Rather than just randomly creating a very large map and then trying to populate it to be interesting, I've taken inspiration from the board game Carcassone, where tiles in the map need to have corresponding edge types (that is to say, a map tile with one side ending in a road needs to meet with another map tile with a road side). This way as the player explores the map, it populates by seeing which sides it already knows about and creates terrain to match, otherwise it picks a random terrain type that future revealed tiles will have to match. See the image below for details.
 
 ![image](https://github.com/user-attachments/assets/f859bb92-5ab5-4b81-8c69-6019c388c4c0)
+
 While the art could still use some work, the system works well and can support extension for new terrain types. I'm currently looking to extend this system even further by looking into related piece-wise random generation algorithms like Wave Function Collapse.
 
