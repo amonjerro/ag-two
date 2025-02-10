@@ -1,5 +1,6 @@
 # Adventurer's Guild v2.0
 [ Not actually a sequel but the second major iteration of a game idea I've been working on and designing for a while ] 
+
 Still _very_ early in development.
 
 ## Game Pitch
