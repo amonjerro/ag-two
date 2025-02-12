@@ -23,7 +23,7 @@ public class Adventurer
     public string Name {get; set;}
     public int Level { get; private set; }
     public Stats Char_Stats { get; private set; }
-    public string race;
+    public string species;
 
     private int _xp;
     private bool _onMission;
@@ -37,10 +37,10 @@ public class Adventurer
         _xp = 0;
     }
 
-    public Adventurer(string name, SpeciesType race){
+    public Adventurer(string name, SpeciesType species){
         Char_Stats = new Stats(0,0,0,0,0);
-        Char_Stats.Add(SpeciesFactory.GetSpeciesStats(race));
-        this.race = SpeciesFactory.GetSpeciesName(race);
+        Char_Stats.Add(SpeciesFactory.GetSpeciesStats(species));
+        this.species = SpeciesFactory.GetSpeciesName(species);
         Level = 1;
         _onMission = false;
         _xp = 0;
@@ -102,7 +102,7 @@ public class Adventurer
 
     // Debug function
     public override string ToString(){
-        return "Name: "+this.Name+" Species: "+this.race;
+        return "Name: "+this.Name+" Species: "+this.species;
     }
 
 }
