@@ -16,8 +16,11 @@ public class SkyEmbellish : MonoBehaviour
 
     public void Start()
     {
-        TimeManager.Tick += UpdateSky;
         timeManagerReference = ServiceLocator.Instance.GetService<TimeManager>();
+    }
+
+    private void Update()
+    {
         UpdateSky();
     }
 

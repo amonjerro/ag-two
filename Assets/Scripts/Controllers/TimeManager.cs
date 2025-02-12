@@ -14,11 +14,13 @@ public class TimeManager : MonoBehaviour
     public TextMeshProUGUI textCalendar;
 
     // Public properties and time variables
-    public float tickLength;
+    [SerializeField]
+    float tickLength;
     public bool IsPaused { get; set; }
 
     // Private time variables
     private float _elapsedTime;
+    private float _totalElapsedTime;
     private int _totalTickCount;
     private int _tickCount;
     private int _days;
@@ -59,6 +61,7 @@ public class TimeManager : MonoBehaviour
         }
 
         _elapsedTime += Time.deltaTime;
+        _totalElapsedTime += Time.deltaTime;
         if (_elapsedTime > tickLength)
         {
             _elapsedTime = 0.0f;
@@ -81,7 +84,7 @@ public class TimeManager : MonoBehaviour
     /// <returns>Progrss of the day expressed as a float [0-1]</returns>
     public float GetCurrentDayProgress()
     {
-        return _tickCount / (float)TICK_TO_DAY;
+        return _totalElapsedTime / (TICK_TO_DAY * tickLength);
     }
 
     /// <summary>
@@ -96,6 +99,7 @@ public class TimeManager : MonoBehaviour
         IsPaused = false;
 
         _elapsedTime = 0.0f;
+        _totalElapsedTime = _elapsedTime + totalTickCount * tickLength;
         _tickCount = totalTickCount % TICK_TO_DAY;
 
         DoTickMath();
@@ -140,6 +144,7 @@ public class TimeManager : MonoBehaviour
         if (_tickCount >= TICK_TO_DAY){
             //Reset tick count
             _tickCount = 0;
+            _totalElapsedTime = 0;
             _days++;
         }
 
