@@ -37,10 +37,10 @@ public class Adventurer
         _xp = 0;
     }
 
-    public Adventurer(string name, RaceType race){
+    public Adventurer(string name, SpeciesType race){
         Char_Stats = new Stats(0,0,0,0,0);
-        Char_Stats.Add(RaceFactory.GetRaceStats(race));
-        this.race = RaceFactory.GetRaceName(race);
+        Char_Stats.Add(SpeciesFactory.GetSpeciesStats(race));
+        this.race = SpeciesFactory.GetSpeciesName(race);
         Level = 1;
         _onMission = false;
         _xp = 0;
@@ -102,7 +102,7 @@ public class Adventurer
 
     // Debug function
     public override string ToString(){
-        return "Name: "+this.Name+" Race: "+this.race;
+        return "Name: "+this.Name+" Species: "+this.race;
     }
 
 }

@@ -14,11 +14,12 @@ public class NameGenerator{
 
     private readonly static Random _rnd = new Random();
 
-    public static string GenerateName(RaceType race){
-        switch(race){
-            case (RaceType.Kedi):
+    // Generates an adventurers name by composing the above name components according to the language rules of each species
+    public static string GenerateName(SpeciesType species){
+        switch(species){
+            case (SpeciesType.Kedi):
                 return MakeKediName();
-            case (RaceType.Corvo):
+            case (SpeciesType.Corvo):
                 return MakeCorvoName();
             default:
                 return MakeHumanName(); 
@@ -27,6 +28,7 @@ public class NameGenerator{
     }
 
     private static string MakeCorvoName(){
+        // Corvo names are made up of two major components, a prefix and a suffix
         int first_name_ix = _rnd.Next(corvoPrefixes.Length);
         int last_name_ix = _rnd.Next(corvoSuffixes.Length);
 
@@ -34,8 +36,9 @@ public class NameGenerator{
     }
 
     private static string MakeKediName(){
+        // Kedi names are composed of three syllables
         int first_name_ix = _rnd.Next(kediPrefixes.Length);
-        int middle_syllable_ix = _rnd.Next( kediMiddleSyllable.Length);
+        int middle_syllable_ix = _rnd.Next(kediMiddleSyllable.Length);
         int last_name_ix = _rnd.Next(kediSuffixes.Length);
 
         if (kediSuffixes[last_name_ix] == kediMiddleSyllable[middle_syllable_ix]){
@@ -47,6 +50,7 @@ public class NameGenerator{
     }
 
     private static string MakeHumanName(){
+        // Human names are composed of a first name and a last name
         int first_name_ix = _rnd.Next(humanFirstNames.Length);
         int last_name_ix = _rnd.Next(humanLastNames.Length);
 

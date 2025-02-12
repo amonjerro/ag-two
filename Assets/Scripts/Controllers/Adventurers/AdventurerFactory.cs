@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 public static class AdventurerFactory 
 {
-
+    /// <summary>
+    /// Populates a random list of adventurers
+    /// </summary>
+    /// <param name="count">How many adventurers to create</param>
+    /// <returns>A list of adventurer objects</returns>
     public static List<Adventurer> MakeAdventurerList(int count){
         List<Adventurer> list = new List<Adventurer>();
         for (int i = 0; i < count; i++){
@@ -21,12 +25,12 @@ public static class AdventurerFactory
     }
 
     public static Adventurer MakeAdventurer(){
-        switch(RandomUtils.RandomEnumValue<RaceType>()){
-            case (RaceType.Human):
+        switch(RandomUtils.RandomEnumValue<SpeciesType>()){
+            case (SpeciesType.Human):
                 return MakeHuman(1);
-            case (RaceType.Kedi):
+            case (SpeciesType.Kedi):
                 return MakeKedi(1);
-            case (RaceType.Corvo):
+            case (SpeciesType.Corvo):
                 return MakeCorvo(1);
             default:
                 return MakeHuman(1);
@@ -34,12 +38,12 @@ public static class AdventurerFactory
     }
 
     public static Adventurer MakeAdventurer(int level){
-        switch(RandomUtils.RandomEnumValue<RaceType>()){
-            case (RaceType.Human):
+        switch(RandomUtils.RandomEnumValue<SpeciesType>()){
+            case (SpeciesType.Human):
                 return MakeHuman(level);
-            case (RaceType.Kedi):
+            case (SpeciesType.Kedi):
                 return MakeKedi(level);
-            case (RaceType.Corvo):
+            case (SpeciesType.Corvo):
                 return MakeCorvo(level);
             default:
                 return MakeHuman(level);
@@ -47,7 +51,7 @@ public static class AdventurerFactory
     }
 
     private static Adventurer MakeKedi(int level){
-        Adventurer adv = new Adventurer(NameGenerator.GenerateName(RaceType.Kedi), RaceType.Kedi);
+        Adventurer adv = new Adventurer(NameGenerator.GenerateName(SpeciesType.Kedi), SpeciesType.Kedi);
         if (level > 1){
             adv.LevelAdjust(level);
         }
@@ -55,7 +59,7 @@ public static class AdventurerFactory
     }
 
     private static Adventurer MakeCorvo(int level){
-        Adventurer adv = new Adventurer(NameGenerator.GenerateName(RaceType.Corvo), RaceType.Corvo);
+        Adventurer adv = new Adventurer(NameGenerator.GenerateName(SpeciesType.Corvo), SpeciesType.Corvo);
         if (level > 1){
             adv.LevelAdjust(level);
         }
@@ -63,7 +67,7 @@ public static class AdventurerFactory
     }
 
     private static Adventurer MakeHuman(int level){
-        Adventurer adv = new Adventurer(NameGenerator.GenerateName(RaceType.Human), RaceType.Human);
+        Adventurer adv = new Adventurer(NameGenerator.GenerateName(SpeciesType.Human), SpeciesType.Human);
         if (level > 1){
             adv.LevelAdjust(level);
         }
