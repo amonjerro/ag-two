@@ -24,10 +24,10 @@ public static class AdventurerFactory
         switch(RandomUtils.RandomEnumValue<RaceType>()){
             case (RaceType.Human):
                 return MakeHuman(1);
-            case (RaceType.Elf):
-                return MakeElf(1);
-            case (RaceType.Dwarf):
-                return MakeDwarf(1);
+            case (RaceType.Kedi):
+                return MakeKedi(1);
+            case (RaceType.Corvo):
+                return MakeCorvo(1);
             default:
                 return MakeHuman(1);
         }
@@ -37,25 +37,25 @@ public static class AdventurerFactory
         switch(RandomUtils.RandomEnumValue<RaceType>()){
             case (RaceType.Human):
                 return MakeHuman(level);
-            case (RaceType.Elf):
-                return MakeElf(level);
-            case (RaceType.Dwarf):
-                return MakeDwarf(level);
+            case (RaceType.Kedi):
+                return MakeKedi(level);
+            case (RaceType.Corvo):
+                return MakeCorvo(level);
             default:
                 return MakeHuman(level);
         }
     }
 
-    private static Adventurer MakeElf(int level){
-        Adventurer adv = new Adventurer(NameGenerator.GenerateName(RaceType.Elf), RaceType.Elf);
+    private static Adventurer MakeKedi(int level){
+        Adventurer adv = new Adventurer(NameGenerator.GenerateName(RaceType.Kedi), RaceType.Kedi);
         if (level > 1){
             adv.LevelAdjust(level);
         }
         return adv;
     }
 
-    private static Adventurer MakeDwarf(int level){
-        Adventurer adv = new Adventurer(NameGenerator.GenerateName(RaceType.Dwarf), RaceType.Dwarf);
+    private static Adventurer MakeCorvo(int level){
+        Adventurer adv = new Adventurer(NameGenerator.GenerateName(RaceType.Corvo), RaceType.Corvo);
         if (level > 1){
             adv.LevelAdjust(level);
         }

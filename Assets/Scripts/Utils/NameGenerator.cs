@@ -2,13 +2,12 @@ using System;
 
 public class NameGenerator{
 
-    private readonly static string[] elfSuffixes = {"el", "il", "ir", "rod","bor","thir","fin","or","lad"};
-    private readonly static string[] elfPrefixes = {"Fin", "Ae","Gal","Gwin","Thran","Nim","Oro","Van","Val","Mel","Gil"};
-    private readonly static string[] elfMiddleSyllable = {"rod", "lan", "gol","gal","gor", "mil","dan","ri","ril","lun","mun","run","da","fea"};
+    private readonly static string[] kediPrefixes = {"Fin", "Ae","Gal","Gwin","Thran","Nim","Oro","Van","Val","Mel","Gil"};
+    private readonly static string[] kediMiddleSyllable = {"rod", "lan", "gol","gal","gor", "mil","dan","ri","ril","lun","mun","run","da","fea"};
+    private readonly static string[] kediSuffixes = { "el", "il", "ir", "rod", "bor", "thir", "fin", "or", "lad" };
 
-
-    private readonly static string[] dwarfPrefixes = {"Bal","Glo","Dûr","Bo","Do","Vin","Han","Brun","Fun","Gun"};
-    private readonly static string[] dwarfSuffixes = {"in","ri","fur","ndalfr","nar","din","ldr"};
+    private readonly static string[] corvoPrefixes = {"Bal","Glo","Dûr","Bo","Do","Vin","Han","Brun","Fun","Gun"};
+    private readonly static string[] corvoSuffixes = {"in","ri","fur","ndalfr","nar","din","ldr"};
 
     private readonly static string[] humanFirstNames = {"James","Arthur","Alfred","Damian","Thomas","Stephen","Edward","Ralph","Andrew","Richard","Bruce","Percival","Mitchell"};
     private readonly static string[] humanLastNames = {"Archer","Smith","Cooper","Cook","Cadderly","Freeman","Snow","Storm","Stone","Green","Black","Browne","Shepard"};
@@ -17,33 +16,33 @@ public class NameGenerator{
 
     public static string GenerateName(RaceType race){
         switch(race){
-            case (RaceType.Elf):
-                return MakeElfName();
-            case (RaceType.Dwarf):
-                return MakeDwarfName();
+            case (RaceType.Kedi):
+                return MakeKediName();
+            case (RaceType.Corvo):
+                return MakeCorvoName();
             default:
                 return MakeHumanName(); 
 
         }
     }
 
-    private static string MakeDwarfName(){
-        int first_name_ix = _rnd.Next(dwarfPrefixes.Length);
-        int last_name_ix = _rnd.Next(dwarfSuffixes.Length);
+    private static string MakeCorvoName(){
+        int first_name_ix = _rnd.Next(corvoPrefixes.Length);
+        int last_name_ix = _rnd.Next(corvoSuffixes.Length);
 
-        return dwarfPrefixes[first_name_ix]+dwarfSuffixes[last_name_ix];
+        return corvoPrefixes[first_name_ix]+corvoSuffixes[last_name_ix];
     }
 
-    private static string MakeElfName(){
-        int first_name_ix = _rnd.Next(elfPrefixes.Length);
-        int middle_syllable_ix = _rnd.Next( elfMiddleSyllable.Length);
-        int last_name_ix = _rnd.Next(elfSuffixes.Length);
+    private static string MakeKediName(){
+        int first_name_ix = _rnd.Next(kediPrefixes.Length);
+        int middle_syllable_ix = _rnd.Next( kediMiddleSyllable.Length);
+        int last_name_ix = _rnd.Next(kediSuffixes.Length);
 
-        if (elfSuffixes[last_name_ix] == elfMiddleSyllable[middle_syllable_ix]){
-             return elfPrefixes[first_name_ix]+" "+elfSuffixes[last_name_ix];
+        if (kediSuffixes[last_name_ix] == kediMiddleSyllable[middle_syllable_ix]){
+             return kediPrefixes[first_name_ix]+" "+kediSuffixes[last_name_ix];
         }
 
-        return elfPrefixes[first_name_ix]+elfMiddleSyllable[middle_syllable_ix]+elfSuffixes[last_name_ix];
+        return kediPrefixes[first_name_ix]+kediMiddleSyllable[middle_syllable_ix]+kediSuffixes[last_name_ix];
        
     }
 
