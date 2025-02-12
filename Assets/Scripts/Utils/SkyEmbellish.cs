@@ -11,7 +11,6 @@ public class SkyEmbellish : MonoBehaviour
     [SerializeField]
     SpriteRenderer skyRenderer;
 
-
     TimeManager timeManagerReference;
 
     public void Start()
@@ -24,6 +23,9 @@ public class SkyEmbellish : MonoBehaviour
         UpdateSky();
     }
 
+    /// <summary>
+    /// Updates the color of the sky background
+    /// </summary>
     private void UpdateSky()
     {
         SeasonGradients currentGradients = skyGradientData.GetBySeason(timeManagerReference.GetCurrentSeason());

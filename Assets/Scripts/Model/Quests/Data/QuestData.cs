@@ -16,7 +16,6 @@ public class QuestData
 
     public AQuestNode rootNode;
 
-
     public QuestData(Faction faction, string questKey, string questTitle, string description, int startTick, int sOIndex)
     {
         this.faction = faction;

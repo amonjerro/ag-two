@@ -1,5 +1,9 @@
 using UnityEngine;
 
+
+/// <summary>
+/// Scriptable object to hold all sky season gradients
+/// </summary>
 [CreateAssetMenu(menuName=Constants.ScriptableObjectsPath+"SkyGradients")]
 public class SeasonalSkiesSO : ScriptableObject
 {
@@ -25,6 +29,9 @@ public class SeasonalSkiesSO : ScriptableObject
     }
 }
 
+/// <summary>
+/// Class to hold gradients for the color the sky should be at the top and at the bottom
+/// </summary>
 [System.Serializable]
 public class SeasonGradients
 {
