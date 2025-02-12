@@ -17,12 +17,16 @@ public class SkyEmbellish : MonoBehaviour
     public void Start()
     {
         TimeManager.Tick += UpdateSky;
+        timeManagerReference = ServiceLocator.Instance.GetService<TimeManager>();
+        UpdateSky();
     }
 
     private void UpdateSky()
     {
-        skyRenderer.material.SetColor("_TopColor", Color.blue);
-        skyRenderer.material.SetColor("_BottomColor", Color.blue);
+        SeasonGradients currentGradients = skyGradientData.GetBySeason(timeManagerReference.GetCurrentSeason());
+        float dayProgress = timeManagerReference.GetCurrentDayProgress();
+        skyRenderer.material.SetColor("_TopColor", currentGradients.Top.Evaluate(dayProgress));
+        skyRenderer.material.SetColor("_BottomColor", currentGradients.Bottom.Evaluate(dayProgress));
     }
 
 }

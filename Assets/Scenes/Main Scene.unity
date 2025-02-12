@@ -2116,7 +2116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf71055b228e1f7428582b205d7f95c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skyGradientData: {fileID: 0}
+  skyGradientData: {fileID: 11400000, guid: fd1d683f26a462345b46b04688eae5be, type: 2}
   skyShader: {fileID: 4800000, guid: 27eeec80a7cae3f428aeafb749d58c75, type: 3}
   skyRenderer: {fileID: 146769007}
 --- !u!1001 &500635172

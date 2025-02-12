@@ -1,41 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 
 public class TimeManager : MonoBehaviour
 {
+    // Main time constants
     const int TICK_TO_DAY = 48;
-
     const int DAYS_TO_SEASON = 28;
-
+    
+    // Should move these out - this is part of the view, should not be in the controller
     public TextMeshProUGUI textClock;
     public TextMeshProUGUI textCalendar;
+
+    // Public properties and time variables
     public float tickLength;
     public bool IsPaused { get; set; }
 
+    // Private time variables
     private float _elapsedTime;
     private int _totalTickCount;
     private int _tickCount;
     private int _days;
     private int _cycle;
-    
     private Season _currentSeason;
+    private Season[] seasonOrder = { Season.Spring, Season.Summer, Season.Fall, Season.Winter };
 
     public delegate void TickEvent();
     public static event TickEvent Tick;
 
+    // Main delegate event
     public void PublishTick(){
         if (Tick != null){
             Tick();
         }
     }
 
+    // Time controls, should be better bound to player input
     public void SetTickLength(float tickLength){
         this.tickLength = tickLength;
     }
 
+
+    // Unity lifecycle management
     private void Awake()
     {
         IsPaused = true;    
@@ -44,39 +51,70 @@ public class TimeManager : MonoBehaviour
     void Start() {
 
     }
-
-    void Update() {
+    void Update()
+    {
         if (IsPaused)
         {
             return;
         }
 
         _elapsedTime += Time.deltaTime;
-        if (_elapsedTime > tickLength){
-            PublishTick();
+        if (_elapsedTime > tickLength)
+        {
             _elapsedTime = 0.0f;
             HandleTick();
             UpdateClockText();
             UpdateCalendarText();
-        }
-
-        // Redesign this
-        //Normal Time
-        if(Input.GetKeyUp(KeyCode.Alpha1)){
-            SetTickLength(1.0f);
-        }
-        //Fast Time
-        if(Input.GetKeyUp(KeyCode.Alpha2)){
-            SetTickLength(0.5f);
-        }
-
-        //Ultra Fast
-        if(Input.GetKeyUp(KeyCode.Alpha3)){
-            SetTickLength(0.25f);
+            PublishTick();
         }
     }
 
-    void UpdateClockText(){
+    // Public methods
+    public Season GetCurrentSeason()
+    {
+        return _currentSeason;
+    }
+
+    /// <summary>
+    /// Returns the progress of the day expressed as a float between 0-1. Useful for lerping sky color values
+    /// </summary>
+    /// <returns>Progrss of the day expressed as a float [0-1]</returns>
+    public float GetCurrentDayProgress()
+    {
+        return _tickCount / (float)TICK_TO_DAY;
+    }
+
+    /// <summary>
+    /// Sets the time of the clock based on saved data
+    /// </summary>
+    /// <param name="totalTickCount">The time to load</param>
+    public void LoadTime(int totalTickCount)
+    {
+        _currentSeason = Season.Spring;
+
+        _totalTickCount = totalTickCount;
+        IsPaused = false;
+
+        _elapsedTime = 0.0f;
+        _tickCount = totalTickCount % TICK_TO_DAY;
+
+        DoTickMath();
+        UpdateClockText();
+        UpdateCalendarText();
+        PublishTick();
+    }
+
+    /// <summary>
+    /// Gets the total amount of ticks the clock has done
+    /// </summary>
+    /// <returns>The game clock's total tick count</returns>
+    public int GetTimeToSave()
+    {
+        return _totalTickCount;
+    }
+
+    // Private methods
+    private void UpdateClockText(){
         string suffix, prefix;
         prefix = (_tickCount / 2).ToString();
         if (_tickCount < 20){
@@ -94,7 +132,7 @@ public class TimeManager : MonoBehaviour
         textCalendar.text = string.Format("Day {0}, {1}. Year {2}", _days, _currentSeason.ToString(), _cycle);
     }
 
-
+    // Handles the logic for calculating day rollover
     private void HandleTick(){
         _tickCount++;
         _totalTickCount++;
@@ -113,6 +151,7 @@ public class TimeManager : MonoBehaviour
 
     }
 
+    // Handles the logic for calculating season rollover
     private void UpdateSeason(){
         if (_currentSeason == Season.Summer){
             _currentSeason = Season.Fall;
@@ -136,51 +175,13 @@ public class TimeManager : MonoBehaviour
         }
     }
 
-    public void LoadTime(int totalTickCount)
-    {
-        _currentSeason = Season.Spring;
-
-        _totalTickCount = totalTickCount;
-        IsPaused = false;
-
-        _elapsedTime = 0.0f;
-        _tickCount = totalTickCount % TICK_TO_DAY;
-
-        DoTickMath();
-        UpdateClockText();
-        UpdateCalendarText();
-    }
-
+    // Do the math to calculate the status of the clock based on the total tick count
     private void DoTickMath()
     {
         _days = 1 + (_totalTickCount / TICK_TO_DAY);
         _cycle = 1 + (_days / DAYS_TO_SEASON * 4);
-        int seasonInt = _days / DAYS_TO_SEASON;
-        _currentSeason = IntToSeason(seasonInt % 4);
+        _currentSeason = seasonOrder[(_days / DAYS_TO_SEASON)%4];
         _days = _days % DAYS_TO_SEASON;
-
-    }
-
-    private Season IntToSeason(int season)
-    {
-        switch (season)
-        {
-            case 0:
-                return Season.Fall;
-            case 1:
-                return Season.Winter;
-            case 2:
-                return Season.Spring;
-            case 3:
-                return Season.Summer;
-            default:
-                return Season.Fall;
-        }
-    }
-
-    public int GetTimeToSave()
-    {
-        return _totalTickCount;
     }
 
 }
