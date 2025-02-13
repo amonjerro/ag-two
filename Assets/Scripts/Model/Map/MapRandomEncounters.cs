@@ -2,9 +2,23 @@ using ExplorationMap;
 using System;
 using System.Collections.Generic;
 
+
+[Serializable]
+public enum OutcomeType
+{
+    Reward = 0,
+    StartQuest
+}
+
+
+[Serializable]
 public class EncounterOutcome
 {
-
+    OutcomeType type;
+    string outcomeText;
+    string outcomeTitle;
+    Reward reward;
+    string questKey;
 }
 
 
@@ -17,7 +31,7 @@ public class MapEncounter
 
     public string imagePath;
 
-    // Condtionals
+    // Conditionals
     public bool bRequiresConnectionType;
     public ConnectionType requiredConnectionType;
     public int minTickDelay;

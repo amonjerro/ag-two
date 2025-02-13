@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/EditorExtensions/ExplorationEvents/ExplorationEventEditorStyle.uss?fileID=7433441132597879392&amp;guid=d94ad87025ed7804398a3efe46069faf&amp;type=3#ExplorationEventEditorStyle" />
+    <SplitView>
+        <ExplorationEventsTool.ExplorationEventsControls />
+        <ExplorationEventsTool.ExplorationEventsInspector />
+    </SplitView>
+</ui:UXML>

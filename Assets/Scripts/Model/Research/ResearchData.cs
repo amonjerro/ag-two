@@ -5,7 +5,8 @@ namespace Research
 {
     public enum ResearchReward
     {
-        RoomType = 0
+        RoomType = 0,
+        FactionUnlock
     }
 
     [Serializable]
