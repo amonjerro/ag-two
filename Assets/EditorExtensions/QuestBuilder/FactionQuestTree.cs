@@ -12,8 +12,9 @@ namespace QuestBuilder
     {
         public new class UxmlFactory : UxmlFactory<FactionQuestTree, UxmlTraits> { }
 
-        QuestNodeArray rawDataTree;
-        public Action<QuestViewNode> OnNodeSelected;
+        FactionQuestTreeData rawDataTree;
+        public Action<GraphTreeNode> OnNodeSelected;
+        public bool NodeActivelySelected { get; private set; }
         FactionQuestEditor editorReference = null;
 
         public FactionQuestTree()
@@ -28,13 +29,14 @@ namespace QuestBuilder
             StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/EditorExtensions/QuestBuilder/QuestBuilder.uss");
             styleSheets.Add(styleSheet);
 
-            rawDataTree = new QuestNodeArray();
+            rawDataTree = new FactionQuestTreeData();
             InitializeTree();
+            NodeActivelySelected = false;
         }
 
         public void ClearTree()
         {
-            rawDataTree = new QuestNodeArray();
+            rawDataTree = new FactionQuestTreeData();
             graphViewChanged -= OnGraphViewChanged;
             DeleteElements(graphElements);
             graphViewChanged += OnGraphViewChanged;
@@ -44,60 +46,49 @@ namespace QuestBuilder
         {
             // Create a start and end node
             graphViewChanged -= OnGraphViewChanged;
-            QuestViewNode startNode = CreateNode(NodeTypes.Start);
+            FactionViewNode startNode = CreateNode(NodeTypes.Start);
             startNode.title = "Start Node";
-            startNode.questNode.title = "Start Node";
-            QuestViewNode endNode = CreateNode(NodeTypes.End);
-            endNode.title = "Decline Quest";
-            endNode.questNode.title = "Decline Quest";
-
-            endNode.SetPosition(new Rect(200, 200, 0, 0));
-            Edge e = startNode.outputPorts[1].ConnectTo(endNode.input);
-            startNode.AddChildConnection(endNode, 1);
-            rawDataTree.ConnectNodes(startNode.questNode, endNode.questNode, 1);
-
-            AddElement(e);
             graphViewChanged += OnGraphViewChanged;
         }
 
 
-        public void PopulateView(QuestNodeArray questData)
+        public void PopulateView(FactionQuestTreeData questData)
         {
             ClearTree();
             rawDataTree = questData;
 
 
             // Set up reference table
-            Dictionary<string, QuestViewNode> nodeMap = new Dictionary<string, QuestViewNode>();
-            List<QuestViewNode> viewNodes = new List<QuestViewNode>();
+            Dictionary<string, FactionViewNode> nodeMap = new Dictionary<string, FactionViewNode>();
+            List<FactionViewNode> viewNodes = new List<FactionViewNode>();
 
             // Create the nodes
-            foreach (QuestNodeData questNode in rawDataTree.nodes)
+            foreach (FactionQuestTreeNode questNode in rawDataTree.nodes)
             {
-                QuestViewNode viewNode = InstantiateNodeElement(questNode);
+                FactionViewNode viewNode = InstantiateNodeElement(questNode);
                 viewNode.SetPosition(new Rect(questNode.positionX, questNode.positionY, 0, 0));
-                nodeMap.Add(questNode.key, viewNode);
+                nodeMap.Add(questNode.questKey, viewNode);
                 viewNodes.Add(viewNode);
             }
 
 
             // Create Edges
-            foreach (QuestViewNode viewNode in viewNodes)
+            foreach (FactionViewNode viewNode in viewNodes)
             {
-
+                int childrenCount = viewNode.NodeData.children.Count;
                 // If not the end node
-                if (viewNode.questNode.next.Count > 0)
+                if (childrenCount > 0)
                 {
 
                     // Create the edges
-                    for (int i = 0; i < viewNode.questNode.next.Count; i++)
+                    for (int i = 0; i < childrenCount; i++)
                     {
-                        string key = viewNode.questNode.next[i];
+                        KeyPort key = viewNode.NodeData.children[i];
 
-                        if (nodeMap.ContainsKey(key))
+                        if (nodeMap.ContainsKey(key.childKey))
                         {
-                            QuestViewNode child = nodeMap[key];
-                            Edge e = viewNode.outputPorts[i].ConnectTo(child.input);
+                            FactionViewNode child = nodeMap[key.childKey];
+                            Edge e = viewNode.outputPorts[i].ConnectTo(child.inputPorts[key.portNumber]);
                             viewNode.AddChildConnection(child, i);
                             AddElement(e);
                         }
@@ -110,12 +101,33 @@ namespace QuestBuilder
         {
             base.BuildContextualMenu(evt);
 
+            if (NodeActivelySelected)
+            {
+                BuildSelectedContextualMenu(evt);
+            } else
+            {
+                BuildUnselectedContextualMenu(evt);
+            }
+
+        }
+
+        private void BuildSelectedContextualMenu(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendSeparator();
+
+            evt.menu.AppendAction("Open", (a) => {
+                EditorApplication.ExecuteMenuItem("Window/Quest Tree Editor");
+            });
+        }
+
+        private void BuildUnselectedContextualMenu(ContextualMenuPopulateEvent evt)
+        {
             evt.menu.AppendSeparator();
             foreach (NodeTypes nodeType in Enum.GetValues(typeof(NodeTypes)))
             {
                 string name = nodeType.ToString();
                 evt.menu.AppendAction(name + " Node", (a) => {
-                    QuestViewNode node = CreateNode(nodeType);
+                    FactionViewNode node = CreateNode(nodeType);
                     node.SetPosition(new Rect(a.eventInfo.mousePosition, Vector2.zero));
                 });
             }
@@ -140,11 +152,11 @@ namespace QuestBuilder
             {
                 foreach (GraphElement elem in graphViewChange.elementsToRemove)
                 {
-                    QuestViewNode nodeView = elem as QuestViewNode;
+                    FactionViewNode nodeView = elem as FactionViewNode;
                     if (nodeView != null)
                     {
                         // Delete this node
-                        rawDataTree.DeleteNode(nodeView.questNode);
+                        rawDataTree.DeleteNode(nodeView.NodeData);
 
                     }
 
@@ -152,11 +164,11 @@ namespace QuestBuilder
                     if (edge != null)
                     {
                         //Remove this edge
-                        QuestViewNode parentView = edge.output.node as QuestViewNode;
-                        QuestViewNode childView = edge.input.node as QuestViewNode;
+                        FactionViewNode parentView = edge.output.node as FactionViewNode;
+                        FactionViewNode childView = edge.input.node as FactionViewNode;
 
                         int index = parentView.RemoveChild(childView);
-                        rawDataTree.DisconnectNodes(parentView.questNode, index);
+                        rawDataTree.DisconnectNodes(parentView.NodeData, index);
                     }
                 }
             }
@@ -166,12 +178,14 @@ namespace QuestBuilder
             {
                 foreach (Edge edge in graphViewChange.edgesToCreate)
                 {
-                    QuestViewNode parentView = edge.output.node as QuestViewNode;
+                    FactionViewNode parentView = edge.output.node as FactionViewNode;
                     int outputPort = parentView.GetPortNumber(edge.output);
-                    QuestViewNode childView = edge.input.node as QuestViewNode;
+                    FactionViewNode childView = edge.input.node as FactionViewNode;
+                    int inputPort = childView.GetPortNumber(edge.input, false);
+
                     parentView.AddChildConnection(childView, outputPort);
                     childView.Parent = parentView;
-                    rawDataTree.ConnectNodes(parentView.questNode, childView.questNode, outputPort);
+                    rawDataTree.ConnectNodes(parentView.NodeData, childView.NodeData, outputPort, inputPort);
                 }
             }
 
@@ -179,49 +193,40 @@ namespace QuestBuilder
 
         }
 
-        private QuestViewNode CreateNode(NodeTypes type)
+        private FactionViewNode CreateNode(NodeTypes type)
         {
             if (editorReference != null)
             {
                 editorReference.ChangesHaveOcurred();
             }
-            QuestNodeData nodeData = new QuestNodeData();
-            switch (type)
-            {
-                case NodeTypes.Challenge:
-                    nodeData.buttonStrings = new string[2];
-                    nodeData.CreateNextSlots(2);
-                    nodeData.challengeValues = new ChallengeValues();
-                    break;
-                case NodeTypes.Decision:
-                case NodeTypes.Start:
-                    nodeData.buttonStrings = new string[2];
-                    nodeData.CreateNextSlots(2);
-                    break;
-                case NodeTypes.End:
-                    nodeData.buttonStrings = new string[1];
-                    break;
-                default:
-                    nodeData.buttonStrings = new string[1];
-                    nodeData.CreateNextSlots(1);
-                    break;
-            }
-            nodeData.type = QuestController.MapTypeToString(type);
-            nodeData.key = GUID.Generate().ToString();
+            FactionQuestTreeNode nodeData = new FactionQuestTreeNode();
+            nodeData.questKey = GUID.Generate().ToString();
             rawDataTree.nodes.Add(nodeData);
-            QuestViewNode qvn = InstantiateNodeElement(nodeData);
-            return qvn;
+            FactionViewNode fvn = InstantiateNodeElement(nodeData);
+            return fvn;
         }
 
-        private QuestViewNode InstantiateNodeElement(QuestNodeData data)
+        private FactionViewNode InstantiateNodeElement(FactionQuestTreeNode data)
         {
-            QuestViewNode viewNode = new QuestViewNode(data);
-            viewNode.OnNodeSelected = OnNodeSelected;
+            FactionViewNode viewNode = new FactionViewNode(data);
+            viewNode.OnNodeSelected = HandleNodeSelect;
+            viewNode.OnNodeUnselected = HandleNodeUnselect;
             AddElement(viewNode);
             return viewNode;
         }
 
-        public QuestNodeArray GetNodeTree()
+        private void HandleNodeSelect(GraphTreeNode node)
+        {
+            NodeActivelySelected = true;
+            OnNodeSelected?.Invoke(node);
+        }
+
+        private void HandleNodeUnselect()
+        {
+            NodeActivelySelected = false;
+        }
+
+        public FactionQuestTreeData GetNodeTree()
         {
             return rawDataTree;
         }
@@ -229,6 +234,11 @@ namespace QuestBuilder
         public void SetEditorReference(FactionQuestEditor qte)
         {
             editorReference = qte;
+        }
+
+        private void OpenQuestMenu()
+        {
+
         }
     }
 }

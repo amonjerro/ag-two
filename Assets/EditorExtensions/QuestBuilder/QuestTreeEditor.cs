@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 
 using UnityEngine;
@@ -9,7 +7,6 @@ namespace QuestBuilder {
     public class QuestTreeEditor : EditorWindow
     {
         string activeTreeFilePath;
-
         NodeTreeView treeView;
         NodeInspector inspector;
 
@@ -110,9 +107,10 @@ namespace QuestBuilder {
 
         }
 
-        private void OnNodeSelectionChanged(QuestViewNode node)
+        private void OnNodeSelectionChanged(GraphTreeNode node)
         {
-            inspector.UpdateSelection(node);
+            QuestViewNode questViewNode = (QuestViewNode)node;
+            inspector.UpdateSelection(questViewNode);
         }
 
 

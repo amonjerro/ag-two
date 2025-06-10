@@ -72,7 +72,7 @@ namespace QuestBuilder
             if (activeTreeFilePath.Length != 0)
             {
                 string fileContent = File.ReadAllText(activeTreeFilePath);
-                QuestNodeArray questNodeArray = JsonUtility.FromJson<QuestNodeArray>(fileContent);
+                FactionQuestTreeData questNodeArray = JsonUtility.FromJson<FactionQuestTreeData>(fileContent);
                 DrawQuestStructure(questNodeArray);
             }
         }
@@ -102,7 +102,7 @@ namespace QuestBuilder
         }
 
 
-        private void DrawQuestStructure(QuestNodeArray questNodes)
+        private void DrawQuestStructure(FactionQuestTreeData questNodes)
         {
             // Guard clause to prevent funny stuff
             if (questNodes == null) return;
@@ -111,9 +111,10 @@ namespace QuestBuilder
 
         }
 
-        private void OnNodeSelectionChanged(QuestViewNode node)
+        private void OnNodeSelectionChanged(GraphTreeNode node)
         {
-            inspector.UpdateSelection(node);
+            FactionViewNode factionViewNode = node as FactionViewNode;
+            inspector.UpdateSelection(factionViewNode);
         }
 
 
@@ -130,12 +131,12 @@ namespace QuestBuilder
 
         private bool NodeDataHasValidIntegrity()
         {
-            QuestNodeArray dataArray = treeView.GetNodeTree();
+            FactionQuestTreeData dataArray = treeView.GetNodeTree();
             bool isValid = true;
 
-            foreach (QuestNodeData qnd in dataArray.nodes)
+            foreach (FactionQuestTreeNode node in dataArray.nodes)
             {
-                if (qnd.key == "")
+                if (node.questKey == "")
                 {
                     return false;
                 }

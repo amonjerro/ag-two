@@ -12,7 +12,7 @@ namespace QuestBuilder {
         public new class UxmlFactory : UxmlFactory<NodeTreeView, UxmlTraits> { }
 
         QuestNodeArray rawDataTree;
-        public Action<QuestViewNode> OnNodeSelected;
+        public Action<GraphTreeNode> OnNodeSelected;
         QuestTreeEditor editorReference = null;
 
         public NodeTreeView()
@@ -51,7 +51,7 @@ namespace QuestBuilder {
             endNode.questNode.title = "Decline Quest";
 
             endNode.SetPosition(new Rect(200, 200, 0, 0));
-            Edge e = startNode.outputPorts[1].ConnectTo(endNode.input);
+            Edge e = startNode.outputPorts[1].ConnectTo(endNode.inputPorts[0]);
             startNode.AddChildConnection(endNode, 1);
             rawDataTree.ConnectNodes(startNode.questNode, endNode.questNode, 1);
 
@@ -97,7 +97,7 @@ namespace QuestBuilder {
                         
                         if (nodeMap.ContainsKey(key)) {
                             QuestViewNode child = nodeMap[key];
-                            Edge e = viewNode.outputPorts[i].ConnectTo(child.input);
+                            Edge e = viewNode.outputPorts[i].ConnectTo(child.inputPorts[0]);
                             viewNode.AddChildConnection(child, i);
                             AddElement(e);
                         }

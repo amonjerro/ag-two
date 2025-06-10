@@ -2,25 +2,20 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QuestBuilder {
-    public class QuestViewNode : Node
+    public class QuestViewNode : GraphTreeNode
     {
 
         public QuestNodeData questNode;
-        public Port input;
-        public List<Port> outputPorts;
-        public Action<QuestViewNode> OnNodeSelected;
+        
         public QuestViewNode Parent { get; set; }
-
-        List<QuestViewNode> childrenNodes;
         public NodeTypes nodeType;
         public QuestViewNode(QuestNodeData node)
         {
             outputPorts = new List<Port>();
-            childrenNodes = new List<QuestViewNode>(); 
+            childrenNodes = new List<GraphTreeNode>(); 
             questNode = node;
 
             title = node.title;
@@ -31,25 +26,25 @@ namespace QuestBuilder {
             CreateOutputPorts();
         }
 
-        private void CreateInputPorts()
+        protected override void CreateInputPorts()
         {
+            inputPorts = new List<Port>();
             switch (nodeType)
             {
                 case NodeTypes.Start:
-                    input = null;
                     break;
                 default:
-                    input = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
+                    inputPorts.Add(InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool)));
                     break;
             }
-            if (input != null)
+            if (inputPorts.Count > 0)
             {
-                input.portName = "";
-                inputContainer.Add(input);
+                inputPorts[0].portName = "";
+                inputContainer.Add(inputPorts[0]);
             }
         }
 
-        private void CreateOutputPorts() {
+        protected override void CreateOutputPorts() {
             Port outputPort = null;
             switch (nodeType) {
                 case NodeTypes.End:
@@ -80,37 +75,11 @@ namespace QuestBuilder {
             }
         }
 
-        public override void SetPosition(Rect newPos)
+        protected override void SetLocationData(float xPosition, float yPosition)
         {
-            base.SetPosition(newPos);
-
-            questNode.positionX = newPos.xMin;
-            questNode.positionY = newPos.yMin;
+            questNode.positionX = xPosition;
+            questNode.positionY = yPosition;
         }
 
-        // Override base event with our logic
-        public override void OnSelected()
-        {
-            base.OnSelected();
-            OnNodeSelected?.Invoke(this);
-        }
-
-
-        public void AddChildConnection(QuestViewNode node, int portNumber)
-        {
-            childrenNodes[portNumber] = node;
-        }
-
-        public int GetPortNumber(Port port)
-        {
-            return outputPorts.IndexOf(port);
-        }
-
-        public int RemoveChild(QuestViewNode child)
-        {
-            int indexOf = childrenNodes.IndexOf(child);
-            childrenNodes[indexOf] = null;
-            return indexOf;
-        }
     }
 }
