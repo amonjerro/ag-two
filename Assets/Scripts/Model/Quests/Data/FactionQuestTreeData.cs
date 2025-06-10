@@ -1,6 +1,7 @@
 using DialogueEditor;
 using JetBrains.Annotations;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 [System.Serializable]
 public enum RequirementType
@@ -49,6 +50,11 @@ public class FactionQuestTreeNode
 
     public float positionX;
     public float positionY;
+
+    public FactionQuestTreeNode()
+    {
+        children = new List<KeyPort>();
+    }
 
     public void AddChildrenSlot(int slots){
         for(int i = 0; i < slots; i++)

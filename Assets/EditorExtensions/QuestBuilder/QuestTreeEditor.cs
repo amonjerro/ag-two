@@ -3,6 +3,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
+using Unity.VisualScripting;
 namespace QuestBuilder {
     public class QuestTreeEditor : EditorWindow
     {
@@ -70,6 +71,25 @@ namespace QuestBuilder {
                 string fileContent = File.ReadAllText(activeTreeFilePath);
                 QuestNodeArray questNodeArray = JsonUtility.FromJson<QuestNodeArray>(fileContent);
                 DrawQuestStructure(questNodeArray);
+            }
+        }
+
+        public void LoadByQuestId(string id)
+        {
+            string lookupPath = $"{Application.dataPath}/RawData/{id}.json";
+            if (File.Exists(lookupPath))
+            {
+                // Load this one
+                string fileContent = File.ReadAllText(lookupPath);
+                activeTreeFilePath = lookupPath;
+                QuestNodeArray qna = JsonUtility.FromJson<QuestNodeArray>(fileContent);
+                DrawQuestStructure(qna);
+            } else { 
+                // Create it
+                string jsonString = JsonUtility.ToJson(treeView.GetNodeTree());
+                File.WriteAllText(lookupPath, jsonString);
+                hasUnsavedChanges = false;
+                activeTreeFilePath = lookupPath;
             }
         }
 

@@ -26,5 +26,10 @@ namespace QuestBuilder
         {
             throw new System.NotImplementedException();
         }
+
+        public override string GetKey()
+        {
+            return nodeData.questKey;
+        }
     }
 }

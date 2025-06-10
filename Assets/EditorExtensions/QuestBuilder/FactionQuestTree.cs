@@ -15,6 +15,7 @@ namespace QuestBuilder
         FactionQuestTreeData rawDataTree;
         public Action<GraphTreeNode> OnNodeSelected;
         public bool NodeActivelySelected { get; private set; }
+        private string nodeKey;
         FactionQuestEditor editorReference = null;
 
         public FactionQuestTree()
@@ -116,7 +117,8 @@ namespace QuestBuilder
             evt.menu.AppendSeparator();
 
             evt.menu.AppendAction("Open", (a) => {
-                EditorApplication.ExecuteMenuItem("Window/Quest Tree Editor");
+                QuestTreeEditor questEditor = (QuestTreeEditor)EditorWindow.GetWindow(typeof(QuestTreeEditor), false, null, true);
+                questEditor.LoadByQuestId(nodeKey);
             });
         }
 
@@ -218,6 +220,7 @@ namespace QuestBuilder
         private void HandleNodeSelect(GraphTreeNode node)
         {
             NodeActivelySelected = true;
+            nodeKey = node.GetKey();
             OnNodeSelected?.Invoke(node);
         }
 

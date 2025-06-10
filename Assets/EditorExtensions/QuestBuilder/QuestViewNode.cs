@@ -81,5 +81,10 @@ namespace QuestBuilder {
             questNode.positionY = yPosition;
         }
 
+        public override string GetKey()
+        {
+            return questNode.key;
+        }
+
     }
 }

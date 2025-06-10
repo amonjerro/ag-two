@@ -16,6 +16,8 @@ namespace QuestBuilder
         protected abstract void CreateInputPorts();
         protected abstract void CreateOutputPorts();
         protected abstract void SetLocationData(float xPosition, float yPosition);
+
+        public abstract string GetKey();
         public int RemoveChild(GraphTreeNode child) {
             int indexOf = childrenNodes.IndexOf(child);
             childrenNodes[indexOf] = null;
@@ -51,6 +53,7 @@ namespace QuestBuilder
             return inputPorts.IndexOf(port);
         }
 
+        
         
     }
 }
