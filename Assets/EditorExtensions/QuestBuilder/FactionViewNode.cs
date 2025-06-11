@@ -7,8 +7,10 @@ namespace QuestBuilder
     {
 
         private FactionQuestTreeNode nodeData;
+        private Label lInputMode;
         public FactionViewNode Parent { get; set; }
         public FactionQuestTreeNode NodeData { get { return nodeData; } private set { nodeData = value; } }
+        
 
         public FactionViewNode(FactionQuestTreeNode incomingData)
         {
@@ -38,6 +40,16 @@ namespace QuestBuilder
             outputButton.text = "Add Output Port";
             outputButton.clicked += CreateOutputPort;
             mainContainer.Add(outputButton);
+
+            lInputMode = new Label("AND");
+            lInputMode.style.paddingLeft = 10;
+            inputContainer.Add(lInputMode);
+
+            Button inputModeToggleButton = new Button();
+            inputModeToggleButton.tooltip = "Toggles the input requirement type";
+            inputModeToggleButton.text = "Toggle Input Mode";
+            inputModeToggleButton.clicked += ToggleInputMode;
+            mainContainer.Add(inputModeToggleButton);
         }
 
 
@@ -50,6 +62,8 @@ namespace QuestBuilder
 
         private void CreateInputPort()
         {
+            
+
             Port p = InstantiatePort(Orientation.Horizontal, Direction.Input, Port.Capacity.Single, typeof(bool));
             p.portName = "";
             inputContainer.Add(p);
@@ -64,6 +78,11 @@ namespace QuestBuilder
         public override string GetKey()
         {
             return nodeData.questKey;
+        }
+
+        private void ToggleInputMode()
+        {
+            lInputMode.text = nodeData.ToggleInputMode().ToString();
         }
     }
 }

@@ -1,7 +1,4 @@
-using DialogueEditor;
-using JetBrains.Annotations;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 [System.Serializable]
 public enum RequirementType
@@ -54,6 +51,8 @@ public class FactionQuestTreeNode
     public FactionQuestTreeNode()
     {
         children = new List<KeyPort>();
+        requirementType = RequirementType.AND;
+        retryOptions = RetryOptions.None;
     }
 
     public void AddChildrenSlot(int slots){
@@ -70,6 +69,18 @@ public class FactionQuestTreeNode
             if (children[i].childKey == key) return i;
         }
         return -1;
+    }
+
+    public RequirementType ToggleInputMode()
+    {
+        if (requirementType == RequirementType.AND)
+        {
+            requirementType = RequirementType.OR;
+        } else
+        {
+            requirementType = RequirementType.AND;
+        }
+        return requirementType;
     }
 }
 
