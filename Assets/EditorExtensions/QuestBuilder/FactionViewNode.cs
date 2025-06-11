@@ -1,4 +1,6 @@
+using System.IO;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace QuestBuilder
@@ -25,6 +27,8 @@ namespace QuestBuilder
             for (int i = 0; i < nodeData.children.Count; i++) {
                 CreateOutputPort();
             }
+
+            CheckQuestStatus();
         }
 
         private void CreateUtilities()
@@ -83,6 +87,21 @@ namespace QuestBuilder
         private void ToggleInputMode()
         {
             lInputMode.text = nodeData.ToggleInputMode().ToString();
+        }
+
+        private void CheckQuestStatus()
+        {
+            // Check if the underlying json file for the nodes exists at all
+            string lookupPath = $"{Application.dataPath}/{QuestSystemConstants.QuestNodeLocations}/{nodeData.questKey}.json";
+            if (!File.Exists(lookupPath)) {
+                SetStyleClass("unpopulated");
+                return;
+            }
+
+            // If it exists, check if it is valid
+            // To do: Add some validation rules here
+
+            SetStyleClass("populated");
         }
     }
 }

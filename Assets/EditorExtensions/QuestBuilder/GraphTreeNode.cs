@@ -55,6 +55,14 @@ namespace QuestBuilder
         {
             mainContainer.AddToClassList(styleClass);
         }
+
+        public void RemoveStyleClass(string styleClass)
+        {
+            if (mainContainer.ClassListContains(styleClass))
+            {
+                mainContainer.RemoveFromClassList(styleClass);
+            }
+        }
         
     }
 }

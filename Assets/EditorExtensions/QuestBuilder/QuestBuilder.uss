@@ -6,6 +6,14 @@ GridBackground {
     background-color: rgba(12, 6, 6, 0.39);
 }
 
-.red {
-    background-color: rgba(120,6,6,0.39);
+.unpopulated {
+    background-color: rgba(180,6,6,0.39);
+}
+
+.warning {
+    background-color: rgba(224, 106, 10, 0.5);
+}
+
+.populated {
+    background-color: rgba(5, 160, 80, 0.39);
 }
