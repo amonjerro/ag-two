@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
-using UnityEngine.UIElements;
 
 namespace QuestBuilder {
     public class QuestViewNode : GraphTreeNode
@@ -14,19 +13,25 @@ namespace QuestBuilder {
         public NodeTypes nodeType;
         public QuestViewNode(QuestNodeData node)
         {
-            outputPorts = new List<Port>();
-            childrenNodes = new List<GraphTreeNode>(); 
             questNode = node;
+            Initialize();
+        }
 
-            title = node.title;
+        protected override void Initialize()
+        {
+            outputPorts = new List<Port>();
+            childrenNodes = new List<GraphTreeNode>();
+
+            title = questNode.title;
             style.left = questNode.positionX;
             style.top = questNode.positionY;
             nodeType = QuestController.MapStringToType(questNode.type);
+
             CreateInputPorts();
             CreateOutputPorts();
         }
 
-        protected override void CreateInputPorts()
+        private void CreateInputPorts()
         {
             inputPorts = new List<Port>();
             switch (nodeType)
@@ -44,7 +49,7 @@ namespace QuestBuilder {
             }
         }
 
-        protected override void CreateOutputPorts() {
+        private void CreateOutputPorts() {
             Port outputPort = null;
             switch (nodeType) {
                 case NodeTypes.End:

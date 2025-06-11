@@ -45,11 +45,6 @@ namespace QuestBuilder
 
         public void InitializeTree()
         {
-            // Create a start and end node
-            graphViewChanged -= OnGraphViewChanged;
-            FactionViewNode startNode = CreateNode(NodeTypes.Start);
-            startNode.title = "Start Node";
-            graphViewChanged += OnGraphViewChanged;
         }
 
 
@@ -101,7 +96,6 @@ namespace QuestBuilder
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
             base.BuildContextualMenu(evt);
-
             if (NodeActivelySelected)
             {
                 BuildSelectedContextualMenu(evt);
@@ -120,11 +114,16 @@ namespace QuestBuilder
                 QuestTreeEditor questEditor = (QuestTreeEditor)EditorWindow.GetWindow(typeof(QuestTreeEditor), false, null, true);
                 questEditor.LoadByQuestId(nodeKey);
             });
+
         }
 
         private void BuildUnselectedContextualMenu(ContextualMenuPopulateEvent evt)
         {
+            
             evt.menu.AppendSeparator();
+            evt.menu.AppendAction("New Node", (a) => {
+                CreateNode(a.eventInfo.localMousePosition.x, a.eventInfo.localMousePosition.y);
+            });
         }
 
         public override List<Port> GetCompatiblePorts(Port start, NodeAdapter adapter)
@@ -187,16 +186,18 @@ namespace QuestBuilder
 
         }
 
-        private FactionViewNode CreateNode(NodeTypes type)
+        private FactionViewNode CreateNode(float positionX, float positionY)
         {
             if (editorReference != null)
             {
                 editorReference.ChangesHaveOcurred();
             }
+
             FactionQuestTreeNode nodeData = new FactionQuestTreeNode();
             nodeData.questKey = GUID.Generate().ToString();
             rawDataTree.nodes.Add(nodeData);
             FactionViewNode fvn = InstantiateNodeElement(nodeData);
+            fvn.SetPosition(new Rect(positionX, positionY, 0,0));
             return fvn;
         }
 

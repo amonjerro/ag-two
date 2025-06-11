@@ -13,10 +13,8 @@ namespace QuestBuilder
         public List<Port> inputPorts;
         protected List<GraphTreeNode> childrenNodes;
 
-        protected abstract void CreateInputPorts();
-        protected abstract void CreateOutputPorts();
+        protected abstract void Initialize();
         protected abstract void SetLocationData(float xPosition, float yPosition);
-
         public abstract string GetKey();
         public int RemoveChild(GraphTreeNode child) {
             int indexOf = childrenNodes.IndexOf(child);
