@@ -76,7 +76,7 @@ namespace QuestBuilder {
 
         public void LoadByQuestId(string id)
         {
-            string lookupPath = $"{Application.dataPath}/RawData/{id}.json";
+            string lookupPath = $"{Application.dataPath}/RawData/questnodes/{id}.json";
             if (File.Exists(lookupPath))
             {
                 // Load this one

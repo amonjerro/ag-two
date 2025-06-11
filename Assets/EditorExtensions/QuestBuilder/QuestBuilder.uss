@@ -5,3 +5,7 @@ GridBackground {
     --spacing: 15;
     background-color: rgba(12, 6, 6, 0.39);
 }
+
+.red {
+    background-color: rgba(120,6,6,0.39);
+}

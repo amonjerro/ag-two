@@ -53,7 +53,10 @@ namespace QuestBuilder
             return inputPorts.IndexOf(port);
         }
 
-        
+        public void SetStyleClass(string styleClass)
+        {
+            mainContainer.AddToClassList(styleClass);
+        }
         
     }
 }
