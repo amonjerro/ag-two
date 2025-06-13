@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
 
 namespace QuestBuilder {
     public class QuestViewNode : GraphTreeNode
@@ -91,5 +92,9 @@ namespace QuestBuilder {
             return questNode.key;
         }
 
+        protected override void MenuBuildingDelegate(ContextualMenuPopulateEvent evt)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

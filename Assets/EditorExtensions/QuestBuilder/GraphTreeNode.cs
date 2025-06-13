@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace QuestBuilder
 {
@@ -16,6 +17,8 @@ namespace QuestBuilder
         protected abstract void Initialize();
         protected abstract void SetLocationData(float xPosition, float yPosition);
         public abstract string GetKey();
+
+        protected abstract void MenuBuildingDelegate(ContextualMenuPopulateEvent evt);
         public int RemoveChild(GraphTreeNode child) {
             int indexOf = childrenNodes.IndexOf(child);
             childrenNodes[indexOf] = null;
@@ -63,6 +66,12 @@ namespace QuestBuilder
                 mainContainer.RemoveFromClassList(styleClass);
             }
         }
-        
+
+        protected void InstallManipulator(VisualElement element)
+        {
+            ContextualMenuManipulator m = new ContextualMenuManipulator(MenuBuildingDelegate);
+            m.target = element;
+        }
+
     }
 }

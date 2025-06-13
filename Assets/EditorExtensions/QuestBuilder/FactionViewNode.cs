@@ -29,6 +29,7 @@ namespace QuestBuilder
             }
 
             CheckQuestStatus();
+            InstallManipulator(this);
         }
 
         private void CreateUtilities()
@@ -87,6 +88,13 @@ namespace QuestBuilder
         private void ToggleInputMode()
         {
             lInputMode.text = nodeData.ToggleInputMode().ToString();
+        }
+
+        protected override void MenuBuildingDelegate(ContextualMenuPopulateEvent evt)
+        {
+            evt.menu.AppendAction("Remove Node", (a) => {
+                Debug.Log(GetKey());
+            });
         }
 
         private void CheckQuestStatus()

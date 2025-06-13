@@ -95,7 +95,7 @@ namespace QuestBuilder
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            base.BuildContextualMenu(evt);
+            
             if (NodeActivelySelected)
             {
                 BuildSelectedContextualMenu(evt);
@@ -108,8 +108,7 @@ namespace QuestBuilder
 
         private void BuildSelectedContextualMenu(ContextualMenuPopulateEvent evt)
         {
-            evt.menu.AppendSeparator();
-
+            
             evt.menu.AppendAction("Open", (a) => {
                 QuestTreeEditor questEditor = (QuestTreeEditor)EditorWindow.GetWindow(typeof(QuestTreeEditor), false, null, true);
                 questEditor.LoadByQuestId(nodeKey);
